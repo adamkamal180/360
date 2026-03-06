@@ -7,131 +7,121 @@
 <title>360° — أدوات الزوايا السعرية الزمنية</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Noto+Kufi+Arabic:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#08080a;--surface:#111113;--surface2:#19191d;--surface3:#222228;
-  --border:#2a2a32;--text:#e8e8ed;--text2:#9898a4;--text3:#5e5e6e;
-  --orange:#ff6a00;--orange2:#ff8c33;--orange-dim:rgba(255,106,0,.12);
-  --green:#00c853;--red:#ff1744;--radius:14px;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:'Noto Kufi Arabic','Cairo',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden;min-height:100vh}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px}::-webkit-scrollbar-thumb:hover{background:var(--orange)}
+:root{--bg:#08080a;--surface:#111113;--surface2:#19191d;--border:#2a2a32;--text:#e8e8ed;--text2:#9898a4;--text3:#5e5e6e;--orange:#ff6a00;--orange2:#ff8c33;--orange-dim:rgba(255,106,0,.12);--green:#00c853;--red:#ff1744;--radius:14px}
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+body{font-family:'Noto Kufi Arabic','Cairo',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px}
 a{color:var(--orange);text-decoration:none}
 
-.topbar{position:fixed;top:0;right:0;left:0;z-index:999;height:60px;background:rgba(8,8,10,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(–border);display:flex;align-items:center;padding:0 1.5rem;gap:1rem}
-.topbar-logo{font-family:‘Cairo’;font-weight:900;font-size:1.6rem;color:var(–orange);cursor:pointer;letter-spacing:-1px}
-.topbar-nav{display:flex;gap:.3rem;margin-right:auto;margin-left:auto}
-.topbar-nav a{padding:.45rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;color:var(–text2);transition:all .2s;white-space:nowrap;cursor:pointer}
+/* TOPBAR */
+.topbar{position:fixed;top:0;right:0;left:0;z-index:999;height:56px;background:rgba(8,8,10,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(–border);display:flex;align-items:center;padding:0 1rem;gap:.8rem}
+.topbar-logo{font-family:‘Cairo’;font-weight:900;font-size:1.5rem;color:var(–orange);cursor:pointer}
+.topbar-nav{display:flex;gap:.2rem;margin-right:auto;margin-left:auto}
+.topbar-nav a{padding:.4rem .8rem;border-radius:8px;font-size:.78rem;font-weight:600;color:var(–text2);transition:all .2s;white-space:nowrap;cursor:pointer}
 .topbar-nav a:hover{color:var(–text);background:var(–surface2)}
 .topbar-nav a.active{color:var(–orange);background:var(–orange-dim)}
-.topbar-author{display:flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:700;color:var(–orange);padding:.3rem .8rem .3rem .3rem;border:1.5px solid var(–orange);border-radius:25px;transition:all .25s}
+.topbar-author{display:flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:700;color:var(–orange);padding:.25rem .7rem .25rem .25rem;border:1.5px solid var(–orange);border-radius:25px;transition:all .25s}
 .topbar-author:hover{background:var(–orange);color:var(–bg)}
-.topbar-author:hover .author-img{border-color:var(–bg)}
-.author-img{width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(–orange)}
-.menu-btn{display:none;background:none;border:none;color:var(–text);font-size:1.5rem;cursor:pointer;padding:.3rem}
-.mobile-nav{display:none;position:fixed;top:60px;right:0;left:0;background:var(–surface);border-bottom:1px solid var(–border);z-index:998;padding:1rem;flex-direction:column;gap:.3rem}
+.author-img{width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid var(–orange)}
+.menu-btn{display:none;background:none;border:none;color:var(–text);font-size:1.4rem;cursor:pointer}
+.mobile-nav{display:none;position:fixed;top:56px;right:0;left:0;background:var(–surface);border-bottom:1px solid var(–border);z-index:998;padding:.8rem;flex-direction:column;gap:.2rem}
 .mobile-nav.open{display:flex}
-.mobile-nav a{padding:.8rem 1rem;border-radius:8px;font-size:.9rem;font-weight:600;color:var(–text2);cursor:pointer}
+.mobile-nav a{padding:.7rem 1rem;border-radius:8px;font-size:.85rem;font-weight:600;color:var(–text2);cursor:pointer}
 .mobile-nav a.active{color:var(–orange);background:var(–orange-dim)}
 
-.page{display:none;padding-top:60px;min-height:100vh;animation:pageIn .4s ease}
+.page{display:none;padding-top:56px;min-height:100vh;animation:pageIn .35s ease}
 .page.active{display:block}
-@keyframes pageIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-/* HERO - horizontal layout */
-.hero{min-height:calc(100vh - 60px);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:2rem 1rem}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(–border) 1px,transparent 1px),linear-gradient(90deg,var(–border) 1px,transparent 1px);background-size:60px 60px;opacity:.08}
-.hero-glow{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,0,.1),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:heroGlow 6s ease-in-out infinite alternate}
-@keyframes heroGlow{0%{transform:translate(-50%,-50%) scale(1);opacity:.6}100%{transform:translate(-50%,-50%) scale(1.3);opacity:1}}
-.hero-top{position:relative;z-index:2;text-align:center;margin-bottom:2.5rem}
-.hero-big{font-family:‘Cairo’;font-weight:900;font-size:clamp(3.5rem,10vw,7rem);color:var(–orange);line-height:1;text-shadow:0 0 120px rgba(255,106,0,.25)}
-.hero-title{font-family:‘Cairo’;font-weight:700;font-size:clamp(1rem,2.5vw,1.6rem);margin-top:.3rem}
-.hero-sub{color:var(–text2);font-size:.9rem;margin-top:.5rem;max-width:500px;margin-inline:auto}
+/* HERO */
+.hero{min-height:calc(100vh - 56px);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:2rem 1rem}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(–border) 1px,transparent 1px),linear-gradient(90deg,var(–border) 1px,transparent 1px);background-size:60px 60px;opacity:.07}
+.hero-glow{position:absolute;width:450px;height:450px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,0,.12),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:glow 5s ease-in-out infinite alternate}
+@keyframes glow{0%{transform:translate(-50%,-50%) scale(1);opacity:.5}100%{transform:translate(-50%,-50%) scale(1.3);opacity:1}}
+.hero-top{position:relative;z-index:2;text-align:center;margin-bottom:2rem}
+.hero-big{font-family:‘Cairo’;font-weight:900;font-size:clamp(3rem,9vw,6.5rem);color:var(–orange);line-height:1;text-shadow:0 0 100px rgba(255,106,0,.2)}
+.hero-title{font-family:‘Cairo’;font-weight:700;font-size:clamp(1rem,2.5vw,1.5rem);margin-top:.3rem}
+.hero-sub{color:var(–text2);font-size:.85rem;margin-top:.4rem;max-width:460px;margin-inline:auto}
 
-/* Horizontal tool cards */
-.hero-cards{position:relative;z-index:2;display:flex;gap:1rem;width:100%;max-width:1100px;overflow-x:auto;padding:0 .5rem 1rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
-.hero-cards::-webkit-scrollbar{height:4px}
-.hero-cards::-webkit-scrollbar-thumb{background:var(–orange);border-radius:2px}
-.tool-card{flex:0 0 240px;scroll-snap-align:start;background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:1.5rem 1.2rem;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
-.tool-card::before{content:’’;position:absolute;top:0;right:0;width:100%;height:3px;background:var(–orange);transform:scaleX(0);transform-origin:right;transition:transform .4s}
-.tool-card:hover::before{transform:scaleX(1)}
-.tool-card:hover{border-color:var(–orange);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4)}
-.tool-icon{font-size:1.8rem;margin-bottom:.6rem}
-.tool-name{font-family:‘Cairo’;font-weight:700;font-size:.95rem;margin-bottom:.3rem}
-.tool-desc{font-size:.75rem;color:var(–text2);line-height:1.6}
+/* HORIZONTAL TOOL STRIP */
+.hero-strip{position:relative;z-index:2;width:100%;max-width:1100px;display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;padding:0 .5rem}
+.tool-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:1.3rem 1rem;cursor:pointer;transition:all .3s;text-align:center}
+.tool-card:hover{border-color:var(–orange);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+.tool-icon{font-size:1.6rem;margin-bottom:.4rem}
+.tool-name{font-family:‘Cairo’;font-weight:700;font-size:.85rem;margin-bottom:.2rem}
+.tool-desc{font-size:.7rem;color:var(–text2);line-height:1.5}
 
-.tool-page{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
-.tool-header{text-align:center;margin-bottom:2.5rem;padding-top:1.5rem}
-.tool-header h1{font-family:‘Cairo’;font-weight:900;font-size:1.8rem;color:var(–orange)}
-.tool-header p{color:var(–text2);font-size:.9rem;margin-top:.4rem}
-
-.input-group{margin-bottom:1.2rem}
-.input-group label{display:block;font-size:.85rem;font-weight:600;color:var(–text2);margin-bottom:.4rem}
-.input-row{display:flex;gap:.8rem;flex-wrap:wrap}
-.input-row .input-group{flex:1;min-width:200px}
-input[type=“number”],input[type=“text”],select{width:100%;padding:.75rem 1rem;background:var(–surface);border:1.5px solid var(–border);border-radius:10px;color:var(–text);font-family:inherit;font-size:.95rem;transition:border-color .2s;outline:none;-moz-appearance:textfield}
+/* TOOL PAGES */
+.tool-page{max-width:900px;margin:0 auto;padding:1.5rem 1.2rem 3rem}
+.tool-header{text-align:center;margin-bottom:2rem;padding-top:1rem}
+.tool-header h1{font-family:‘Cairo’;font-weight:900;font-size:1.6rem;color:var(–orange)}
+.tool-header p{color:var(–text2);font-size:.85rem;margin-top:.3rem}
+.input-group{margin-bottom:1rem}
+.input-group label{display:block;font-size:.82rem;font-weight:600;color:var(–text2);margin-bottom:.3rem}
+.input-row{display:flex;gap:.7rem;flex-wrap:wrap}
+.input-row .input-group{flex:1;min-width:180px}
+input[type=“number”],input[type=“text”],select{width:100%;padding:.65rem .9rem;background:var(–surface);border:1.5px solid var(–border);border-radius:10px;color:var(–text);font-family:inherit;font-size:.9rem;transition:border-color .2s;outline:none;-moz-appearance:textfield}
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none}
 input:focus,select:focus{border-color:var(–orange)}
 select{cursor:pointer}select option{background:var(–surface);color:var(–text)}
-
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.8rem 2rem;background:var(–orange);color:#000;font-family:inherit;font-weight:700;font-size:.95rem;border:none;border-radius:10px;cursor:pointer;transition:all .2s;min-width:160px}
-.btn:hover{background:var(–orange2);box-shadow:0 8px 30px rgba(255,106,0,.3);transform:translateY(-1px)}
-.btn:active{transform:scale(.97)}
-.btn-row{display:flex;gap:.8rem;margin-top:1.5rem;flex-wrap:wrap}
-
-.result-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:1.5rem;margin-bottom:1rem;animation:pageIn .3s ease}
-.result-card h3{font-family:‘Cairo’;font-weight:700;color:var(–orange);font-size:1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
-.result-card h3::before{content:’’;width:6px;height:6px;background:var(–orange);border-radius:50%;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.7rem 1.8rem;background:var(–orange);color:#000;font-family:inherit;font-weight:700;font-size:.9rem;border:none;border-radius:10px;cursor:pointer;transition:all .2s}
+.btn:hover{background:var(–orange2);box-shadow:0 6px 25px rgba(255,106,0,.3)}
+.btn-row{display:flex;gap:.7rem;margin-top:1.2rem;flex-wrap:wrap}
+.result-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:1.3rem;margin-bottom:.8rem;animation:pageIn .3s ease}
+.result-card h3{font-family:‘Cairo’;font-weight:700;color:var(–orange);font-size:.95rem;margin-bottom:.8rem;display:flex;align-items:center;gap:.4rem}
+.result-card h3::before{content:’’;width:5px;height:5px;background:var(–orange);border-radius:50%;flex-shrink:0}
 .rtable{width:100%;border-collapse:collapse}
-.rtable th{text-align:center;padding:.6rem .8rem;background:var(–surface2);color:var(–text2);font-size:.8rem;font-weight:600;border-bottom:1px solid var(–border)}
-.rtable td{text-align:center;padding:.65rem .8rem;border-bottom:1px solid rgba(42,42,50,.5);font-size:.9rem;font-variant-numeric:tabular-nums}
+.rtable th{text-align:center;padding:.5rem .6rem;background:var(–surface2);color:var(–text2);font-size:.75rem;font-weight:600;border-bottom:1px solid var(–border)}
+.rtable td{text-align:center;padding:.55rem .6rem;border-bottom:1px solid rgba(42,42,50,.4);font-size:.85rem;font-variant-numeric:tabular-nums}
 .rtable tr:hover td{background:var(–orange-dim)}
 .up{color:var(–green);font-weight:600}.dn{color:var(–red);font-weight:600}
 
-.shape-result{text-align:center;padding:2rem}
-.shape-visual{width:100px;height:100px;border:3px solid var(–orange);margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;color:var(–orange)}
-.shape-visual.v-circle{border-radius:50%}.shape-visual.v-square{border-radius:6px}.shape-visual.v-pentagon{border-radius:35%}
-.shape-visual.v-hexagon{border-radius:25%;transform:rotate(30deg)}.shape-visual.v-other{border-radius:15%}
-.shape-visual.v-line{width:120px;height:6px;background:var(–orange);border:none}
-.shape-visual.v-triangle{border:none;width:0;height:0;border-left:50px solid transparent;border-right:50px solid transparent;border-bottom:87px solid var(–orange)}
-.shape-big{font-family:‘Cairo’;font-weight:900;font-size:1.8rem}
-.shape-en{font-size:.9rem;color:var(–text3);margin-top:.2rem}
-.sprops{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-top:1.5rem}
-.sprop{background:var(–surface2);border-radius:10px;padding:1rem;text-align:center}
-.sprop-l{font-size:.75rem;color:var(–text3);margin-bottom:.3rem}
-.sprop-v{font-family:‘Cairo’;font-weight:700;font-size:1.1rem;color:var(–orange)}
+/* SHAPES */
+.shape-result{text-align:center;padding:1.5rem}
+.shape-visual{width:90px;height:90px;border:3px solid var(–orange);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;color:var(–orange)}
+.shape-visual.v-circle{border-radius:50%}.shape-visual.v-square{border-radius:6px}.shape-visual.v-pentagon{border-radius:35%}.shape-visual.v-hexagon{border-radius:25%;transform:rotate(30deg)}.shape-visual.v-other{border-radius:15%}
+.shape-visual.v-line{width:110px;height:5px;background:var(–orange);border:none}
+.shape-visual.v-triangle{border:none;width:0;height:0;border-left:45px solid transparent;border-right:45px solid transparent;border-bottom:78px solid var(–orange)}
+.shape-big{font-family:‘Cairo’;font-weight:900;font-size:1.6rem}
+.shape-en{font-size:.85rem;color:var(–text3)}
+.sprops{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.8rem;margin-top:1.2rem}
+.sprop{background:var(–surface2);border-radius:10px;padding:.8rem;text-align:center}
+.sprop-l{font-size:.7rem;color:var(–text3);margin-bottom:.2rem}
+.sprop-v{font-family:‘Cairo’;font-weight:700;font-size:1rem;color:var(–orange)}
 
-.sq9-container{overflow-x:auto;margin:1.5rem 0;text-align:center}
-.sq9-grid{display:inline-grid;gap:2px;direction:ltr}
-.sq9-cell{width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:600;border-radius:6px;background:var(–surface);color:var(–text2);transition:all .25s;cursor:default;border:1px solid transparent}
-.sq9-cell.center{background:var(–orange);color:#000;font-weight:800;font-size:.85rem}
-.sq9-cell.highlight{background:var(–orange-dim);color:var(–orange);border-color:var(–orange);font-weight:700}
-.sq9-cell.cardinal{background:rgba(0,200,83,.06);color:var(–green);border-color:rgba(0,200,83,.25)}
-.sq9-cell:hover{border-color:var(–orange);transform:scale(1.12);z-index:2}
-.sq9-info{margin-top:1rem;display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center}
-.sq9-legend{display:flex;align-items:center;gap:.4rem;font-size:.8rem;color:var(–text2)}
-.sq9-legend-dot{width:12px;height:12px;border-radius:3px}
+/* SQ9 GRID */
+.sq9-wrap{overflow-x:auto;margin:1rem 0;text-align:center}
+.sq9-grid{display:inline-grid;gap:1px;direction:ltr}
+.sq9-cell{width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:600;border-radius:5px;background:var(–surface);color:var(–text2);transition:all .2s;cursor:default;border:1px solid transparent}
+.sq9-cell.center{background:var(–orange);color:#000;font-weight:800;font-size:.8rem}
+.sq9-cell.target{background:var(–orange);color:#000;font-weight:800;box-shadow:0 0 12px var(–orange)}
+.sq9-cell.same-angle{background:var(–orange-dim);color:var(–orange);border-color:var(–orange);font-weight:700}
+.sq9-cell.cardinal{background:rgba(0,200,83,.06);color:var(–green);border-color:rgba(0,200,83,.2)}
+.sq9-cell:hover{border-color:var(–orange);transform:scale(1.15);z-index:2}
+.sq9-info{margin-top:.8rem;display:flex;gap:1.2rem;flex-wrap:wrap;justify-content:center}
+.sq9-legend{display:flex;align-items:center;gap:.3rem;font-size:.75rem;color:var(–text2)}
+.sq9-legend-dot{width:11px;height:11px;border-radius:3px}
 
-.cyc-vis{display:flex;align-items:center;justify-content:center;gap:.4rem;margin:1.5rem 0;flex-wrap:wrap}
-.cyc-d{width:50px;height:50px;display:flex;align-items:center;justify-content:center;background:var(–surface2);border:1px solid var(–border);border-radius:10px;font-family:‘Cairo’;font-weight:700;font-size:1.3rem;transition:all .3s}
+/* CYCLES */
+.cyc-vis{display:flex;align-items:center;justify-content:center;gap:.3rem;margin:1.2rem 0;flex-wrap:wrap}
+.cyc-d{width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:var(–surface2);border:1px solid var(–border);border-radius:8px;font-family:‘Cairo’;font-weight:700;font-size:1.2rem}
 .cyc-d.active{border-color:var(–orange);color:var(–orange);background:var(–orange-dim)}
-.cyc-arr{color:var(–text3);font-size:1.2rem}
-.cyc-big{text-align:center;margin:1.5rem 0}
-.cyc-big .n{font-family:‘Cairo’;font-weight:900;font-size:4rem;color:var(–orange);line-height:1}
-.cyc-big .l{font-size:.9rem;color:var(–text2);margin-top:.3rem}
+.cyc-arr{color:var(–text3);font-size:1rem}
+.cyc-big{text-align:center;margin:1.2rem 0}
+.cyc-big .n{font-family:‘Cairo’;font-weight:900;font-size:3.5rem;color:var(–orange);line-height:1}
+.cyc-big .l{font-size:.85rem;color:var(–text2);margin-top:.2rem}
 
 @media(max-width:768px){
 .topbar-nav{display:none}.menu-btn{display:block}
-.tool-page{padding:1.5rem 1rem 3rem}
-.tool-card{flex:0 0 200px}
-.sq9-cell{width:36px;height:36px;font-size:.6rem}.input-row{flex-direction:column}.input-row .input-group{min-width:100%}
+.hero-strip{grid-template-columns:1fr 1fr;gap:.6rem}
+.sq9-cell{width:34px;height:34px;font-size:.55rem}
+.input-row{flex-direction:column}.input-row .input-group{min-width:100%}
 }
+@media(max-width:420px){.hero-strip{grid-template-columns:1fr}}
 </style>
 
 </head>
 <body>
-
 <header class="topbar">
   <div class="topbar-logo" onclick="navigate('home')">360°</div>
   <nav class="topbar-nav">
@@ -139,7 +129,7 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
     <a onclick="navigate('calculator')" data-page="calculator">حاسبة الزوايا</a>
     <a onclick="navigate('detector')" data-page="detector">كاشف الشكل</a>
     <a onclick="navigate('sq9')" data-page="sq9">مربع التسعة</a>
-    <a onclick="navigate('cycles')" data-page="cycles">دورات الأرقام</a>
+    <a onclick="navigate('cycles')" data-page="cycles">الدورات</a>
   </nav>
   <a href="https://x.com/adams_k1?s=21&t=j0daPEI6JiicPs6LaMWXxQ" target="_blank" class="topbar-author"><img src="data:image/jpeg;base64,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" class="author-img" alt="AK">ADAM KAMAL</a>
   <button class="menu-btn" onclick="toggleMobile()">☰</button>
@@ -149,50 +139,29 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
   <a onclick="navigate('calculator');closeMobile()" data-page="calculator">حاسبة الزوايا</a>
   <a onclick="navigate('detector');closeMobile()" data-page="detector">كاشف الشكل</a>
   <a onclick="navigate('sq9');closeMobile()" data-page="sq9">مربع التسعة</a>
-  <a onclick="navigate('cycles');closeMobile()" data-page="cycles">دورات الأرقام</a>
+  <a onclick="navigate('cycles');closeMobile()" data-page="cycles">الدورات</a>
 </div>
-
-<!-- HOME -->
 
 <div class="page active" id="page-home">
   <section class="hero">
-    <div class="hero-grid"></div>
-    <div class="hero-glow"></div>
+    <div class="hero-grid"></div><div class="hero-glow"></div>
     <div class="hero-top">
       <div class="hero-big">360°</div>
       <h1 class="hero-title">أدوات الزوايا السعرية الزمنية</h1>
-      <p class="hero-sub">حوّل نظرية جان إلى أدوات حسابية تفاعلية — أدخل الأرقام واحصل على النتائج فوراً</p>
+      <p class="hero-sub">حوّل نظرية جان إلى أدوات تفاعلية — أدخل الأرقام واحصل على النتائج فوراً</p>
     </div>
-    <div class="hero-cards">
-      <div class="tool-card" onclick="navigate('calculator')">
-        <div class="tool-icon">📐</div>
-        <div class="tool-name">حاسبة الزوايا السعرية</div>
-        <div class="tool-desc">أدخل سعر القمة أو القاع → تحسب كل الزوايا من 30° إلى 360°</div>
-      </div>
-      <div class="tool-card" onclick="navigate('detector')">
-        <div class="tool-icon">🔍</div>
-        <div class="tool-name">كاشف الشكل الهندسي</div>
-        <div class="tool-desc">أدخل سعر البداية وسعر الارتداد → يحدد الشكل وخصائصه</div>
-      </div>
-      <div class="tool-card" onclick="navigate('sq9')">
-        <div class="tool-icon">🔢</div>
-        <div class="tool-name">مربع التسعة التفاعلي</div>
-        <div class="tool-desc">مربع جان المرئي — أدخل رقماً ليتم تمييزه والزوايا حوله</div>
-      </div>
-      <div class="tool-card" onclick="navigate('cycles')">
-        <div class="tool-icon">🔄</div>
-        <div class="tool-name">حاسبة دورات الأرقام</div>
-        <div class="tool-desc">أدخل السعر → عدد الدورات المتوقعة وأهداف كل دورة</div>
-      </div>
+    <div class="hero-strip">
+      <div class="tool-card" onclick="navigate('calculator')"><div class="tool-icon">📐</div><div class="tool-name">حاسبة الزوايا</div><div class="tool-desc">حساب كل الزوايا من 30° إلى 360°</div></div>
+      <div class="tool-card" onclick="navigate('detector')"><div class="tool-icon">🔍</div><div class="tool-name">كاشف الشكل</div><div class="tool-desc">تحديد الشكل الهندسي وأهدافه</div></div>
+      <div class="tool-card" onclick="navigate('sq9')"><div class="tool-icon">🔢</div><div class="tool-name">مربع التسعة</div><div class="tool-desc">مربع جان التفاعلي مع السعر</div></div>
+      <div class="tool-card" onclick="navigate('cycles')"><div class="tool-icon">🔄</div><div class="tool-name">الدورات</div><div class="tool-desc">حساب دورات الأرقام والأهداف</div></div>
     </div>
   </section>
 </div>
 
-<!-- CALCULATOR -->
-
 <div class="page" id="page-calculator">
   <div class="tool-page">
-    <div class="tool-header"><h1>📐 حاسبة الزوايا السعرية</h1><p>أدخل السعر — النتائج تتحدث تلقائياً</p></div>
+    <div class="tool-header"><h1>📐 حاسبة الزوايا السعرية</h1><p>النتائج تتحدث تلقائياً مع كل تغيير</p></div>
     <div class="result-card">
       <div class="input-row">
         <div class="input-group"><label>السعر</label><input type="text" id="calcPrice" placeholder="مثال: 104000 أو 1.08500" oninput="autoCalc()"></div>
@@ -203,8 +172,6 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
   </div>
 </div>
 
-<!-- DETECTOR -->
-
 <div class="page" id="page-detector">
   <div class="tool-page">
     <div class="tool-header"><h1>🔍 كاشف الشكل الهندسي</h1><p>حدد سعر البداية وسعر الارتداد</p></div>
@@ -212,8 +179,6 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
       <div class="input-row">
         <div class="input-group"><label>سعر البداية</label><input type="text" id="detPrice" placeholder="مثال: 104000"></div>
         <div class="input-group"><label>سعر أول ارتداد</label><input type="text" id="detBounce" placeholder="مثال: 108500"></div>
-      </div>
-      <div class="input-row">
         <div class="input-group"><label>الاتجاه</label><select id="detDir"><option value="up">صعود ↑</option><option value="down">هبوط ↓</option></select></div>
       </div>
       <div class="btn-row"><button class="btn" onclick="detectShape()">اكتشف الشكل ←</button></div>
@@ -222,36 +187,32 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
   </div>
 </div>
 
-<!-- SQ9 -->
-
 <div class="page" id="page-sq9">
   <div class="tool-page">
-    <div class="tool-header"><h1>🔢 مربع التسعة التفاعلي</h1><p>أدخل رقماً لتحديد موقعه على المربع</p></div>
+    <div class="tool-header"><h1>🔢 مربع التسعة التفاعلي</h1><p>أدخل السعر — يبني المربع ويحسب مستويات الدعم والمقاومة</p></div>
     <div class="result-card">
       <div class="input-row">
-        <div class="input-group"><label>الرقم</label><input type="number" id="sq9Input" value="120" min="1" max="800" oninput="buildSQ9()"></div>
-        <div class="input-group"><label>الحجم</label><select id="sq9Size" onchange="buildSQ9()"><option value="5">5 حلقات</option><option value="7" selected>7 حلقات</option><option value="9">9 حلقات</option></select></div>
+        <div class="input-group"><label>السعر الحالي</label><input type="text" id="sq9Price" value="104000" oninput="calcSQ9()"></div>
+        <div class="input-group"><label>حجم المربع</label><select id="sq9Size" onchange="calcSQ9()"><option value="4">صغير (9×9)</option><option value="5" selected>متوسط (11×11)</option><option value="7">كبير (15×15)</option></select></div>
       </div>
       <div class="sq9-info">
-        <div class="sq9-legend"><div class="sq9-legend-dot" style="background:var(--orange)"></div> المحدد</div>
+        <div class="sq9-legend"><div class="sq9-legend-dot" style="background:var(--orange)"></div> السعر</div>
         <div class="sq9-legend"><div class="sq9-legend-dot" style="background:var(--orange-dim);border:1px solid var(--orange)"></div> نفس الزاوية</div>
-        <div class="sq9-legend"><div class="sq9-legend-dot" style="background:rgba(0,200,83,.06);border:1px solid rgba(0,200,83,.25)"></div> المحاور</div>
+        <div class="sq9-legend"><div class="sq9-legend-dot" style="background:rgba(0,200,83,.06);border:1px solid rgba(0,200,83,.2)"></div> محاور 0°/90°/180°/270°</div>
       </div>
     </div>
-    <div class="sq9-container" id="sq9Container"></div>
+    <div class="sq9-wrap" id="sq9Wrap"></div>
     <div id="sq9Results"></div>
   </div>
 </div>
 
-<!-- CYCLES -->
-
 <div class="page" id="page-cycles">
   <div class="tool-page">
-    <div class="tool-header"><h1>🔄 حاسبة الزوايا والدورات</h1><p>أدخل السعر لحساب الزوايا بالإزاحة الذكية + دورات الأرقام</p></div>
+    <div class="tool-header"><h1>🔄 حاسبة الدورات والأشكال</h1><p>حساب شامل: دورات الأرقام + أشكال هندسية + مربع التسعة</p></div>
     <div class="result-card">
       <div class="input-row">
-        <div class="input-group"><label>السعر</label><input type="text" id="cycPrice" placeholder="مثال: 104000 أو 2.45"></div>
-        <div class="input-group"><label>النوع</label><select id="cycType"><option value="up">صعود ↑</option><option value="down">هبوط ↓</option></select></div>
+        <div class="input-group"><label>السعر</label><input type="text" id="cycPrice" placeholder="مثال: 104000"></div>
+        <div class="input-group"><label>الاتجاه</label><select id="cycType"><option value="up">صعود ↑</option><option value="down">هبوط ↓</option></select></div>
       </div>
       <div class="btn-row"><button class="btn" onclick="calcCycles()">احسب ←</button></div>
     </div>
@@ -260,208 +221,254 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
 </div>
 
 <script>
-// ===== NAV =====
-function navigate(p){
-  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
-  document.getElementById('page-'+p).classList.add('active');
-  document.querySelectorAll('[data-page]').forEach(a=>a.classList.toggle('active',a.dataset.page===p));
-  window.scrollTo({top:0});history.replaceState(null,null,'#'+p);
-  if(p==='sq9')setTimeout(buildSQ9,50);
-}
+// NAV
+function navigate(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+p).classList.add('active');document.querySelectorAll('[data-page]').forEach(a=>a.classList.toggle('active',a.dataset.page===p));window.scrollTo({top:0});history.replaceState(null,null,'#'+p);if(p==='sq9')setTimeout(calcSQ9,80)}
 function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open')}
 function closeMobile(){document.getElementById('mobileNav').classList.remove('open')}
 window.addEventListener('DOMContentLoaded',()=>{const h=location.hash.replace('#','');if(h&&document.getElementById('page-'+h))navigate(h);else navigate('home')});
 
-// ===== SMART SCALING (from your Python code) =====
-function getScalingFactor(p, direction){
-  if(p>=10000){
-    if(direction==='up') return 0.0001;
-    else return p>=40000?0.0001:0.001;
-  } else if(p>=1000) return 0.01;
-  else if(p>=100) return 0.1;
-  else if(p>=5.0){
-    return direction==='down'?100.0:1.0;
-  } else if(p>=1.0){
-    return direction==='down'?100.0:1.0;
-  } else return 100.0;
+// SMART SCALING
+function getSF(p,dir){
+  if(p>=10000)return dir==='up'?0.0001:(p>=40000?0.0001:0.001);
+  if(p>=1000)return 0.01;if(p>=100)return 0.1;
+  if(p>=5)return dir==='down'?100:1;
+  if(p>=1)return dir==='down'?100:1;
+  return 100;
 }
-
-function smartCalc(price, angleDeg, direction){
-  let m = getScalingFactor(price, direction);
-  let scaledP = price * m;
-  let root = Math.sqrt(scaledP);
-  let factor = angleDeg / 180;
-  let newRoot = direction==='up' ? root+factor : root-factor;
-  if(newRoot<0) return 0;
-  return (newRoot**2)/m;
+function smartCalc(price,deg,dir){
+  let m=getSF(price,dir),sp=price*m,root=Math.sqrt(sp),f=deg/180;
+  let nr=dir==='up'?root+f:root-f;
+  return nr<0?0:(nr*nr)/m;
 }
+function fmt(p){if(p<1&&p>0)return p.toFixed(4);if(p<10)return p.toFixed(4);if(p<1000)return p.toFixed(2);return p.toFixed(2)}
 
-function formatPrice(p){
-  if(p<1 && p>0) return p.toFixed(4);
-  if(p<10) return p.toFixed(4);
-  if(p<1000) return p.toFixed(2);
-  return p.toFixed(2);
-}
-
-// ===== CALCULATOR (uses smart scaling) =====
+// CALCULATOR
 const ANGLES=[30,36,40,45,51.43,60,72,90,108,120,135,144,150,180,210,216,240,252,270,288,300,315,324,330,360];
 function autoCalc(){
-  const ps=document.getElementById('calcPrice').value.trim(),
-    ty=document.getElementById('calcType').value,
-    ct=document.getElementById('calcResults');
-  const price=parseFloat(ps);
-  if(!ps||isNaN(price)||price<=0){ct.innerHTML='';return}
-  const dir=ty==='low'?'up':'down';
-  let rows='';
+  const ps=document.getElementById('calcPrice').value.trim(),ty=document.getElementById('calcType').value,ct=document.getElementById('calcResults');
+  const price=parseFloat(ps);if(!ps||isNaN(price)||price<=0){ct.innerHTML='';return}
+  const dir=ty==='low'?'up':'down';let rows='';
   ANGLES.forEach(a=>{
-    const r=smartCalc(price,a,dir);
-    const diff=Math.abs(r-price);
-    const pct=((diff/price)*100).toFixed(2);
-    const c=dir==='up'?'up':'dn',ar=dir==='up'?'↑':'↓';
-    const bg=[90,180,270,360].includes(a)?'background:var(--orange-dim)':'';
-    const imp=[90,120,144,180,270,360].includes(a)?'font-weight:700':'';
-    rows+=`<tr style="${bg}"><td style="${imp}">${a}°</td><td class="${c}" style="font-weight:700">${formatPrice(r)}</td><td>${ar} ${formatPrice(diff)}</td><td>${pct}%</td><td style="color:var(--text3)">${(a/180).toFixed(4)}</td></tr>`;
+    const r=smartCalc(price,a,dir),diff=Math.abs(r-price),pct=((diff/price)*100).toFixed(2);
+    const c=dir==='up'?'up':'dn',bg=[90,180,270,360].includes(a)?'background:var(--orange-dim)':'';
+    rows+=`<tr style="${bg}"><td>${a}°</td><td class="${c}" style="font-weight:700">${fmt(r)}</td><td>${fmt(diff)}</td><td>${pct}%</td></tr>`;
   });
-  ct.innerHTML=`<div class="result-card"><h3>${ty==='low'?'مستويات الصعود ↑':'مستويات الهبوط ↓'} من ${ps}</h3><p style="color:var(--text3);font-size:.8rem;margin-bottom:1rem">الصفوف المظللة = زوايا رئيسية | الإزاحة الذكية = ${getScalingFactor(price,dir)}</p><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th><th>الفارق</th><th>النسبة</th><th>المعامل</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  ct.innerHTML=`<div class="result-card"><h3>مستويات ${dir==='up'?'الصعود ↑':'الهبوط ↓'} من ${ps}</h3><p style="color:var(--text3);font-size:.75rem;margin-bottom:.8rem">الإزاحة: ${getSF(price,dir)}</p><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th><th>الفارق</th><th>%</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
 }
 
-// ===== SHAPE DETECTOR (uses smart scaling) =====
+// SHAPE DETECTOR
 const SHAPES=[
-  {a:360,name:'الدائري',en:'Circle',css:'v-circle',ok:true,desc:'حركة قوية جداً — كوارث أو تدخلات بنوك مركزية',aa:[360]},
-  {a:180,name:'الخط المستقيم',en:'Straight Line',css:'v-line',ok:true,desc:'حركة قوية سريعة — نسبة نجاح كبيرة',aa:[180,360]},
-  {a:144,name:'الخماسي (144)',en:'Pentagon 144',css:'v-pentagon',ok:true,desc:'تذبذب متوسط — صفقة 1:1',aa:[144,288,360]},
-  {a:120,name:'الثلاثي',en:'Triangle',css:'v-triangle',ok:true,desc:'من أهم الأشكال — حركة سريعة',aa:[120,240,360]},
-  {a:90,name:'الرباعي',en:'Square',css:'v-square',ok:true,desc:'الأكثر شيوعاً — حركة متزنة',aa:[90,180,270,360]},
-  {a:72,name:'الخماسي',en:'Pentagon',css:'v-pentagon',ok:true,desc:'تذبذب متوسط — صفقة 1:1',aa:[72,144,216,288,360]},
-  {a:60,name:'السداسي',en:'Hexagon',css:'v-hexagon',ok:false,desc:'حركة بطيئة — نطاق ضيق',aa:[60,120,180,240,300,360]},
-  {a:51.43,name:'السباعي',en:'Heptagon',css:'v-other',ok:false,desc:'نادر — نطاق ضيق',aa:[51.43,102.86,154.29,205.71,257.14,308.57,360]},
-  {a:45,name:'الثماني',en:'Octagon',css:'v-other',ok:false,desc:'تذبذب — شائع في التذبذب',aa:[45,90,135,180,225,270,315,360]},
-  {a:40,name:'التساعي',en:'Nonagon',css:'v-other',ok:false,desc:'نادر — تصحيحي',aa:[40,80,120,160,200,240,280,320,360]},
+  {a:360,name:'الدائري',en:'Circle',css:'v-circle',ok:true,desc:'حركة قوية جداً — اتجاه طويل وسريع',aa:[360]},
+  {a:180,name:'المستقيم',en:'Straight Line',css:'v-line',ok:true,desc:'حركة قوية — نسبة نجاح كبيرة',aa:[180,360]},
+  {a:144,name:'الخماسي 144',en:'Pentagon',css:'v-pentagon',ok:true,desc:'تذبذب متوسط — صفقة 1:1',aa:[144,288,360]},
+  {a:120,name:'الثلاثي',en:'Triangle',css:'v-triangle',ok:true,desc:'من أهم الأشكال — سريع',aa:[120,240,360]},
+  {a:90,name:'الرباعي',en:'Square',css:'v-square',ok:true,desc:'الأكثر شيوعاً — متزن',aa:[90,180,270,360]},
+  {a:72,name:'الخماسي',en:'Pentagon',css:'v-pentagon',ok:true,desc:'تذبذب متوسط',aa:[72,144,216,288,360]},
+  {a:60,name:'السداسي',en:'Hexagon',css:'v-hexagon',ok:false,desc:'بطيء — نطاق ضيق',aa:[60,120,180,240,300,360]},
+  {a:45,name:'الثماني',en:'Octagon',css:'v-other',ok:false,desc:'تذبذب — شائع',aa:[45,90,135,180,225,270,315,360]},
   {a:36,name:'العشاري',en:'Decagon',css:'v-other',ok:false,desc:'قد يسبق انفجار سعري',aa:[36,72,108,144,180,216,252,288,324,360]},
-  {a:30,name:'الثاني عشر',en:'Dodecagon',css:'v-other',ok:false,desc:'نادر جداً',aa:[30,60,90,120,150,180,210,240,270,300,330,360]},
+  {a:30,name:'12 ضلع',en:'Dodecagon',css:'v-other',ok:false,desc:'نادر جداً',aa:[30,60,90,120,150,180,210,240,270,300,330,360]},
 ];
 function detectShape(){
-  const ps=document.getElementById('detPrice').value.trim(),bs=document.getElementById('detBounce').value.trim(),
-    dir=document.getElementById('detDir').value,ct=document.getElementById('detResults');
+  const ps=document.getElementById('detPrice').value.trim(),bs=document.getElementById('detBounce').value.trim(),dir=document.getElementById('detDir').value,ct=document.getElementById('detResults');
   const price=parseFloat(ps),bounce=parseFloat(bs);
-  if(!ps||!bs||isNaN(price)||isNaN(bounce)){ct.innerHTML='<div class="result-card" style="text-align:center;color:var(--text2);padding:2rem">أدخل السعرين</div>';return}
+  if(!ps||!bs||isNaN(price)||isNaN(bounce)){ct.innerHTML='<div class="result-card" style="text-align:center;color:var(--text2);padding:1.5rem">أدخل السعرين</div>';return}
   let best=null,bestD=Infinity;
   SHAPES.forEach(s=>{const r=smartCalc(price,s.a,dir);const df=Math.abs(r-bounce);if(df<bestD){bestD=df;best=s}});
   if(!best)return;
-  let trows='';
-  best.aa.forEach(a=>{const r=smartCalc(price,a,dir);
-    trows+=`<tr><td style="font-weight:600">${a}°</td><td class="${dir==='up'?'up':'dn'}" style="font-weight:700;font-size:1rem">${formatPrice(r)}</td></tr>`;
-  });
-  const th=best.a<=90?`${best.a/2} أو ${best.a} شمعة`:`${Math.round(best.a/2)} أو ${Math.round(best.a/4)} شمعة`;
-  ct.innerHTML=`
-  <div class="result-card"><div class="shape-result">
-    <div class="shape-visual ${best.css}">${best.css==='v-triangle'||best.css==='v-line'?'':best.a+'°'}</div>
-    <div class="shape-big">${best.name}</div><div class="shape-en">${best.en}</div>
-    <div class="sprops">
-      <div class="sprop"><div class="sprop-l">أول زاوية</div><div class="sprop-v">${best.a}°</div></div>
-      <div class="sprop"><div class="sprop-l">الاكتمال</div><div class="sprop-v" style="color:${best.ok?'var(--green)':'var(--red)'}">${best.ok?'يكتمل ✓':'لا يكتمل ✗'}</div></div>
-      <div class="sprop"><div class="sprop-l">الزمن</div><div class="sprop-v" style="font-size:.85rem">${th}</div></div>
-    </div></div></div>
-  <div class="result-card"><h3>الأهداف</h3><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th></tr></thead><tbody>${trows}</tbody></table></div>
-  <div class="result-card"><h3>قواعد التداول</h3><ul style="color:var(--text2);padding-right:1.2rem;line-height:2.4">
-    <li>تأكيد: ارتداد إلى <strong style="color:var(--orange)">نصف المسافة على الأقل</strong></li>
-    <li>الدخول: عند كسر ${best.a}°</li>
-    <li>التمحور حول ${best.a}° → الهدف ${best.a*2}°</li>
-    <li>إذا جاء الزمن ولم يأتِ السعر → تغيّر الاتجاه</li>
-    ${!best.ok?'<li style="color:var(--red)">⚠ غالباً لا يكتمل</li>':''}
-  </ul></div>`;
+  let trows='';best.aa.forEach(a=>{const r=smartCalc(price,a,dir);trows+=`<tr><td>${a}°</td><td class="${dir==='up'?'up':'dn'}" style="font-weight:700">${fmt(r)}</td></tr>`});
+  ct.innerHTML=`<div class="result-card"><div class="shape-result"><div class="shape-visual ${best.css}">${best.css==='v-triangle'||best.css==='v-line'?'':best.a+'°'}</div><div class="shape-big">${best.name}</div><div class="shape-en">${best.en}</div><div class="sprops"><div class="sprop"><div class="sprop-l">الزاوية</div><div class="sprop-v">${best.a}°</div></div><div class="sprop"><div class="sprop-l">اكتمال</div><div class="sprop-v" style="color:${best.ok?'var(--green)':'var(--red)'}">${best.ok?'✓':'✗'}</div></div></div></div></div><div class="result-card"><h3>الأهداف</h3><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th></tr></thead><tbody>${trows}</tbody></table></div>`;
 }
 
-// ===== SQ9 =====
-function genSQ9(rings){const sz=rings*2+1;const g=Array.from({length:sz},()=>Array(sz).fill(0));let x=rings,y=rings,n=1;g[y][x]=n++;let L=1;while(L<=rings){x++;g[y][x]=n++;for(let i=0;i<L*2-1;i++){y--;g[y][x]=n++}for(let i=0;i<L*2;i++){x--;g[y][x]=n++}for(let i=0;i<L*2;i++){y++;g[y][x]=n++}for(let i=0;i<L*2;i++){x++;g[y][x]=n++}L++}return{g,sz}}
-function getCardinals(rings){const c=new Set([1]);for(let L=1;L<=rings;L++){let s=(2*(L-1)+1)**2;let sl=2*L;c.add(s+1);c.add(s+sl);c.add(s+sl*2);c.add(s+sl*3)}return c}
-function getSameAngle(target,rings){const mx=(2*rings+1)**2,same=new Set();if(target<=1||target>mx)return same;let tL=0,tP=0;for(let L=1;L<=rings;L++){let st=(2*(L-1)+1)**2+1;let en=(2*L+1)**2;if(target>=st&&target<=en){tL=L;tP=target-st;break}}if(!tL)return same;let sl=2*tL,side=Math.floor(tP/sl),pos=tP%sl;for(let L=1;L<=rings;L++){if(L===tL)continue;let nsl=2*L;let st=(2*(L-1)+1)**2+1;let num=st+side*nsl+Math.round(pos*nsl/sl);if(num>=1&&num<=mx)same.add(num)}return same}
-function buildSQ9(){const target=parseInt(document.getElementById('sq9Input').value)||120;const rings=parseInt(document.getElementById('sq9Size').value)||7;const{g,sz}=genSQ9(rings);const cards=getCardinals(rings);const same=getSameAngle(target,rings);let h=`<div class="sq9-grid" style="grid-template-columns:repeat(${sz},1fr)">`;for(let y=0;y<sz;y++)for(let x=0;x<sz;x++){const n=g[y][x];let c='sq9-cell';if(n===1)c+=' center';else if(n===target)c+=' highlight';else if(same.has(n))c+=' highlight';else if(cards.has(n))c+=' cardinal';h+=`<div class="${c}" title="${n}">${n||''}</div>`}h+='</div>';document.getElementById('sq9Container').innerHTML=h;
-  let rows='';[45,90,120,144,180,270,360].forEach(a=>{const u=smartCalc(target,a,'up'),d2=smartCalc(target,a,'down');rows+=`<tr><td style="font-weight:600">${a}°</td><td class="up">${formatPrice(u)}</td><td class="dn">${formatPrice(d2)}</td></tr>`});
-  document.getElementById('sq9Results').innerHTML=`<div class="result-card"><h3>زوايا الرقم ${target}</h3><table class="rtable"><thead><tr><th>الزاوية</th><th>↑ التالية</th><th>↓ السابقة</th></tr></thead><tbody>${rows}</tbody></table></div>`}
+// ===== SQ9: REAL INTERACTIVE GANN SQUARE OF 9 =====
+// Formula: Level = (√Price ± Angle/360)²
+// Grid: counterclockwise spiral from center
 
-// ===== CYCLES (smart scaling + digital root) =====
+function buildSpiralGrid(rings){
+  // Build counterclockwise spiral (Gann style)
+  const sz=rings*2+1;
+  const g=Array.from({length:sz},()=>Array(sz).fill(0));
+  const pos={}; // number -> {y,x}
+  let x=rings,y=rings,n=1;
+  g[y][x]=n;pos[n]={y,x};n++;
+  // Directions: right, up, left, down (counterclockwise after first move right)
+  for(let layer=1;layer<=rings;layer++){
+    // Move right 1
+    x++;g[y][x]=n;pos[n]={y,x};n++;
+    // Move up (layer*2-1)
+    for(let i=0;i<layer*2-1;i++){y--;g[y][x]=n;pos[n]={y,x};n++}
+    // Move left (layer*2)
+    for(let i=0;i<layer*2;i++){x--;g[y][x]=n;pos[n]={y,x};n++}
+    // Move down (layer*2)
+    for(let i=0;i<layer*2;i++){y++;g[y][x]=n;pos[n]={y,x};n++}
+    // Move right (layer*2)
+    for(let i=0;i<layer*2;i++){x++;g[y][x]=n;pos[n]={y,x};n++}
+  }
+  return{g,sz,pos,max:n-1};
+}
+
+function calcSQ9(){
+  const priceStr=document.getElementById('sq9Price').value.trim();
+  const rings=parseInt(document.getElementById('sq9Size').value)||5;
+  const price=parseFloat(priceStr);
+  if(!priceStr||isNaN(price)||price<=0)return;
+
+  // Build the visual grid (numbers 1..max)
+  const{g,sz,pos,max}=buildSpiralGrid(rings);
+
+  // Calculate Gann levels from price using formula: (√price ± n/360)²
+  // The center = price, surrounding = calculated levels
+  // We map grid position numbers to actual price levels
+  const centerNum=1;
+  const priceLevels={};
+  const sqrtP=Math.sqrt(price);
+  
+  for(let num=1;num<=max;num++){
+    if(num===centerNum){
+      priceLevels[num]=price;
+    } else {
+      // Each step in the spiral = increment of angle
+      // Full rotation (8 numbers around center) = 360°
+      // So each cell = (num-1) * (360/8) roughly, but better: use ring-based
+      // Simpler: each number offset from center represents fraction of rotation
+      // Standard approach: level = (√price + (num-1)/360 * k)² for up
+      // For SQ9, the step between adjacent cells on same cardinal = 2 added to sqrt
+      // We use: level_up = (√price + (num-1)*increment)²
+      // increment chosen so that a full rotation (8 steps) = meaningful price move
+    }
+  }
+  
+  // Better approach: Calculate actual S/R levels and show grid + table
+  // The REAL Gann SQ9 calculator: find levels at cardinal/ordinal angles
+  const angles=[45,90,135,180,225,270,315,360];
+  const levelsUp=[], levelsDown=[];
+  
+  angles.forEach(a=>{
+    // Gann formula: Level = (√Price + Angle/360)²
+    const up = Math.pow(sqrtP + a/360, 2);
+    const down = Math.pow(Math.max(0, sqrtP - a/360), 2);
+    levelsUp.push({angle:a, price:up});
+    levelsDown.push({angle:a, price:down});
+  });
+
+  // Also multi-rotation levels
+  for(let rot=2;rot<=3;rot++){
+    angles.forEach(a=>{
+      const totalA = 360*(rot-1)+a;
+      const up = Math.pow(sqrtP + totalA/360, 2);
+      const down = Math.pow(Math.max(0, sqrtP - totalA/360), 2);
+      levelsUp.push({angle:totalA, price:up});
+      levelsDown.push({angle:totalA, price:down});
+    });
+  }
+
+  // Now build visual spiral grid with PRICE values
+  // Map numbers to price levels where center=input price
+  // Each number N maps to: price_level = (√price + (N-1)/360)²
+  const cellPrices={};
+  for(let num=1;num<=max;num++){
+    const offset=(num-1);
+    cellPrices[num] = Math.pow(sqrtP + offset/360, 2);
+  }
+  // For numbers "below" center (downside), use negative offset
+  // But spiral only goes up. So let's use the grid purely visually
+  // and show the real calculator below
+
+  // Build grid HTML - show grid numbers mapped to prices
+  let gridHTML=`<div class="sq9-grid" style="grid-template-columns:repeat(${sz},1fr)">`;
+  
+  // Find which cells are on cardinal/ordinal crosses
+  const cardinalNums=new Set([1]);
+  for(let L=1;L<=rings;L++){
+    let start=(2*(L-1)+1)**2;
+    let sl=2*L;
+    cardinalNums.add(start+1);      // 0° (right)
+    cardinalNums.add(start+sl);     // 90° (top)  
+    cardinalNums.add(start+sl*2);   // 180° (left)
+    cardinalNums.add(start+sl*3);   // 270° (bottom)
+  }
+  // Ordinal crosses (45°, 135°, 225°, 315°) = odd perfect squares and midpoints
+  const ordinalNums=new Set();
+  for(let L=1;L<=rings;L++){
+    let start=(2*(L-1)+1)**2;
+    let sl=2*L;
+    let half=Math.floor(sl/2);
+    ordinalNums.add(start+half);           // ~45°
+    ordinalNums.add(start+sl+half);        // ~135°
+    ordinalNums.add(start+sl*2+half);      // ~225°
+    ordinalNums.add(start+sl*3+half);      // ~315°
+  }
+
+  for(let y2=0;y2<sz;y2++){
+    for(let x2=0;x2<sz;x2++){
+      const num=g[y2][x2];
+      let cls='sq9-cell';
+      if(num===1)cls+=' center';
+      else if(cardinalNums.has(num))cls+=' cardinal';
+      else if(ordinalNums.has(num))cls+=' same-angle';
+      
+      // Show actual price for this cell
+      const cellP = Math.pow(sqrtP + (num-1)/360, 2);
+      const display = num===1 ? fmt(price) : fmt(cellP);
+      gridHTML+=`<div class="${cls}" title="رقم ${num} | ${display}">${display}</div>`;
+    }
+  }
+  gridHTML+='</div>';
+  document.getElementById('sq9Wrap').innerHTML=gridHTML;
+
+  // Results table: Buy/Sell levels
+  let buyRows='',sellRows='';
+  const mainAngles=[45,90,135,180,225,270,315,360,405,450,540,630,720];
+  mainAngles.forEach(a=>{
+    const up=Math.pow(sqrtP+a/360,2);
+    const down=Math.pow(Math.max(0,sqrtP-a/360),2);
+    const upDiff=((up-price)/price*100).toFixed(2);
+    const downDiff=((price-down)/price*100).toFixed(2);
+    buyRows+=`<tr${a===360?' style="background:var(--orange-dim)"':''}><td>${a}°</td><td class="up" style="font-weight:700">${fmt(up)}</td><td>${upDiff}%</td></tr>`;
+    sellRows+=`<tr${a===360?' style="background:var(--orange-dim)"':''}><td>${a}°</td><td class="dn" style="font-weight:700">${fmt(down)}</td><td>${downDiff}%</td></tr>`;
+  });
+  
+  document.getElementById('sq9Results').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+      <div class="result-card"><h3>مستويات الشراء (المقاومة) ↑</h3><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th><th>%</th></tr></thead><tbody>${buyRows}</tbody></table></div>
+      <div class="result-card"><h3>مستويات البيع (الدعم) ↓</h3><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th><th>%</th></tr></thead><tbody>${sellRows}</tbody></table></div>
+    </div>
+    <div class="result-card"><h3>طريقة الاستخدام</h3><ul style="color:var(--text2);padding-right:1rem;line-height:2.2;font-size:.85rem"><li><strong style="color:var(--green)">شراء:</strong> إذا السعر فوق مستوى زاوية معينة → الهدف الزاوية التالية</li><li><strong style="color:var(--red)">بيع:</strong> إذا السعر تحت مستوى زاوية → الهدف الزاوية التالية للأسفل</li><li><strong style="color:var(--orange)">360°</strong> = دورة كاملة — مستوى انعكاس رئيسي</li><li>الزوايا 90° و 180° و 270° هي أقوى مستويات الدعم والمقاومة</li></ul></div>`;
+}
+
+// CYCLES
 function dRoot(n){let s=String(Math.round(Math.abs(n))).split('').reduce((a,b)=>a+parseInt(b),0);while(s>=10){s=String(s).split('').reduce((a,b)=>a+parseInt(b),0)}return s}
 const CM={1:'1',2:'2',3:'3',4:'4',5:'5',6:'3 أو 4',7:'5',8:'2 أو 4',9:'1 أو 5'};
 const CMN={1:[1],2:[2],3:[3],4:[4],5:[5],6:[3,4],7:[5],8:[2,4],9:[1,5]};
 
 function calcCycles(){
-  const ps=document.getElementById('cycPrice').value.trim(),
-    dir=document.getElementById('cycType').value,
-    ct=document.getElementById('cycResults');
-  const price=parseFloat(ps);
-  if(!ps||isNaN(price)||price<=0){ct.innerHTML='';return}
-  
-  const root=dRoot(price);
-  const cycs=CMN[root]||[1];
-  const mx=Math.max(...cycs);
-  const sf=getScalingFactor(price,dir);
+  const ps=document.getElementById('cycPrice').value.trim(),dir=document.getElementById('cycType').value,ct=document.getElementById('cycResults');
+  const price=parseFloat(ps);if(!ps||isNaN(price)||price<=0){ct.innerHTML='';return}
+  const root=dRoot(price),cycs=CMN[root]||[1],mx=Math.max(...cycs);
 
-  // Digit animation
-  let digs=String(Math.round(price)).split('');
-  let dh='<div class="cyc-vis">';
-  digs.forEach(x=>{dh+=`<div class="cyc-d">${x}</div>`});
-  dh+='<div class="cyc-arr">→</div>';
+  let digs=String(Math.round(price)).split(''),dh='<div class="cyc-vis">';
+  digs.forEach(x=>{dh+=`<div class="cyc-d">${x}</div>`});dh+='<div class="cyc-arr">→</div>';
   let tmp=digs.reduce((a,b)=>a+parseInt(b),0),steps=[tmp];
   while(tmp>=10){let ns=String(tmp).split('').reduce((a,b)=>a+parseInt(b),0);tmp=ns;steps.push(tmp)}
-  steps.forEach((s,i)=>{dh+=`<div class="cyc-d ${i===steps.length-1?'active':''}">${s}</div>`;if(i<steps.length-1)dh+='<div class="cyc-arr">→</div>'});
-  dh+='</div>';
+  steps.forEach((s,i)=>{dh+=`<div class="cyc-d ${i===steps.length-1?'active':''}">${s}</div>`;if(i<steps.length-1)dh+='<div class="cyc-arr">→</div>'});dh+='</div>';
 
-  // SQ9 angles with smart scaling
-  let sq9rows='';
-  [90,180,270,360].forEach(a=>{
-    const r=smartCalc(price,a,dir);
-    const diff=Math.abs(r-price);
-    const pct=((diff/price)*100).toFixed(2);
-    const cls=dir==='up'?'up':'dn';
-    const bg=a===360?'background:var(--orange-dim)':'';
-    sq9rows+=`<tr style="${bg}"><td style="font-weight:600">${a}°</td><td class="${cls}" style="font-weight:700">${formatPrice(r)}</td><td>${formatPrice(diff)}</td><td>${pct}%</td></tr>`;
-  });
+  let sq9rows='';[90,180,270,360].forEach(a=>{const r=smartCalc(price,a,dir),diff=Math.abs(r-price),pct=((diff/price)*100).toFixed(2);
+    sq9rows+=`<tr${a===360?' style="background:var(--orange-dim)"':''}><td>${a}°</td><td class="${dir==='up'?'up':'dn'}" style="font-weight:700">${fmt(r)}</td><td>${fmt(diff)}</td><td>${pct}%</td></tr>`});
 
-  // Multi-shape angles
   let shapeRows='';
-  const shapeAngles={
-    'المربع (Square)':[90,180,270,360],
-    'المثلث (Triangle)':[120,240,360],
-    'الخماسي (Pentagon)':[72,144,216,288,360],
-    'السداسي (Hexagon)':[60,120,180,240,300,360]
-  };
-  for(let[name,angles] of Object.entries(shapeAngles)){
-    let cells='';
-    angles.forEach(a=>{
-      const r=smartCalc(price,a,dir);
-      cells+=`<td class="${dir==='up'?'up':'dn'}" style="font-weight:600">${formatPrice(r)}</td>`;
-    });
-    shapeRows+=`<tr><td style="font-weight:600;color:var(--orange);white-space:nowrap">${name}</td>${cells}</tr>`;
-  }
+  const SA={'المربع':[90,180,270,360],'المثلث':[120,240,360],'الخماسي':[72,144,216,288,360],'السداسي':[60,120,180,240,300,360]};
+  for(let[name,angs] of Object.entries(SA)){let cells='';angs.forEach(a=>{cells+=`<td class="${dir==='up'?'up':'dn'}" style="font-weight:600">${fmt(smartCalc(price,a,dir))}</td>`});
+    shapeRows+=`<tr><td style="color:var(--orange);font-weight:600">${name}</td>${cells}</tr>`}
 
-  // Cycle targets
   let cycRows='';
-  for(let c=1;c<=mx;c++){
-    const a=360*c;
-    const r=smartCalc(price,a,dir);
-    const pct=((Math.abs(r-price)/price)*100).toFixed(2);
-    const cls=dir==='up'?'up':'dn';
-    const active=cycs.includes(c)?'background:var(--orange-dim)':'';
-    cycRows+=`<tr style="${active}"><td>الدورة ${c}</td><td>${a}°</td><td class="${cls}" style="font-weight:700;font-size:1rem">${formatPrice(r)}</td><td>${pct}%</td></tr>`;
-  }
+  for(let c=1;c<=mx;c++){const a=360*c,r=smartCalc(price,a,dir),pct=((Math.abs(r-price)/price)*100).toFixed(2);
+    cycRows+=`<tr${cycs.includes(c)?' style="background:var(--orange-dim)"':''}><td>الدورة ${c}</td><td>${a}°</td><td class="${dir==='up'?'up':'dn'}" style="font-weight:700">${fmt(r)}</td><td>${pct}%</td></tr>`}
 
   ct.innerHTML=`
-  <div class="result-card"><h3>مربع التسعة — SQ9</h3>
-    <p style="color:var(--text3);font-size:.8rem;margin-bottom:1rem">الإزاحة الذكية: ${sf} | السعر المعدّل: ${(price*sf).toFixed(2)}</p>
-    <div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th><th>الفارق</th><th>النسبة</th></tr></thead><tbody>${sq9rows}</tbody></table></div></div>
-
-  <div class="result-card"><h3>الأشكال الهندسية</h3>
-    <div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الشكل</th><th>الزاوية 1</th><th>الزاوية 2</th><th>الزاوية 3</th><th>الزاوية 4</th><th>360°</th></tr></thead><tbody>${shapeRows}</tbody></table></div></div>
-
-  <div class="result-card"><h3>تحليل دورات الأرقام</h3>${dh}
-    <div class="cyc-big"><div class="n">${root}</div><div class="l">الجذر الرقمي</div></div>
-    <div style="text-align:center;font-size:1.1rem">عدد الدورات: <strong style="color:var(--orange);font-size:1.5rem">${CM[root]}</strong></div>
-    ${[6,8,9].includes(root)?'<p style="text-align:center;font-size:.8rem;color:var(--text3);margin-top:.4rem">يتحدد بمراقبة التمحور</p>':''}
-  </div>
-
-  <div class="result-card"><h3>أهداف الدورات ${dir==='up'?'↑':'↓'}</h3>
-    <div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الدورة</th><th>الزاوية</th><th>السعر</th><th>النسبة</th></tr></thead><tbody>${cycRows}</tbody></table></div></div>`;
+    <div class="result-card"><h3>مربع التسعة SQ9</h3><p style="color:var(--text3);font-size:.75rem;margin-bottom:.6rem">الإزاحة: ${getSF(price,dir)}</p><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th><th>الفارق</th><th>%</th></tr></thead><tbody>${sq9rows}</tbody></table></div></div>
+    <div class="result-card"><h3>الأشكال الهندسية</h3><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الشكل</th>${Object.values(SA)[0].map((_,i)=>'<th>Z'+(i+1)+'</th>').join('')}<th>360°</th></tr></thead><tbody>${shapeRows}</tbody></table></div></div>
+    <div class="result-card"><h3>دورات الأرقام</h3>${dh}<div class="cyc-big"><div class="n">${root}</div><div class="l">الجذر الرقمي</div></div><div style="text-align:center;font-size:1rem">الدورات: <strong style="color:var(--orange);font-size:1.3rem">${CM[root]}</strong></div></div>
+    <div class="result-card"><h3>أهداف الدورات ${dir==='up'?'↑':'↓'}</h3><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الدورة</th><th>الزاوية</th><th>السعر</th><th>%</th></tr></thead><tbody>${cycRows}</tbody></table></div></div>`;
 }
 </script>
 
