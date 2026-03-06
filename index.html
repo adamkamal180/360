@@ -22,37 +22,44 @@ a{color:var(--orange);text-decoration:none}
 .topbar{position:fixed;top:0;right:0;left:0;z-index:999;height:60px;background:rgba(8,8,10,.85);backdrop-filter:blur(20px);border-bottom:1px solid var(–border);display:flex;align-items:center;padding:0 1.5rem;gap:1rem}
 .topbar-logo{font-family:‘Cairo’;font-weight:900;font-size:1.6rem;color:var(–orange);cursor:pointer;letter-spacing:-1px}
 .topbar-nav{display:flex;gap:.3rem;margin-right:auto;margin-left:auto}
-.topbar-nav a{padding:.45rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;color:var(–text2);transition:all .2s;white-space:nowrap}
+.topbar-nav a{padding:.45rem 1rem;border-radius:8px;font-size:.82rem;font-weight:600;color:var(–text2);transition:all .2s;white-space:nowrap;cursor:pointer}
 .topbar-nav a:hover{color:var(–text);background:var(–surface2)}
 .topbar-nav a.active{color:var(–orange);background:var(–orange-dim)}
-.topbar-author{font-size:.8rem;font-weight:700;color:var(–orange);padding:.4rem 1rem;border:1.5px solid var(–orange);border-radius:20px;transition:all .25s}
+.topbar-author{display:flex;align-items:center;gap:.5rem;font-size:.8rem;font-weight:700;color:var(–orange);padding:.3rem .8rem .3rem .3rem;border:1.5px solid var(–orange);border-radius:25px;transition:all .25s}
 .topbar-author:hover{background:var(–orange);color:var(–bg)}
+.topbar-author:hover .author-img{border-color:var(–bg)}
+.author-img{width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(–orange)}
 .menu-btn{display:none;background:none;border:none;color:var(–text);font-size:1.5rem;cursor:pointer;padding:.3rem}
 .mobile-nav{display:none;position:fixed;top:60px;right:0;left:0;background:var(–surface);border-bottom:1px solid var(–border);z-index:998;padding:1rem;flex-direction:column;gap:.3rem}
 .mobile-nav.open{display:flex}
-.mobile-nav a{padding:.8rem 1rem;border-radius:8px;font-size:.9rem;font-weight:600;color:var(–text2)}
+.mobile-nav a{padding:.8rem 1rem;border-radius:8px;font-size:.9rem;font-weight:600;color:var(–text2);cursor:pointer}
 .mobile-nav a.active{color:var(–orange);background:var(–orange-dim)}
 
 .page{display:none;padding-top:60px;min-height:100vh;animation:pageIn .4s ease}
 .page.active{display:block}
 @keyframes pageIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-.hero{min-height:calc(100vh - 60px);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+/* HERO - horizontal layout */
+.hero{min-height:calc(100vh - 60px);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:2rem 1rem}
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(–border) 1px,transparent 1px),linear-gradient(90deg,var(–border) 1px,transparent 1px);background-size:60px 60px;opacity:.08}
 .hero-glow{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,0,.1),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:heroGlow 6s ease-in-out infinite alternate}
 @keyframes heroGlow{0%{transform:translate(-50%,-50%) scale(1);opacity:.6}100%{transform:translate(-50%,-50%) scale(1.3);opacity:1}}
-.hero-c{position:relative;z-index:2;text-align:center;padding:2rem}
-.hero-big{font-family:‘Cairo’;font-weight:900;font-size:clamp(4rem,12vw,9rem);color:var(–orange);line-height:1;text-shadow:0 0 120px rgba(255,106,0,.25)}
-.hero-title{font-family:‘Cairo’;font-weight:700;font-size:clamp(1.2rem,3vw,2rem);margin-top:.5rem}
-.hero-sub{color:var(–text2);font-size:1rem;margin-top:.8rem;max-width:500px;margin-inline:auto}
-.hero-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;max-width:960px;margin:3rem auto 0;padding:0 1rem}
-.tool-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:1.8rem 1.4rem;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.hero-top{position:relative;z-index:2;text-align:center;margin-bottom:2.5rem}
+.hero-big{font-family:‘Cairo’;font-weight:900;font-size:clamp(3.5rem,10vw,7rem);color:var(–orange);line-height:1;text-shadow:0 0 120px rgba(255,106,0,.25)}
+.hero-title{font-family:‘Cairo’;font-weight:700;font-size:clamp(1rem,2.5vw,1.6rem);margin-top:.3rem}
+.hero-sub{color:var(–text2);font-size:.9rem;margin-top:.5rem;max-width:500px;margin-inline:auto}
+
+/* Horizontal tool cards */
+.hero-cards{position:relative;z-index:2;display:flex;gap:1rem;width:100%;max-width:1100px;overflow-x:auto;padding:0 .5rem 1rem;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+.hero-cards::-webkit-scrollbar{height:4px}
+.hero-cards::-webkit-scrollbar-thumb{background:var(–orange);border-radius:2px}
+.tool-card{flex:0 0 240px;scroll-snap-align:start;background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:1.5rem 1.2rem;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
 .tool-card::before{content:’’;position:absolute;top:0;right:0;width:100%;height:3px;background:var(–orange);transform:scaleX(0);transform-origin:right;transition:transform .4s}
 .tool-card:hover::before{transform:scaleX(1)}
 .tool-card:hover{border-color:var(–orange);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4)}
-.tool-icon{font-size:2rem;margin-bottom:.8rem}
-.tool-name{font-family:‘Cairo’;font-weight:700;font-size:1.05rem;margin-bottom:.4rem}
-.tool-desc{font-size:.8rem;color:var(–text2);line-height:1.6}
+.tool-icon{font-size:1.8rem;margin-bottom:.6rem}
+.tool-name{font-family:‘Cairo’;font-weight:700;font-size:.95rem;margin-bottom:.3rem}
+.tool-desc{font-size:.75rem;color:var(–text2);line-height:1.6}
 
 .tool-page{max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem}
 .tool-header{text-align:center;margin-bottom:2.5rem;padding-top:1.5rem}
@@ -73,7 +80,6 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
 .btn:active{transform:scale(.97)}
 .btn-row{display:flex;gap:.8rem;margin-top:1.5rem;flex-wrap:wrap}
 
-.results{margin-top:2rem}
 .result-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:1.5rem;margin-bottom:1rem;animation:pageIn .3s ease}
 .result-card h3{font-family:‘Cairo’;font-weight:700;color:var(–orange);font-size:1rem;margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
 .result-card h3::before{content:’’;width:6px;height:6px;background:var(–orange);border-radius:50%;flex-shrink:0}
@@ -117,10 +123,10 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
 
 @media(max-width:768px){
 .topbar-nav{display:none}.menu-btn{display:block}
-.tool-page{padding:1.5rem 1rem 3rem}.hero-cards{grid-template-columns:1fr 1fr}
+.tool-page{padding:1.5rem 1rem 3rem}
+.tool-card{flex:0 0 200px}
 .sq9-cell{width:36px;height:36px;font-size:.6rem}.input-row{flex-direction:column}.input-row .input-group{min-width:100%}
 }
-@media(max-width:480px){.hero-cards{grid-template-columns:1fr}}
 </style>
 
 </head>
@@ -128,14 +134,14 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
 
 <header class="topbar">
   <div class="topbar-logo" onclick="navigate('home')">360°</div>
-  <nav class="topbar-nav" id="desktopNav">
+  <nav class="topbar-nav">
     <a onclick="navigate('home')" class="active" data-page="home">الرئيسية</a>
     <a onclick="navigate('calculator')" data-page="calculator">حاسبة الزوايا</a>
     <a onclick="navigate('detector')" data-page="detector">كاشف الشكل</a>
     <a onclick="navigate('sq9')" data-page="sq9">مربع التسعة</a>
     <a onclick="navigate('cycles')" data-page="cycles">دورات الأرقام</a>
   </nav>
-  <a href="https://x.com/adams_k1?s=21&t=j0daPEI6JiicPs6LaMWXxQ" target="_blank" class="topbar-author">ADAM KAMAL</a>
+  <a href="https://x.com/adams_k1?s=21&t=j0daPEI6JiicPs6LaMWXxQ" target="_blank" class="topbar-author"><img src="data:image/jpeg;base64,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" class="author-img" alt="AK">ADAM KAMAL</a>
   <button class="menu-btn" onclick="toggleMobile()">☰</button>
 </header>
 <div class="mobile-nav" id="mobileNav">
@@ -152,31 +158,31 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
   <section class="hero">
     <div class="hero-grid"></div>
     <div class="hero-glow"></div>
-    <div class="hero-c">
+    <div class="hero-top">
       <div class="hero-big">360°</div>
       <h1 class="hero-title">أدوات الزوايا السعرية الزمنية</h1>
       <p class="hero-sub">حوّل نظرية جان إلى أدوات حسابية تفاعلية — أدخل الأرقام واحصل على النتائج فوراً</p>
-      <div class="hero-cards">
-        <div class="tool-card" onclick="navigate('calculator')">
-          <div class="tool-icon">📐</div>
-          <div class="tool-name">حاسبة الزوايا السعرية</div>
-          <div class="tool-desc">أدخل سعر القمة أو القاع → تحسب كل الزوايا من 30° إلى 360° مع المعامل والفارق</div>
-        </div>
-        <div class="tool-card" onclick="navigate('detector')">
-          <div class="tool-icon">🔍</div>
-          <div class="tool-name">كاشف الشكل الهندسي</div>
-          <div class="tool-desc">أدخل سعر البداية وسعر الارتداد → يحدد الشكل الهندسي وخصائصه وأهدافه</div>
-        </div>
-        <div class="tool-card" onclick="navigate('sq9')">
-          <div class="tool-icon">🔢</div>
-          <div class="tool-name">مربع التسعة التفاعلي</div>
-          <div class="tool-desc">مربع جان المرئي — أدخل رقماً ليتم تمييز موقعه والزوايا والدورات</div>
-        </div>
-        <div class="tool-card" onclick="navigate('cycles')">
-          <div class="tool-icon">🔄</div>
-          <div class="tool-name">حاسبة دورات الأرقام</div>
-          <div class="tool-desc">أدخل السعر والفريم → عدد الدورات المتوقعة وأسعار كل دورة</div>
-        </div>
+    </div>
+    <div class="hero-cards">
+      <div class="tool-card" onclick="navigate('calculator')">
+        <div class="tool-icon">📐</div>
+        <div class="tool-name">حاسبة الزوايا السعرية</div>
+        <div class="tool-desc">أدخل سعر القمة أو القاع → تحسب كل الزوايا من 30° إلى 360°</div>
+      </div>
+      <div class="tool-card" onclick="navigate('detector')">
+        <div class="tool-icon">🔍</div>
+        <div class="tool-name">كاشف الشكل الهندسي</div>
+        <div class="tool-desc">أدخل سعر البداية وسعر الارتداد → يحدد الشكل وخصائصه</div>
+      </div>
+      <div class="tool-card" onclick="navigate('sq9')">
+        <div class="tool-icon">🔢</div>
+        <div class="tool-name">مربع التسعة التفاعلي</div>
+        <div class="tool-desc">مربع جان المرئي — أدخل رقماً ليتم تمييزه والزوايا حوله</div>
+      </div>
+      <div class="tool-card" onclick="navigate('cycles')">
+        <div class="tool-icon">🔄</div>
+        <div class="tool-name">حاسبة دورات الأرقام</div>
+        <div class="tool-desc">أدخل السعر → عدد الدورات المتوقعة وأهداف كل دورة</div>
       </div>
     </div>
   </section>
@@ -186,18 +192,11 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
 
 <div class="page" id="page-calculator">
   <div class="tool-page">
-    <div class="tool-header">
-      <h1>📐 حاسبة الزوايا السعرية</h1>
-      <p>أدخل سعر القمة أو القاع — النتائج تتحدث تلقائياً مع كل تغيير</p>
-    </div>
+    <div class="tool-header"><h1>📐 حاسبة الزوايا السعرية</h1><p>أدخل السعر — النتائج تتحدث تلقائياً</p></div>
     <div class="result-card">
       <div class="input-row">
-        <div class="input-group"><label>السعر</label><input type="text" id="calcPrice" placeholder="مثال: 1.08500" oninput="autoCalc()"></div>
-        <div class="input-group"><label>النوع</label><select id="calcType" onchange="autoCalc()"><option value="low">قاع — حساب الصعود ↑</option><option value="high">قمة — حساب الهبوط ↓</option></select></div>
-      </div>
-      <div class="input-row">
-        <div class="input-group"><label>الفريم</label><select id="calcFrame" onchange="autoCalc()"><option value="h1">H1 / H4</option><option value="d1">Daily</option><option value="mn">Monthly</option></select></div>
-        <div class="input-group"><label>نوع الزوج</label><select id="calcPair" onchange="autoCalc()"><option value="normal">أزواج عادية (5 أرقام)</option><option value="jpy">أزواج الين (3 أرقام)</option></select></div>
+        <div class="input-group"><label>السعر</label><input type="text" id="calcPrice" placeholder="مثال: 104000 أو 1.08500" oninput="autoCalc()"></div>
+        <div class="input-group"><label>النوع</label><select id="calcType" onchange="autoCalc()"><option value="low">قاع — صعود ↑</option><option value="high">قمة — هبوط ↓</option></select></div>
       </div>
     </div>
     <div id="calcResults"></div>
@@ -208,19 +207,14 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
 
 <div class="page" id="page-detector">
   <div class="tool-page">
-    <div class="tool-header">
-      <h1>🔍 كاشف الشكل الهندسي</h1>
-      <p>حدد سعر البداية وسعر أول ارتداد لمعرفة الشكل وكل تفاصيله</p>
-    </div>
+    <div class="tool-header"><h1>🔍 كاشف الشكل الهندسي</h1><p>حدد سعر البداية وسعر الارتداد</p></div>
     <div class="result-card">
       <div class="input-row">
-        <div class="input-group"><label>سعر البداية (القمة أو القاع)</label><input type="text" id="detPrice" placeholder="مثال: 1.08500"></div>
-        <div class="input-group"><label>سعر أول ارتداد</label><input type="text" id="detBounce" placeholder="مثال: 1.09200"></div>
+        <div class="input-group"><label>سعر البداية</label><input type="text" id="detPrice" placeholder="مثال: 104000"></div>
+        <div class="input-group"><label>سعر أول ارتداد</label><input type="text" id="detBounce" placeholder="مثال: 108500"></div>
       </div>
       <div class="input-row">
-        <div class="input-group"><label>الاتجاه</label><select id="detDir"><option value="up">صعود ↑ (من قاع)</option><option value="down">هبوط ↓ (من قمة)</option></select></div>
-        <div class="input-group"><label>الفريم</label><select id="detFrame"><option value="h1">H1 / H4</option><option value="d1">Daily</option><option value="mn">Monthly</option></select></div>
-        <div class="input-group"><label>الزوج</label><select id="detPair"><option value="normal">أزواج عادية</option><option value="jpy">أزواج الين</option></select></div>
+        <div class="input-group"><label>الاتجاه</label><select id="detDir"><option value="up">صعود ↑</option><option value="down">هبوط ↓</option></select></div>
       </div>
       <div class="btn-row"><button class="btn" onclick="detectShape()">اكتشف الشكل ←</button></div>
     </div>
@@ -232,19 +226,16 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
 
 <div class="page" id="page-sq9">
   <div class="tool-page">
-    <div class="tool-header">
-      <h1>🔢 مربع التسعة التفاعلي</h1>
-      <p>أدخل رقماً لتحديد موقعه وحساب الزوايا حوله على مربع جان</p>
-    </div>
+    <div class="tool-header"><h1>🔢 مربع التسعة التفاعلي</h1><p>أدخل رقماً لتحديد موقعه على المربع</p></div>
     <div class="result-card">
       <div class="input-row">
         <div class="input-group"><label>الرقم</label><input type="number" id="sq9Input" value="120" min="1" max="800" oninput="buildSQ9()"></div>
         <div class="input-group"><label>الحجم</label><select id="sq9Size" onchange="buildSQ9()"><option value="5">5 حلقات</option><option value="7" selected>7 حلقات</option><option value="9">9 حلقات</option></select></div>
       </div>
       <div class="sq9-info">
-        <div class="sq9-legend"><div class="sq9-legend-dot" style="background:var(--orange)"></div> الرقم المحدد</div>
+        <div class="sq9-legend"><div class="sq9-legend-dot" style="background:var(--orange)"></div> المحدد</div>
         <div class="sq9-legend"><div class="sq9-legend-dot" style="background:var(--orange-dim);border:1px solid var(--orange)"></div> نفس الزاوية</div>
-        <div class="sq9-legend"><div class="sq9-legend-dot" style="background:rgba(0,200,83,.06);border:1px solid rgba(0,200,83,.25)"></div> المحاور الأساسية</div>
+        <div class="sq9-legend"><div class="sq9-legend-dot" style="background:rgba(0,200,83,.06);border:1px solid rgba(0,200,83,.25)"></div> المحاور</div>
       </div>
     </div>
     <div class="sq9-container" id="sq9Container"></div>
@@ -256,20 +247,13 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
 
 <div class="page" id="page-cycles">
   <div class="tool-page">
-    <div class="tool-header">
-      <h1>🔄 حاسبة دورات الأرقام</h1>
-      <p>أدخل السعر لحساب الجذر الرقمي وعدد الدورات المتوقعة</p>
-    </div>
+    <div class="tool-header"><h1>🔄 حاسبة الزوايا والدورات</h1><p>أدخل السعر لحساب الزوايا بالإزاحة الذكية + دورات الأرقام</p></div>
     <div class="result-card">
       <div class="input-row">
-        <div class="input-group"><label>السعر</label><input type="text" id="cycPrice" placeholder="مثال: 1.03399"></div>
-        <div class="input-group"><label>النوع</label><select id="cycType"><option value="low">قاع — دورات صاعدة ↑</option><option value="high">قمة — دورات هابطة ↓</option></select></div>
+        <div class="input-group"><label>السعر</label><input type="text" id="cycPrice" placeholder="مثال: 104000 أو 2.45"></div>
+        <div class="input-group"><label>النوع</label><select id="cycType"><option value="up">صعود ↑</option><option value="down">هبوط ↓</option></select></div>
       </div>
-      <div class="input-row">
-        <div class="input-group"><label>الفريم</label><select id="cycFrame"><option value="h1">H1 / H4</option><option value="d1">Daily</option><option value="mn">Monthly</option></select></div>
-        <div class="input-group"><label>الزوج</label><select id="cycPair"><option value="normal">أزواج عادية</option><option value="jpy">أزواج الين</option></select></div>
-      </div>
-      <div class="btn-row"><button class="btn" onclick="calcCycles()">احسب الدورات ←</button></div>
+      <div class="btn-row"><button class="btn" onclick="calcCycles()">احسب ←</button></div>
     </div>
     <div id="cycResults"></div>
   </div>
@@ -288,77 +272,87 @@ function toggleMobile(){document.getElementById('mobileNav').classList.toggle('o
 function closeMobile(){document.getElementById('mobileNav').classList.remove('open')}
 window.addEventListener('DOMContentLoaded',()=>{const h=location.hash.replace('#','');if(h&&document.getElementById('page-'+h))navigate(h);else navigate('home')});
 
-// ===== CORE MATH =====
-function prep(priceStr,frame,pair){
-  let p=parseFloat(priceStr);if(isNaN(p)||p<=0)return null;
-  let kd;
-  if(pair==='jpy'){kd=frame==='h1'?2:frame==='d1'?1:0}
-  else{kd=frame==='h1'?4:frame==='d1'?3:2}
-  let rounded=parseFloat(p.toFixed(kd));
-  let intP=Math.round(rounded*Math.pow(10,kd));
-  return{intP,kd,orig:p};
+// ===== SMART SCALING (from your Python code) =====
+function getScalingFactor(p, direction){
+  if(p>=10000){
+    if(direction==='up') return 0.0001;
+    else return p>=40000?0.0001:0.001;
+  } else if(p>=1000) return 0.01;
+  else if(p>=100) return 0.1;
+  else if(p>=5.0){
+    return direction==='down'?100.0:1.0;
+  } else if(p>=1.0){
+    return direction==='down'?100.0:1.0;
+  } else return 100.0;
 }
-function angleCalc(intP,deg,dir){
-  let f=deg/180,sq=Math.sqrt(intP);
-  return dir==='up'?Math.pow(sq+f,2):Math.pow(Math.max(0,sq-f),2);
-}
-function toPrice(v,kd){return(v/Math.pow(10,kd)).toFixed(kd)}
 
-// ===== CALCULATOR =====
+function smartCalc(price, angleDeg, direction){
+  let m = getScalingFactor(price, direction);
+  let scaledP = price * m;
+  let root = Math.sqrt(scaledP);
+  let factor = angleDeg / 180;
+  let newRoot = direction==='up' ? root+factor : root-factor;
+  if(newRoot<0) return 0;
+  return (newRoot**2)/m;
+}
+
+function formatPrice(p){
+  if(p<1 && p>0) return p.toFixed(4);
+  if(p<10) return p.toFixed(4);
+  if(p<1000) return p.toFixed(2);
+  return p.toFixed(2);
+}
+
+// ===== CALCULATOR (uses smart scaling) =====
 const ANGLES=[30,36,40,45,51.43,60,72,90,108,120,135,144,150,180,210,216,240,252,270,288,300,315,324,330,360];
 function autoCalc(){
   const ps=document.getElementById('calcPrice').value.trim(),
     ty=document.getElementById('calcType').value,
-    fr=document.getElementById('calcFrame').value,
-    pr=document.getElementById('calcPair').value,
     ct=document.getElementById('calcResults');
-  if(!ps||isNaN(parseFloat(ps))){ct.innerHTML='';return}
-  const d=prep(ps,fr,pr);if(!d){ct.innerHTML='';return}
+  const price=parseFloat(ps);
+  if(!ps||isNaN(price)||price<=0){ct.innerHTML='';return}
   const dir=ty==='low'?'up':'down';
   let rows='';
   ANGLES.forEach(a=>{
-    const r=angleCalc(d.intP,a,dir),pR=toPrice(r,d.kd);
-    const diff=dir==='up'?(r-d.intP):(d.intP-r);
-    const pips=pr==='jpy'?(diff/Math.pow(10,d.kd)*100).toFixed(1):(diff/Math.pow(10,d.kd)*10000).toFixed(1);
+    const r=smartCalc(price,a,dir);
+    const diff=Math.abs(r-price);
+    const pct=((diff/price)*100).toFixed(2);
     const c=dir==='up'?'up':'dn',ar=dir==='up'?'↑':'↓';
-    const important=[90,120,144,180,270,360].includes(a)?'font-weight:700':'';
     const bg=[90,180,270,360].includes(a)?'background:var(--orange-dim)':'';
-    rows+=`<tr style="${bg}"><td style="${important}">${a}°</td><td class="${c}" style="font-weight:700">${pR}</td><td>${ar} ${Math.abs(parseFloat(pips))} نقطة</td><td style="color:var(--text3)">${(a/180).toFixed(4)}</td></tr>`;
+    const imp=[90,120,144,180,270,360].includes(a)?'font-weight:700':'';
+    rows+=`<tr style="${bg}"><td style="${imp}">${a}°</td><td class="${c}" style="font-weight:700">${formatPrice(r)}</td><td>${ar} ${formatPrice(diff)}</td><td>${pct}%</td><td style="color:var(--text3)">${(a/180).toFixed(4)}</td></tr>`;
   });
-  ct.innerHTML=`<div class="result-card"><h3>${ty==='low'?'مستويات الصعود ↑':'مستويات الهبوط ↓'} من ${ps}</h3><p style="color:var(--text3);font-size:.8rem;margin-bottom:1rem">الصفوف المُظللة = زوايا رئيسية (90° / 180° / 270° / 360°)</p><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر المستهدف</th><th>الفارق</th><th>المعامل</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+  ct.innerHTML=`<div class="result-card"><h3>${ty==='low'?'مستويات الصعود ↑':'مستويات الهبوط ↓'} من ${ps}</h3><p style="color:var(--text3);font-size:.8rem;margin-bottom:1rem">الصفوف المظللة = زوايا رئيسية | الإزاحة الذكية = ${getScalingFactor(price,dir)}</p><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th><th>الفارق</th><th>النسبة</th><th>المعامل</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
 }
 
-// ===== SHAPE DETECTOR =====
+// ===== SHAPE DETECTOR (uses smart scaling) =====
 const SHAPES=[
-  {a:360,name:'الدائري',en:'Circle',css:'v-circle',ok:true,desc:'حركة قوية جداً — كوارث أو تدخلات بنوك مركزية — اتجاه طويل وسريع',aa:[360]},
-  {a:180,name:'الخط المستقيم',en:'Straight Line',css:'v-line',ok:true,desc:'حركة قوية سريعة — نسبة نجاح كبيرة — يسمى الشكل الثنائي',aa:[180,360]},
-  {a:144,name:'الخماسي (مربع 144)',en:'Pentagon 144',css:'v-pentagon',ok:true,desc:'تذبذب متوسط — نطاق معتدل وطبيعي — صفقة 1:1',aa:[144,288,360]},
-  {a:120,name:'الثلاثي',en:'Triangle',css:'v-triangle',ok:true,desc:'من أهم الأشكال — اعتمد جان عليه كثيراً — حركة طبيعية سريعة',aa:[120,240,360]},
-  {a:90,name:'الرباعي',en:'Square',css:'v-square',ok:true,desc:'الأكثر شيوعاً — حركة متزنة — يحترم جميع الزوايا',aa:[90,180,270,360]},
-  {a:72,name:'الخماسي',en:'Pentagon',css:'v-pentagon',ok:true,desc:'تذبذب متوسط — نطاق معتدل — صفقة 1:1',aa:[72,144,216,288,360]},
-  {a:60,name:'السداسي',en:'Hexagon',css:'v-hexagon',ok:false,desc:'حركة متذبذبة بطيئة — نطاق ضيق — سيولة متوسطة',aa:[60,120,180,240,300,360]},
-  {a:51.43,name:'السباعي',en:'Heptagon',css:'v-other',ok:false,desc:'الأكثر تعقيداً — ضيق — نادر',aa:[51.43,102.86,154.29,205.71,257.14,308.57,360]},
-  {a:45,name:'الثماني',en:'Octagon',css:'v-other',ok:false,desc:'تذبذب وبطء — شائع في أوقات التذبذب',aa:[45,90,135,180,225,270,315,360]},
-  {a:40,name:'التساعي',en:'Nonagon',css:'v-other',ok:false,desc:'ضيق ونادر — غالباً تصحيحي',aa:[40,80,120,160,200,240,280,320,360]},
-  {a:36,name:'العشاري',en:'Decagon',css:'v-other',ok:false,desc:'ضيق — قد يسبق انفجار سعري',aa:[36,72,108,144,180,216,252,288,324,360]},
-  {a:30,name:'الثاني عشر',en:'Dodecagon',css:'v-other',ok:false,desc:'نادر جداً — ضيق وبطيء',aa:[30,60,90,120,150,180,210,240,270,300,330,360]},
+  {a:360,name:'الدائري',en:'Circle',css:'v-circle',ok:true,desc:'حركة قوية جداً — كوارث أو تدخلات بنوك مركزية',aa:[360]},
+  {a:180,name:'الخط المستقيم',en:'Straight Line',css:'v-line',ok:true,desc:'حركة قوية سريعة — نسبة نجاح كبيرة',aa:[180,360]},
+  {a:144,name:'الخماسي (144)',en:'Pentagon 144',css:'v-pentagon',ok:true,desc:'تذبذب متوسط — صفقة 1:1',aa:[144,288,360]},
+  {a:120,name:'الثلاثي',en:'Triangle',css:'v-triangle',ok:true,desc:'من أهم الأشكال — حركة سريعة',aa:[120,240,360]},
+  {a:90,name:'الرباعي',en:'Square',css:'v-square',ok:true,desc:'الأكثر شيوعاً — حركة متزنة',aa:[90,180,270,360]},
+  {a:72,name:'الخماسي',en:'Pentagon',css:'v-pentagon',ok:true,desc:'تذبذب متوسط — صفقة 1:1',aa:[72,144,216,288,360]},
+  {a:60,name:'السداسي',en:'Hexagon',css:'v-hexagon',ok:false,desc:'حركة بطيئة — نطاق ضيق',aa:[60,120,180,240,300,360]},
+  {a:51.43,name:'السباعي',en:'Heptagon',css:'v-other',ok:false,desc:'نادر — نطاق ضيق',aa:[51.43,102.86,154.29,205.71,257.14,308.57,360]},
+  {a:45,name:'الثماني',en:'Octagon',css:'v-other',ok:false,desc:'تذبذب — شائع في التذبذب',aa:[45,90,135,180,225,270,315,360]},
+  {a:40,name:'التساعي',en:'Nonagon',css:'v-other',ok:false,desc:'نادر — تصحيحي',aa:[40,80,120,160,200,240,280,320,360]},
+  {a:36,name:'العشاري',en:'Decagon',css:'v-other',ok:false,desc:'قد يسبق انفجار سعري',aa:[36,72,108,144,180,216,252,288,324,360]},
+  {a:30,name:'الثاني عشر',en:'Dodecagon',css:'v-other',ok:false,desc:'نادر جداً',aa:[30,60,90,120,150,180,210,240,270,300,330,360]},
 ];
 function detectShape(){
   const ps=document.getElementById('detPrice').value.trim(),bs=document.getElementById('detBounce').value.trim(),
-    dir=document.getElementById('detDir').value,fr=document.getElementById('detFrame').value,
-    pr=document.getElementById('detPair').value,ct=document.getElementById('detResults');
-  if(!ps||!bs){ct.innerHTML='<div class="result-card" style="text-align:center;color:var(--text2);padding:2rem">أدخل السعرين للحساب</div>';return}
-  const d=prep(ps,fr,pr);if(!d){ct.innerHTML='';return}
-  const bp=parseFloat(bs);let best=null,bestD=Infinity;
-  SHAPES.forEach(s=>{const r=angleCalc(d.intP,s.a,dir)/Math.pow(10,d.kd);const df=Math.abs(r-bp);if(df<bestD){bestD=df;best=s}});
+    dir=document.getElementById('detDir').value,ct=document.getElementById('detResults');
+  const price=parseFloat(ps),bounce=parseFloat(bs);
+  if(!ps||!bs||isNaN(price)||isNaN(bounce)){ct.innerHTML='<div class="result-card" style="text-align:center;color:var(--text2);padding:2rem">أدخل السعرين</div>';return}
+  let best=null,bestD=Infinity;
+  SHAPES.forEach(s=>{const r=smartCalc(price,s.a,dir);const df=Math.abs(r-bounce);if(df<bestD){bestD=df;best=s}});
   if(!best)return;
-
   let trows='';
-  best.aa.forEach(a=>{const r=angleCalc(d.intP,a,dir);const pR=toPrice(r,d.kd);
-    trows+=`<tr><td style="font-weight:600">${a}°</td><td class="${dir==='up'?'up':'dn'}" style="font-weight:700;font-size:1rem">${pR}</td></tr>`;
+  best.aa.forEach(a=>{const r=smartCalc(price,a,dir);
+    trows+=`<tr><td style="font-weight:600">${a}°</td><td class="${dir==='up'?'up':'dn'}" style="font-weight:700;font-size:1rem">${formatPrice(r)}</td></tr>`;
   });
   const th=best.a<=90?`${best.a/2} أو ${best.a} شمعة`:`${Math.round(best.a/2)} أو ${Math.round(best.a/4)} شمعة`;
-
   ct.innerHTML=`
   <div class="result-card"><div class="shape-result">
     <div class="shape-visual ${best.css}">${best.css==='v-triangle'||best.css==='v-line'?'':best.a+'°'}</div>
@@ -366,110 +360,108 @@ function detectShape(){
     <div class="sprops">
       <div class="sprop"><div class="sprop-l">أول زاوية</div><div class="sprop-v">${best.a}°</div></div>
       <div class="sprop"><div class="sprop-l">الاكتمال</div><div class="sprop-v" style="color:${best.ok?'var(--green)':'var(--red)'}">${best.ok?'يكتمل ✓':'لا يكتمل ✗'}</div></div>
-      <div class="sprop"><div class="sprop-l">عدد الزوايا</div><div class="sprop-v">${best.aa.length}</div></div>
-      <div class="sprop"><div class="sprop-l">الزمن المقترح</div><div class="sprop-v" style="font-size:.85rem">${th}</div></div>
-    </div>
-  </div></div>
-  <div class="result-card"><h3>خصائص الشكل</h3><p style="color:var(--text2);font-size:.95rem;margin-bottom:1.5rem">${best.desc}</p>
-    <h3>الأهداف السعرية</h3><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th></tr></thead><tbody>${trows}</tbody></table></div></div>
-  <div class="result-card"><h3>قواعد التداول لهذا الشكل</h3>
-    <ul style="color:var(--text2);padding-right:1.2rem;line-height:2.4">
-      <li>تأكيد: ارتداد السعر إلى <strong style="color:var(--orange)">نصف المسافة على الأقل</strong></li>
-      <li>الدخول: عند كسر الزاوية ${best.a}° وليس من نقطة الارتداد</li>
-      <li>التمحور حول ${best.a}° → الهدف ${best.a*2}°</li>
-      <li>إذا جاء الزمن (${th}) ولم يأتِ السعر → تغيّر الاتجاه</li>
-      ${!best.ok?'<li style="color:var(--red)">⚠ هذا الشكل غالباً لا يكتمل — حذر عند التداول</li>':''}
-    </ul></div>`;
+      <div class="sprop"><div class="sprop-l">الزمن</div><div class="sprop-v" style="font-size:.85rem">${th}</div></div>
+    </div></div></div>
+  <div class="result-card"><h3>الأهداف</h3><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th></tr></thead><tbody>${trows}</tbody></table></div>
+  <div class="result-card"><h3>قواعد التداول</h3><ul style="color:var(--text2);padding-right:1.2rem;line-height:2.4">
+    <li>تأكيد: ارتداد إلى <strong style="color:var(--orange)">نصف المسافة على الأقل</strong></li>
+    <li>الدخول: عند كسر ${best.a}°</li>
+    <li>التمحور حول ${best.a}° → الهدف ${best.a*2}°</li>
+    <li>إذا جاء الزمن ولم يأتِ السعر → تغيّر الاتجاه</li>
+    ${!best.ok?'<li style="color:var(--red)">⚠ غالباً لا يكتمل</li>':''}
+  </ul></div>`;
 }
 
 // ===== SQ9 =====
-function genSQ9(rings){
-  const sz=rings*2+1;const g=Array.from({length:sz},()=>Array(sz).fill(0));
-  let x=rings,y=rings,n=1;g[y][x]=n++;let L=1;
-  while(L<=rings){x++;g[y][x]=n++;for(let i=0;i<L*2-1;i++){y--;g[y][x]=n++}for(let i=0;i<L*2;i++){x--;g[y][x]=n++}for(let i=0;i<L*2;i++){y++;g[y][x]=n++}for(let i=0;i<L*2;i++){x++;g[y][x]=n++}L++}
-  return{g,sz};
-}
-function getCardinals(rings){
-  const c=new Set([1]);
-  for(let L=1;L<=rings;L++){let s=(2*(L-1)+1)**2;let sl=2*L;c.add(s+1);c.add(s+sl);c.add(s+sl*2);c.add(s+sl*3)}return c;
-}
-function getSameAngle(target,rings){
-  const mx=(2*rings+1)**2,same=new Set();if(target<=1||target>mx)return same;
-  let tL=0,tP=0;
-  for(let L=1;L<=rings;L++){let st=(2*(L-1)+1)**2+1;let en=(2*L+1)**2;if(target>=st&&target<=en){tL=L;tP=target-st;break}}
-  if(!tL)return same;
-  let sl=2*tL,side=Math.floor(tP/sl),pos=tP%sl;
-  for(let L=1;L<=rings;L++){if(L===tL)continue;let nsl=2*L;let st=(2*(L-1)+1)**2+1;let num=st+side*nsl+Math.round(pos*nsl/sl);if(num>=1&&num<=mx)same.add(num)}
-  return same;
-}
-function buildSQ9(){
-  const target=parseInt(document.getElementById('sq9Input').value)||120;
-  const rings=parseInt(document.getElementById('sq9Size').value)||7;
-  const{g,sz}=genSQ9(rings);const cards=getCardinals(rings);const same=getSameAngle(target,rings);
-  let h=`<div class="sq9-grid" style="grid-template-columns:repeat(${sz},1fr)">`;
-  for(let y=0;y<sz;y++)for(let x=0;x<sz;x++){
-    const n=g[y][x];let c='sq9-cell';
-    if(n===1)c+=' center';else if(n===target)c+=' highlight';else if(same.has(n))c+=' highlight';else if(cards.has(n))c+=' cardinal';
-    h+=`<div class="${c}" title="${n}">${n||''}</div>`;
-  }
-  h+='</div>';document.getElementById('sq9Container').innerHTML=h;
+function genSQ9(rings){const sz=rings*2+1;const g=Array.from({length:sz},()=>Array(sz).fill(0));let x=rings,y=rings,n=1;g[y][x]=n++;let L=1;while(L<=rings){x++;g[y][x]=n++;for(let i=0;i<L*2-1;i++){y--;g[y][x]=n++}for(let i=0;i<L*2;i++){x--;g[y][x]=n++}for(let i=0;i<L*2;i++){y++;g[y][x]=n++}for(let i=0;i<L*2;i++){x++;g[y][x]=n++}L++}return{g,sz}}
+function getCardinals(rings){const c=new Set([1]);for(let L=1;L<=rings;L++){let s=(2*(L-1)+1)**2;let sl=2*L;c.add(s+1);c.add(s+sl);c.add(s+sl*2);c.add(s+sl*3)}return c}
+function getSameAngle(target,rings){const mx=(2*rings+1)**2,same=new Set();if(target<=1||target>mx)return same;let tL=0,tP=0;for(let L=1;L<=rings;L++){let st=(2*(L-1)+1)**2+1;let en=(2*L+1)**2;if(target>=st&&target<=en){tL=L;tP=target-st;break}}if(!tL)return same;let sl=2*tL,side=Math.floor(tP/sl),pos=tP%sl;for(let L=1;L<=rings;L++){if(L===tL)continue;let nsl=2*L;let st=(2*(L-1)+1)**2+1;let num=st+side*nsl+Math.round(pos*nsl/sl);if(num>=1&&num<=mx)same.add(num)}return same}
+function buildSQ9(){const target=parseInt(document.getElementById('sq9Input').value)||120;const rings=parseInt(document.getElementById('sq9Size').value)||7;const{g,sz}=genSQ9(rings);const cards=getCardinals(rings);const same=getSameAngle(target,rings);let h=`<div class="sq9-grid" style="grid-template-columns:repeat(${sz},1fr)">`;for(let y=0;y<sz;y++)for(let x=0;x<sz;x++){const n=g[y][x];let c='sq9-cell';if(n===1)c+=' center';else if(n===target)c+=' highlight';else if(same.has(n))c+=' highlight';else if(cards.has(n))c+=' cardinal';h+=`<div class="${c}" title="${n}">${n||''}</div>`}h+='</div>';document.getElementById('sq9Container').innerHTML=h;
+  let rows='';[45,90,120,144,180,270,360].forEach(a=>{const u=smartCalc(target,a,'up'),d2=smartCalc(target,a,'down');rows+=`<tr><td style="font-weight:600">${a}°</td><td class="up">${formatPrice(u)}</td><td class="dn">${formatPrice(d2)}</td></tr>`});
+  document.getElementById('sq9Results').innerHTML=`<div class="result-card"><h3>زوايا الرقم ${target}</h3><table class="rtable"><thead><tr><th>الزاوية</th><th>↑ التالية</th><th>↓ السابقة</th></tr></thead><tbody>${rows}</tbody></table></div>`}
 
-  // Angles table for this number
-  let rows='';
-  [45,90,120,144,180,270,360].forEach(a=>{
-    const u=angleCalc(target,a,'up'),d2=angleCalc(target,a,'down');
-    rows+=`<tr><td style="font-weight:600">${a}°</td><td class="up">${Math.round(u)}</td><td class="dn">${Math.round(Math.max(0,d2))}</td><td style="color:var(--text3)">${(a/180).toFixed(3)}</td></tr>`;
-  });
-  document.getElementById('sq9Results').innerHTML=`<div class="result-card"><h3>زوايا الرقم ${target} على مربع التسعة</h3><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الزاوية</th><th>↑ الدورة التالية</th><th>↓ الدورة السابقة</th><th>المعامل</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
-}
-
-// ===== CYCLES =====
-function dRoot(n){let s=Math.abs(Math.round(n));while(s>=10){let sm=0;while(s>0){sm+=s%10;s=Math.floor(s/10)}s=sm}return s}
+// ===== CYCLES (smart scaling + digital root) =====
+function dRoot(n){let s=String(Math.round(Math.abs(n))).split('').reduce((a,b)=>a+parseInt(b),0);while(s>=10){s=String(s).split('').reduce((a,b)=>a+parseInt(b),0)}return s}
 const CM={1:'1',2:'2',3:'3',4:'4',5:'5',6:'3 أو 4',7:'5',8:'2 أو 4',9:'1 أو 5'};
 const CMN={1:[1],2:[2],3:[3],4:[4],5:[5],6:[3,4],7:[5],8:[2,4],9:[1,5]};
 
 function calcCycles(){
-  const ps=document.getElementById('cycPrice').value.trim(),ty=document.getElementById('cycType').value,
-    fr=document.getElementById('cycFrame').value,pr=document.getElementById('cycPair').value,
+  const ps=document.getElementById('cycPrice').value.trim(),
+    dir=document.getElementById('cycType').value,
     ct=document.getElementById('cycResults');
-  if(!ps){ct.innerHTML='';return}
-  const d=prep(ps,fr,pr);if(!d){ct.innerHTML='<div class="result-card" style="text-align:center;color:var(--red)">سعر غير صحيح</div>';return}
-  const root=dRoot(d.intP),dir=ty==='low'?'up':'down',cycs=CMN[root]||[1],mx=Math.max(...cycs);
+  const price=parseFloat(ps);
+  if(!ps||isNaN(price)||price<=0){ct.innerHTML='';return}
+  
+  const root=dRoot(price);
+  const cycs=CMN[root]||[1];
+  const mx=Math.max(...cycs);
+  const sf=getScalingFactor(price,dir);
 
   // Digit animation
-  let digs=String(d.intP).split('');
+  let digs=String(Math.round(price)).split('');
   let dh='<div class="cyc-vis">';
   digs.forEach(x=>{dh+=`<div class="cyc-d">${x}</div>`});
   dh+='<div class="cyc-arr">→</div>';
   let tmp=digs.reduce((a,b)=>a+parseInt(b),0),steps=[tmp];
-  while(tmp>=10){let ns=0;String(tmp).split('').forEach(x=>{ns+=parseInt(x)});tmp=ns;steps.push(tmp)}
+  while(tmp>=10){let ns=String(tmp).split('').reduce((a,b)=>a+parseInt(b),0);tmp=ns;steps.push(tmp)}
   steps.forEach((s,i)=>{dh+=`<div class="cyc-d ${i===steps.length-1?'active':''}">${s}</div>`;if(i<steps.length-1)dh+='<div class="cyc-arr">→</div>'});
   dh+='</div>';
 
-  // Targets
-  let rows='';
+  // SQ9 angles with smart scaling
+  let sq9rows='';
+  [90,180,270,360].forEach(a=>{
+    const r=smartCalc(price,a,dir);
+    const diff=Math.abs(r-price);
+    const pct=((diff/price)*100).toFixed(2);
+    const cls=dir==='up'?'up':'dn';
+    const bg=a===360?'background:var(--orange-dim)':'';
+    sq9rows+=`<tr style="${bg}"><td style="font-weight:600">${a}°</td><td class="${cls}" style="font-weight:700">${formatPrice(r)}</td><td>${formatPrice(diff)}</td><td>${pct}%</td></tr>`;
+  });
+
+  // Multi-shape angles
+  let shapeRows='';
+  const shapeAngles={
+    'المربع (Square)':[90,180,270,360],
+    'المثلث (Triangle)':[120,240,360],
+    'الخماسي (Pentagon)':[72,144,216,288,360],
+    'السداسي (Hexagon)':[60,120,180,240,300,360]
+  };
+  for(let[name,angles] of Object.entries(shapeAngles)){
+    let cells='';
+    angles.forEach(a=>{
+      const r=smartCalc(price,a,dir);
+      cells+=`<td class="${dir==='up'?'up':'dn'}" style="font-weight:600">${formatPrice(r)}</td>`;
+    });
+    shapeRows+=`<tr><td style="font-weight:600;color:var(--orange);white-space:nowrap">${name}</td>${cells}</tr>`;
+  }
+
+  // Cycle targets
+  let cycRows='';
   for(let c=1;c<=mx;c++){
-    const a=360*c,r=angleCalc(d.intP,a,dir),pR=toPrice(r,d.kd);
+    const a=360*c;
+    const r=smartCalc(price,a,dir);
+    const pct=((Math.abs(r-price)/price)*100).toFixed(2);
     const cls=dir==='up'?'up':'dn';
     const active=cycs.includes(c)?'background:var(--orange-dim)':'';
-    rows+=`<tr style="${active}"><td>الدورة ${c}</td><td>${a}°</td><td class="${cls}" style="font-weight:700;font-size:1rem">${pR}</td></tr>`;
+    cycRows+=`<tr style="${active}"><td>الدورة ${c}</td><td>${a}°</td><td class="${cls}" style="font-weight:700;font-size:1rem">${formatPrice(r)}</td><td>${pct}%</td></tr>`;
   }
 
   ct.innerHTML=`
-  <div class="result-card"><h3>تحليل الرقم ${d.intP}</h3>${dh}
+  <div class="result-card"><h3>مربع التسعة — SQ9</h3>
+    <p style="color:var(--text3);font-size:.8rem;margin-bottom:1rem">الإزاحة الذكية: ${sf} | السعر المعدّل: ${(price*sf).toFixed(2)}</p>
+    <div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th><th>الفارق</th><th>النسبة</th></tr></thead><tbody>${sq9rows}</tbody></table></div></div>
+
+  <div class="result-card"><h3>الأشكال الهندسية</h3>
+    <div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الشكل</th><th>الزاوية 1</th><th>الزاوية 2</th><th>الزاوية 3</th><th>الزاوية 4</th><th>360°</th></tr></thead><tbody>${shapeRows}</tbody></table></div></div>
+
+  <div class="result-card"><h3>تحليل دورات الأرقام</h3>${dh}
     <div class="cyc-big"><div class="n">${root}</div><div class="l">الجذر الرقمي</div></div>
-    <div style="text-align:center;margin-top:1rem;font-size:1.1rem">عدد الدورات المتوقعة: <strong style="color:var(--orange);font-size:1.5rem">${CM[root]}</strong></div>
-    ${[6,8,9].includes(root)?'<p style="text-align:center;font-size:.8rem;color:var(--text3);margin-top:.5rem">يتحدد بمراقبة التمحور عند نهاية أول عدد</p>':''}
+    <div style="text-align:center;font-size:1.1rem">عدد الدورات: <strong style="color:var(--orange);font-size:1.5rem">${CM[root]}</strong></div>
+    ${[6,8,9].includes(root)?'<p style="text-align:center;font-size:.8rem;color:var(--text3);margin-top:.4rem">يتحدد بمراقبة التمحور</p>':''}
   </div>
-  <div class="result-card"><h3>أهداف الدورات ${dir==='up'?'الصاعدة ↑':'الهابطة ↓'}</h3>
-    <p style="color:var(--text3);font-size:.8rem;margin-bottom:1rem">الصفوف المُظللة = الدورات الأكثر احتمالاً</p>
-    <div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الدورة</th><th>الزاوية</th><th>السعر المستهدف</th></tr></thead><tbody>${rows}</tbody></table></div></div>
-  <div class="result-card"><h3>ملاحظات</h3>
-    <ul style="color:var(--text2);padding-right:1.2rem;line-height:2.4">
-      <li>الدورة 1 = 360° ← الدورة 2 = 720° ← الدورة 3 = 1080°</li>
-      <li>التمحور عند نهاية دورة = سيكمل للدورة التالية</li>
-      <li>أداة مساعدة وليست قاعدة مطلقة</li>
-    </ul></div>`;
+
+  <div class="result-card"><h3>أهداف الدورات ${dir==='up'?'↑':'↓'}</h3>
+    <div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الدورة</th><th>الزاوية</th><th>السعر</th><th>النسبة</th></tr></thead><tbody>${cycRows}</tbody></table></div></div>`;
 }
 </script>
 
