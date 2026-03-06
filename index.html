@@ -7,729 +7,398 @@
 <title>360° — أدوات الزوايا السعرية الزمنية</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Noto+Kufi+Arabic:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#08080a;--surface:#111113;--surface2:#19191d;--border:#2a2a32;--text:#e8e8ed;--text2:#9898a4;--text3:#5e5e6e;--orange:#ff6a00;--orange2:#ff8c33;--orange-dim:rgba(255,106,0,.12);--green:#00c853;--red:#ff1744;--radius:14px}
+:root{--bg:#08080a;--s:#111113;--s2:#19191d;--b:#2a2a32;--t:#e8e8ed;--t2:#9898a4;--t3:#5e5e6e;--o:#ff6a00;--o2:#ff8c33;--od:rgba(255,106,0,.12);--g:#00c853;--r:#ff1744;--rd:14px}
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
-body{font-family:'Noto Kufi Arabic','Cairo',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--border);border-radius:9px}
-a{color:var(--orange);text-decoration:none}
+body{font-family:'Noto Kufi Arabic','Cairo',sans-serif;background:var(--bg);color:var(--t);line-height:1.7;overflow-x:hidden}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--b);border-radius:9px}
+a{color:var(--o);text-decoration:none}
+.top{position:fixed;top:0;right:0;left:0;z-index:999;height:52px;background:rgba(8,8,10,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 1rem;gap:.6rem}
+.top-logo{font-family:'Cairo';font-weight:900;font-size:1.4rem;color:var(--o);cursor:pointer}
+.top-nav{display:flex;gap:.15rem;margin:0 auto}
+.top-nav a{padding:.35rem .6rem;border-radius:7px;font-size:.72rem;font-weight:600;color:var(--t2);transition:all .2s;white-space:nowrap;cursor:pointer}
+.top-nav a:hover{color:var(--t);background:var(--s2)}
+.top-nav a.active{color:var(--o);background:var(--od)}
+.top-a{display:flex;align-items:center;gap:.35rem;font-size:.7rem;font-weight:700;color:var(--o);padding:.2rem .6rem .2rem .2rem;border:1.5px solid var(--o);border-radius:20px;transition:all .2s}
+.top-a:hover{background:var(--o);color:var(--bg)}
+.top-a img{width:26px;height:26px;border-radius:50%;object-fit:cover;border:1px solid var(--o)}
+.mbtn{display:none;background:none;border:none;color:var(--t);font-size:1.3rem;cursor:pointer}
+.mnav{display:none;position:fixed;top:52px;right:0;left:0;background:var(--s);border-bottom:1px solid var(--b);z-index:998;padding:.6rem;flex-direction:column;gap:.15rem}
+.mnav.open{display:flex}
+.mnav a{padding:.6rem .8rem;border-radius:7px;font-size:.82rem;font-weight:600;color:var(--t2);cursor:pointer}
+.mnav a.active{color:var(--o);background:var(--od)}
+.pg{display:none;padding-top:52px;min-height:100vh;animation:fi .3s ease}.pg.active{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-/* TOPBAR */
-.topbar{position:fixed;top:0;right:0;left:0;z-index:999;height:56px;background:rgba(8,8,10,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(–border);display:flex;align-items:center;padding:0 1rem;gap:.8rem}
-.topbar-logo{font-family:‘Cairo’;font-weight:900;font-size:1.5rem;color:var(–orange);cursor:pointer}
-.topbar-nav{display:flex;gap:.2rem;margin-right:auto;margin-left:auto}
-.topbar-nav a{padding:.4rem .8rem;border-radius:8px;font-size:.78rem;font-weight:600;color:var(–text2);transition:all .2s;white-space:nowrap;cursor:pointer}
-.topbar-nav a:hover{color:var(–text);background:var(–surface2)}
-.topbar-nav a.active{color:var(–orange);background:var(–orange-dim)}
-.topbar-author{display:flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:700;color:var(–orange);padding:.25rem .7rem .25rem .25rem;border:1.5px solid var(–orange);border-radius:25px;transition:all .25s}
-.topbar-author:hover{background:var(–orange);color:var(–bg)}
-.author-img{width:28px;height:28px;border-radius:50%;object-fit:cover;border:1.5px solid var(–orange)}
-.menu-btn{display:none;background:none;border:none;color:var(–text);font-size:1.4rem;cursor:pointer}
-.mobile-nav{display:none;position:fixed;top:56px;right:0;left:0;background:var(–surface);border-bottom:1px solid var(–border);z-index:998;padding:.8rem;flex-direction:column;gap:.2rem}
-.mobile-nav.open{display:flex}
-.mobile-nav a{padding:.7rem 1rem;border-radius:8px;font-size:.85rem;font-weight:600;color:var(–text2);cursor:pointer}
-.mobile-nav a.active{color:var(–orange);background:var(–orange-dim)}
+.hero{min-height:calc(100vh - 52px);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:1.5rem 1rem}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(–b) 1px,transparent 1px),linear-gradient(90deg,var(–b) 1px,transparent 1px);background-size:60px 60px;opacity:.06}
+.hero-glow{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,0,.1),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%)}
+.hero-top{position:relative;z-index:2;text-align:center;margin-bottom:1.5rem}
+.hero-big{font-family:‘Cairo’;font-weight:900;font-size:clamp(2.5rem,8vw,5.5rem);color:var(–o);line-height:1}
+.hero-tt{font-family:‘Cairo’;font-weight:700;font-size:clamp(.9rem,2vw,1.3rem);margin-top:.2rem}
+.hero-sub{color:var(–t2);font-size:.8rem;margin-top:.3rem}
 
-.page{display:none;padding-top:56px;min-height:100vh;animation:pageIn .35s ease}
-.page.active{display:block}
-@keyframes pageIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+/* Halving countdown */
+.halving{position:relative;z-index:2;background:var(–s);border:1px solid var(–b);border-radius:var(–rd);padding:1rem 1.5rem;margin-bottom:1.5rem;text-align:center;max-width:600px;width:100%}
+.halving-title{font-size:.75rem;color:var(–t2);margin-bottom:.5rem}
+.halving-nums{display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap}
+.halving-box{text-align:center}
+.halving-box .n{font-family:‘Cairo’;font-weight:900;font-size:1.8rem;color:var(–o);line-height:1}
+.halving-box .l{font-size:.6rem;color:var(–t3)}
+.halving-bar{width:100%;height:6px;background:var(–s2);border-radius:3px;margin-top:.6rem;overflow:hidden}
+.halving-bar-fill{height:100%;background:var(–o);border-radius:3px;transition:width 1s}
 
-/* HERO */
-.hero{min-height:calc(100vh - 56px);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;padding:2rem 1rem}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(–border) 1px,transparent 1px),linear-gradient(90deg,var(–border) 1px,transparent 1px);background-size:60px 60px;opacity:.07}
-.hero-glow{position:absolute;width:450px;height:450px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,0,.12),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);animation:glow 5s ease-in-out infinite alternate}
-@keyframes glow{0%{transform:translate(-50%,-50%) scale(1);opacity:.5}100%{transform:translate(-50%,-50%) scale(1.3);opacity:1}}
-.hero-top{position:relative;z-index:2;text-align:center;margin-bottom:2rem}
-.hero-big{font-family:‘Cairo’;font-weight:900;font-size:clamp(3rem,9vw,6.5rem);color:var(–orange);line-height:1;text-shadow:0 0 100px rgba(255,106,0,.2)}
-.hero-title{font-family:‘Cairo’;font-weight:700;font-size:clamp(1rem,2.5vw,1.5rem);margin-top:.3rem}
-.hero-sub{color:var(–text2);font-size:.85rem;margin-top:.4rem;max-width:460px;margin-inline:auto}
+/* Tool strip */
+.hstrip{position:relative;z-index:2;width:100%;max-width:900px;display:grid;grid-template-columns:repeat(5,1fr);gap:.6rem}
+.tc{background:var(–s);border:1px solid var(–b);border-radius:var(–rd);padding:1rem .8rem;cursor:pointer;transition:all .3s;text-align:center}
+.tc:hover{border-color:var(–o);transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,0,0,.4)}
+.tc-i{font-size:1.4rem;margin-bottom:.3rem}
+.tc-n{font-family:‘Cairo’;font-weight:700;font-size:.78rem;margin-bottom:.15rem}
+.tc-d{font-size:.62rem;color:var(–t2);line-height:1.4}
 
-/* HORIZONTAL TOOL STRIP */
-.hero-strip{position:relative;z-index:2;width:100%;max-width:1100px;display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;padding:0 .5rem}
-.tool-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:1.3rem 1rem;cursor:pointer;transition:all .3s;text-align:center}
-.tool-card:hover{border-color:var(–orange);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
-.tool-icon{font-size:1.6rem;margin-bottom:.4rem}
-.tool-name{font-family:‘Cairo’;font-weight:700;font-size:.85rem;margin-bottom:.2rem}
-.tool-desc{font-size:.7rem;color:var(–text2);line-height:1.5}
-
-/* TOOL PAGES */
-.tool-page{max-width:900px;margin:0 auto;padding:1.5rem 1.2rem 3rem}
-.tool-header{text-align:center;margin-bottom:2rem;padding-top:1rem}
-.tool-header h1{font-family:‘Cairo’;font-weight:900;font-size:1.6rem;color:var(–orange)}
-.tool-header p{color:var(–text2);font-size:.85rem;margin-top:.3rem}
-.input-group{margin-bottom:1rem}
-.input-group label{display:block;font-size:.82rem;font-weight:600;color:var(–text2);margin-bottom:.3rem}
-.input-row{display:flex;gap:.7rem;flex-wrap:wrap}
-.input-row .input-group{flex:1;min-width:180px}
-input[type=“number”],input[type=“text”],select{width:100%;padding:.65rem .9rem;background:var(–surface);border:1.5px solid var(–border);border-radius:10px;color:var(–text);font-family:inherit;font-size:.9rem;transition:border-color .2s;outline:none;-moz-appearance:textfield}
+/* Tool pages */
+.tp{max-width:900px;margin:0 auto;padding:1.5rem 1rem 3rem}
+.th{text-align:center;margin-bottom:2rem;padding-top:1rem}
+.th h1{font-family:‘Cairo’;font-weight:900;font-size:1.5rem;color:var(–o)}
+.th p{color:var(–t2);font-size:.82rem;margin-top:.2rem}
+.ig{margin-bottom:1rem}
+.ig label{display:block;font-size:.8rem;font-weight:600;color:var(–t2);margin-bottom:.25rem}
+.ir{display:flex;gap:.6rem;flex-wrap:wrap}
+.ir .ig{flex:1;min-width:160px}
+input[type=“number”],input[type=“text”],select{width:100%;padding:.6rem .8rem;background:var(–s);border:1.5px solid var(–b);border-radius:9px;color:var(–t);font-family:inherit;font-size:.88rem;outline:none;-moz-appearance:textfield;transition:border-color .2s}
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none}
-input:focus,select:focus{border-color:var(–orange)}
-select{cursor:pointer}select option{background:var(–surface);color:var(–text)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.7rem 1.8rem;background:var(–orange);color:#000;font-family:inherit;font-weight:700;font-size:.9rem;border:none;border-radius:10px;cursor:pointer;transition:all .2s}
-.btn:hover{background:var(–orange2);box-shadow:0 6px 25px rgba(255,106,0,.3)}
-.btn-row{display:flex;gap:.7rem;margin-top:1.2rem;flex-wrap:wrap}
-.result-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:1.3rem;margin-bottom:.8rem;animation:pageIn .3s ease}
-.result-card h3{font-family:‘Cairo’;font-weight:700;color:var(–orange);font-size:.95rem;margin-bottom:.8rem;display:flex;align-items:center;gap:.4rem}
-.result-card h3::before{content:’’;width:5px;height:5px;background:var(–orange);border-radius:50%;flex-shrink:0}
-.rtable{width:100%;border-collapse:collapse}
-.rtable th{text-align:center;padding:.5rem .6rem;background:var(–surface2);color:var(–text2);font-size:.75rem;font-weight:600;border-bottom:1px solid var(–border)}
-.rtable td{text-align:center;padding:.55rem .6rem;border-bottom:1px solid rgba(42,42,50,.4);font-size:.85rem;font-variant-numeric:tabular-nums}
-.rtable tr:hover td{background:var(–orange-dim)}
-.up{color:var(–green);font-weight:600}.dn{color:var(–red);font-weight:600}
+input:focus,select:focus{border-color:var(–o)}
+select{cursor:pointer}select option{background:var(–s);color:var(–t)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.3rem;padding:.6rem 1.5rem;background:var(–o);color:#000;font-family:inherit;font-weight:700;font-size:.85rem;border:none;border-radius:9px;cursor:pointer;transition:all .2s}
+.btn:hover{background:var(–o2);box-shadow:0 4px 20px rgba(255,106,0,.25)}
+.btn2{background:var(–s);color:var(–o);border:1.5px solid var(–b)}
+.btn2:hover{border-color:var(–o);background:var(–od)}
+.br{display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap}
+.rc{background:var(–s);border:1px solid var(–b);border-radius:var(–rd);padding:1.2rem;margin-bottom:.7rem;animation:fi .3s ease}
+.rc h3{font-family:‘Cairo’;font-weight:700;color:var(–o);font-size:.9rem;margin-bottom:.7rem;display:flex;align-items:center;gap:.4rem}
+.rc h3::before{content:’’;width:5px;height:5px;background:var(–o);border-radius:50%;flex-shrink:0}
+.rt{width:100%;border-collapse:collapse}
+.rt th{text-align:center;padding:.45rem .5rem;background:var(–s2);color:var(–t2);font-size:.72rem;font-weight:600;border-bottom:1px solid var(–b)}
+.rt td{text-align:center;padding:.5rem .5rem;border-bottom:1px solid rgba(42,42,50,.3);font-size:.82rem;font-variant-numeric:tabular-nums}
+.rt tr:hover td{background:var(–od)}
+.up{color:var(–g);font-weight:600}.dn{color:var(–r);font-weight:600}
 
-/* SHAPES */
-.shape-result{text-align:center;padding:1.5rem}
-.shape-visual{width:90px;height:90px;border:3px solid var(–orange);margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;color:var(–orange)}
+/* Fear gauge */
+.gauge-wrap{display:flex;justify-content:center;margin:1rem 0}
+.gauge{position:relative;width:200px;height:110px;overflow:hidden}
+.gauge-bg{width:200px;height:100px;border-radius:100px 100px 0 0;background:conic-gradient(from 180deg at 50% 100%,var(–r) 0deg,var(–o) 90deg,var(–g) 180deg);position:relative}
+.gauge-mask{position:absolute;bottom:0;left:15px;right:15px;height:70px;border-radius:70px 70px 0 0;background:var(–s)}
+.gauge-needle{position:absolute;bottom:0;left:50%;width:3px;height:80px;background:var(–t);border-radius:2px;transform-origin:bottom center;transform:rotate(0deg);transition:transform 1s ease}
+.gauge-val{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);font-family:‘Cairo’;font-weight:900;font-size:1.3rem;color:var(–o)}
+.gauge-label{text-align:center;font-size:.75rem;color:var(–t2);margin-top:.2rem}
+
+/* Shapes */
+.shape-result{text-align:center;padding:1.2rem}
+.shape-visual{width:80px;height:80px;border:3px solid var(–o);margin:0 auto .8rem;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;color:var(–o)}
 .shape-visual.v-circle{border-radius:50%}.shape-visual.v-square{border-radius:6px}.shape-visual.v-pentagon{border-radius:35%}.shape-visual.v-hexagon{border-radius:25%;transform:rotate(30deg)}.shape-visual.v-other{border-radius:15%}
-.shape-visual.v-line{width:110px;height:5px;background:var(–orange);border:none}
-.shape-visual.v-triangle{border:none;width:0;height:0;border-left:45px solid transparent;border-right:45px solid transparent;border-bottom:78px solid var(–orange)}
-.shape-big{font-family:‘Cairo’;font-weight:900;font-size:1.6rem}
-.shape-en{font-size:.85rem;color:var(–text3)}
-.sprops{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.8rem;margin-top:1.2rem}
-.sprop{background:var(–surface2);border-radius:10px;padding:.8rem;text-align:center}
-.sprop-l{font-size:.7rem;color:var(–text3);margin-bottom:.2rem}
-.sprop-v{font-family:‘Cairo’;font-weight:700;font-size:1rem;color:var(–orange)}
+.shape-visual.v-line{width:100px;height:5px;background:var(–o);border:none}
+.shape-visual.v-triangle{border:none;width:0;height:0;border-left:40px solid transparent;border-right:40px solid transparent;border-bottom:70px solid var(–o)}
+.shape-big{font-family:‘Cairo’;font-weight:900;font-size:1.4rem}
+.shape-en{font-size:.8rem;color:var(–t3)}
+.sprops{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.6rem;margin-top:1rem}
+.sp{background:var(–s2);border-radius:9px;padding:.7rem;text-align:center}
+.sp-l{font-size:.65rem;color:var(–t3);margin-bottom:.15rem}
+.sp-v{font-family:‘Cairo’;font-weight:700;font-size:.95rem;color:var(–o)}
 
-/* SQ9 GRID */
-.sq9-wrap{overflow-x:auto;margin:1rem 0;text-align:center}
-.sq9-grid{display:inline-grid;gap:1px;direction:ltr}
-.sq9-cell{width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:600;border-radius:5px;background:var(–surface);color:var(–text2);transition:all .2s;cursor:default;border:1px solid transparent}
-.sq9-cell.center{background:var(–orange);color:#000;font-weight:800;font-size:.8rem}
-.sq9-cell.target{background:var(–orange);color:#000;font-weight:800;box-shadow:0 0 12px var(–orange)}
-.sq9-cell.same-angle{background:var(–orange-dim);color:var(–orange);border-color:var(–orange);font-weight:700}
-.sq9-cell.cardinal{background:rgba(0,200,83,.06);color:var(–green);border-color:rgba(0,200,83,.2)}
-.sq9-cell:hover{border-color:var(–orange);transform:scale(1.15);z-index:2}
-.sq9-info{margin-top:.8rem;display:flex;gap:1.2rem;flex-wrap:wrap;justify-content:center}
-.sq9-legend{display:flex;align-items:center;gap:.3rem;font-size:.75rem;color:var(–text2)}
-.sq9-legend-dot{width:11px;height:11px;border-radius:3px}
+.cyc-vis{display:flex;align-items:center;justify-content:center;gap:.25rem;margin:1rem 0;flex-wrap:wrap}
+.cyc-d{width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(–s2);border:1px solid var(–b);border-radius:8px;font-family:‘Cairo’;font-weight:700;font-size:1.1rem}
+.cyc-d.active{border-color:var(–o);color:var(–o);background:var(–od)}
+.cyc-arr{color:var(–t3);font-size:.9rem}
 
-/* CYCLES */
-.cyc-vis{display:flex;align-items:center;justify-content:center;gap:.3rem;margin:1.2rem 0;flex-wrap:wrap}
-.cyc-d{width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:var(–surface2);border:1px solid var(–border);border-radius:8px;font-family:‘Cairo’;font-weight:700;font-size:1.2rem}
-.cyc-d.active{border-color:var(–orange);color:var(–orange);background:var(–orange-dim)}
-.cyc-arr{color:var(–text3);font-size:1rem}
-.cyc-big{text-align:center;margin:1.2rem 0}
-.cyc-big .n{font-family:‘Cairo’;font-weight:900;font-size:3.5rem;color:var(–orange);line-height:1}
-.cyc-big .l{font-size:.85rem;color:var(–text2);margin-top:.2rem}
-
-@media(max-width:768px){
-.topbar-nav{display:none}.menu-btn{display:block}
-.hero-strip{grid-template-columns:1fr 1fr;gap:.6rem}
-.sq9-cell{width:34px;height:34px;font-size:.55rem}
-.input-row{flex-direction:column}.input-row .input-group{min-width:100%}
-}
-@media(max-width:420px){.hero-strip{grid-template-columns:1fr}}
+@media(max-width:768px){.top-nav{display:none}.mbtn{display:block}.hstrip{grid-template-columns:repeat(3,1fr)}.ir{flex-direction:column}.ir .ig{min-width:100%}}
+@media(max-width:480px){.hstrip{grid-template-columns:1fr 1fr}}
 </style>
 
 </head>
 <body>
-<header class="topbar">
-  <div class="topbar-logo" onclick="navigate('home')">360°</div>
-  <nav class="topbar-nav">
-    <a onclick="navigate('home')" class="active" data-page="home">الرئيسية</a>
-    <a onclick="navigate('calculator')" data-page="calculator">حاسبة الزوايا</a>
-    <a onclick="navigate('detector')" data-page="detector">كاشف الشكل</a>
-    <a onclick="navigate('sq9')" data-page="sq9">مربع التسعة</a>
-    <a onclick="navigate('cycles')" data-page="cycles">الدورات</a>
-    <a onclick="navigate('cluster')" data-page="cluster">فيبو+زوايا</a>
-    <a onclick="navigate('live')" data-page="live">سعر حي</a>
+<header class="top">
+  <div class="top-logo" onclick="nav('home')">360°</div>
+  <nav class="top-nav">
+    <a onclick="nav('home')" class="active" data-p="home">الرئيسية</a>
+    <a onclick="nav('calc')" data-p="calc">حاسبة الزوايا</a>
+    <a onclick="nav('det')" data-p="det">كاشف الشكل</a>
+    <a onclick="nav('cls')" data-p="cls">فيبو+زوايا</a>
+    <a onclick="nav('cyc')" data-p="cyc">الدورات</a>
+    <a onclick="nav('live')" data-p="live">سعر حي</a>
   </nav>
-  <a href="https://x.com/adams_k1?s=21&t=j0daPEI6JiicPs6LaMWXxQ" target="_blank" class="topbar-author"><img src="data:image/jpeg;base64,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" class="author-img" alt="AK">ADAM KAMAL</a>
-  <button class="menu-btn" onclick="toggleMobile()">☰</button>
+  <a href="https://x.com/adams_k1?s=21&t=j0daPEI6JiicPs6LaMWXxQ" target="_blank" class="top-a"><img src="data:image/jpeg;base64,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" alt="AK">ADAM KAMAL</a>
+  <button class="mbtn" onclick="toggleM()">☰</button>
 </header>
-<div class="mobile-nav" id="mobileNav">
-  <a onclick="navigate('home');closeMobile()" data-page="home" class="active">الرئيسية</a>
-  <a onclick="navigate('calculator');closeMobile()" data-page="calculator">حاسبة الزوايا</a>
-  <a onclick="navigate('detector');closeMobile()" data-page="detector">كاشف الشكل</a>
-  <a onclick="navigate('sq9');closeMobile()" data-page="sq9">مربع التسعة</a>
-  <a onclick="navigate('cycles');closeMobile()" data-page="cycles">الدورات</a>
-  <a onclick="navigate('cluster');closeMobile()" data-page="cluster">فيبو+زوايا</a>
-  <a onclick="navigate('live');closeMobile()" data-page="live">سعر حي</a>
+<div class="mnav" id="mn">
+  <a onclick="nav('home');closeM()" data-p="home" class="active">الرئيسية</a>
+  <a onclick="nav('calc');closeM()" data-p="calc">حاسبة الزوايا</a>
+  <a onclick="nav('det');closeM()" data-p="det">كاشف الشكل</a>
+  <a onclick="nav('cls');closeM()" data-p="cls">فيبو+زوايا</a>
+  <a onclick="nav('cyc');closeM()" data-p="cyc">الدورات</a>
+  <a onclick="nav('live');closeM()" data-p="live">سعر حي</a>
 </div>
 
-<div class="page active" id="page-home">
-  <section class="hero">
-    <div class="hero-grid"></div><div class="hero-glow"></div>
-    <div class="hero-top">
-      <div class="hero-big">360°</div>
-      <h1 class="hero-title">أدوات الزوايا السعرية الزمنية</h1>
-      <p class="hero-sub">حوّل نظرية جان إلى أدوات تفاعلية — أدخل الأرقام واحصل على النتائج فوراً</p>
-    </div>
-    <div class="hero-strip">
-      <div class="tool-card" onclick="navigate('calculator')"><div class="tool-icon">📐</div><div class="tool-name">حاسبة الزوايا</div><div class="tool-desc">حساب كل الزوايا من 30° إلى 360°</div></div>
-      <div class="tool-card" onclick="navigate('detector')"><div class="tool-icon">🔍</div><div class="tool-name">كاشف الشكل</div><div class="tool-desc">تحديد الشكل الهندسي وأهدافه</div></div>
-      <div class="tool-card" onclick="navigate('sq9')"><div class="tool-icon">🔢</div><div class="tool-name">مربع التسعة</div><div class="tool-desc">مربع جان التفاعلي مع السعر</div></div>
-      <div class="tool-card" onclick="navigate('cycles')"><div class="tool-icon">🔄</div><div class="tool-name">الدورات</div><div class="tool-desc">حساب دورات الأرقام والأهداف</div></div>
-      <div class="tool-card" onclick="navigate('cluster')"><div class="tool-icon">🎯</div><div class="tool-name">فيبو + زوايا</div><div class="tool-desc">مناطق الكلاستر حيث يتطابق فيبوناتشي مع زاوية</div></div>
-      <div class="tool-card" onclick="navigate('live')"><div class="tool-icon">⚡</div><div class="tool-name">سعر حي</div><div class="tool-desc">جلب السعر من Binance وتشغيل كل الأدوات تلقائياً</div></div>
-    </div>
-  </section>
+<!-- HOME -->
+
+<div class="pg active" id="pg-home">
+<section class="hero">
+<div class="hero-grid"></div><div class="hero-glow"></div>
+<div class="hero-top">
+  <div class="hero-big">360°</div>
+  <h1 class="hero-tt">أدوات الزوايا السعرية الزمنية</h1>
+  <p class="hero-sub">حوّل نظرية جان إلى أدوات تفاعلية — أدخل الأرقام واحصل على النتائج فوراً</p>
 </div>
 
-<div class="page" id="page-calculator">
-  <div class="tool-page">
-    <div class="tool-header"><h1>📐 حاسبة الزوايا السعرية</h1><p>النتائج تتحدث تلقائياً مع كل تغيير</p></div>
-    <div class="result-card">
-      <div class="input-row">
-        <div class="input-group"><label>السعر</label><input type="text" id="calcPrice" placeholder="مثال: 104000 أو 1.08500" oninput="autoCalc()"></div>
-        <div class="input-group"><label>النوع</label><select id="calcType" onchange="autoCalc()"><option value="low">قاع — صعود ↑</option><option value="high">قمة — هبوط ↓</option></select></div>
-      </div>
-    </div>
-    <div id="calcResults"></div>
+<!-- Halving Countdown -->
+
+<div class="halving" id="halvingBox">
+  <div class="halving-title">⏱ العد التنازلي لهالفينج البيتكوين القادم — البلوك 1,050,000</div>
+  <div class="halving-nums" id="halvingNums">
+    <div class="halving-box"><div class="n" id="hDays">---</div><div class="l">يوم</div></div>
+    <div class="halving-box"><div class="n" id="hHours">--</div><div class="l">ساعة</div></div>
+    <div class="halving-box"><div class="n" id="hMins">--</div><div class="l">دقيقة</div></div>
+    <div class="halving-box"><div class="n" id="hSecs">--</div><div class="l">ثانية</div></div>
   </div>
+  <div class="halving-bar"><div class="halving-bar-fill" id="hBar" style="width:0%"></div></div>
+  <div style="font-size:.65rem;color:var(--t3);margin-top:.3rem">المكافأة الحالية: 3.125 BTC → بعد الهالفينج: 1.5625 BTC</div>
 </div>
 
-<div class="page" id="page-detector">
-  <div class="tool-page">
-    <div class="tool-header"><h1>🔍 كاشف الشكل الهندسي</h1><p>حدد سعر البداية وسعر الارتداد</p></div>
-    <div class="result-card">
-      <div class="input-row">
-        <div class="input-group"><label>سعر البداية</label><input type="text" id="detPrice" placeholder="مثال: 104000"></div>
-        <div class="input-group"><label>سعر أول ارتداد</label><input type="text" id="detBounce" placeholder="مثال: 108500"></div>
-        <div class="input-group"><label>الاتجاه</label><select id="detDir"><option value="up">صعود ↑</option><option value="down">هبوط ↓</option></select></div>
-      </div>
-      <div class="btn-row"><button class="btn" onclick="detectShape()">اكتشف الشكل ←</button></div>
-    </div>
-    <div id="detResults"></div>
-  </div>
+<div class="hstrip">
+  <div class="tc" onclick="nav('calc')"><div class="tc-i">📐</div><div class="tc-n">حاسبة الزوايا</div><div class="tc-d">كل الزوايا من 30° إلى 360°</div></div>
+  <div class="tc" onclick="nav('det')"><div class="tc-i">🔍</div><div class="tc-n">كاشف الشكل</div><div class="tc-d">تحديد الشكل وأهدافه</div></div>
+  <div class="tc" onclick="nav('cls')"><div class="tc-i">🎯</div><div class="tc-n">فيبو + زوايا</div><div class="tc-d">مناطق الكلاستر</div></div>
+  <div class="tc" onclick="nav('cyc')"><div class="tc-i">🔄</div><div class="tc-n">الدورات</div><div class="tc-d">دورات الأرقام</div></div>
+  <div class="tc" onclick="nav('live')"><div class="tc-i">⚡</div><div class="tc-n">سعر حي</div><div class="tc-d">Binance WebSocket</div></div>
+</div>
+</section>
 </div>
 
-<div class="page" id="page-sq9">
-  <div class="tool-page">
-    <div class="tool-header"><h1>🔢 مربع التسعة التفاعلي</h1><p>أدخل السعر — يبني المربع ويحسب مستويات الدعم والمقاومة</p></div>
-    <div class="result-card">
-      <div class="input-row">
-        <div class="input-group"><label>السعر الحالي</label><input type="text" id="sq9Price" value="104000" oninput="calcSQ9()"></div>
-        <div class="input-group"><label>حجم المربع</label><select id="sq9Size" onchange="calcSQ9()"><option value="4">صغير (9×9)</option><option value="5" selected>متوسط (11×11)</option><option value="7">كبير (15×15)</option></select></div>
-      </div>
-      <div class="sq9-info">
-        <div class="sq9-legend"><div class="sq9-legend-dot" style="background:var(--orange)"></div> السعر</div>
-        <div class="sq9-legend"><div class="sq9-legend-dot" style="background:var(--orange-dim);border:1px solid var(--orange)"></div> نفس الزاوية</div>
-        <div class="sq9-legend"><div class="sq9-legend-dot" style="background:rgba(0,200,83,.06);border:1px solid rgba(0,200,83,.2)"></div> محاور 0°/90°/180°/270°</div>
-      </div>
-    </div>
-    <div class="sq9-wrap" id="sq9Wrap"></div>
-    <div id="sq9Results"></div>
-  </div>
-</div>
+<!-- CALC -->
 
-<div class="page" id="page-cycles">
-  <div class="tool-page">
-    <div class="tool-header"><h1>🔄 حاسبة الدورات والأشكال</h1><p>حساب شامل: دورات الأرقام + أشكال هندسية + مربع التسعة</p></div>
-    <div class="result-card">
-      <div class="input-row">
-        <div class="input-group"><label>السعر</label><input type="text" id="cycPrice" placeholder="مثال: 104000"></div>
-        <div class="input-group"><label>الاتجاه</label><select id="cycType"><option value="up">صعود ↑</option><option value="down">هبوط ↓</option></select></div>
-      </div>
-      <div class="btn-row"><button class="btn" onclick="calcCycles()">احسب ←</button></div>
-    </div>
-    <div id="cycResults"></div>
-  </div>
-</div>
+<div class="pg" id="pg-calc"><div class="tp">
+<div class="th"><h1>📐 حاسبة الزوايا السعرية</h1><p>النتائج تتحدث تلقائياً</p></div>
+<div class="rc"><div class="ir">
+  <div class="ig"><label>السعر</label><input type="text" id="cP" placeholder="104000" oninput="autoCalc()"></div>
+  <div class="ig"><label>النوع</label><select id="cT" onchange="autoCalc()"><option value="up">قاع — صعود ↑</option><option value="down">قمة — هبوط ↓</option></select></div>
+</div></div>
+<div id="cR"></div>
+</div></div>
 
-<!-- CLUSTER: Fibonacci + Angles -->
+<!-- DETECTOR -->
 
-<div class="page" id="page-cluster">
-  <div class="tool-page">
-    <div class="tool-header"><h1>🎯 فيبوناتشي + الزوايا — مناطق الكلاستر</h1><p>اكتشف المناطق حيث يتطابق مستوى فيبوناتشي مع زاوية جان — أقوى مناطق الارتداد</p></div>
-    <div class="result-card">
-      <div class="input-row">
-        <div class="input-group"><label>سعر البداية (القاع أو القمة)</label><input type="text" id="clsStart" placeholder="مثال: 90000"></div>
-        <div class="input-group"><label>سعر النهاية (أول زاوية ردّت السعر)</label><input type="text" id="clsEnd" placeholder="مثال: 108000"></div>
-        <div class="input-group"><label>الاتجاه</label><select id="clsDir"><option value="up">صعود ↑ (بدأ من قاع)</option><option value="down">هبوط ↓ (بدأ من قمة)</option></select></div>
-      </div>
-      <div class="btn-row"><button class="btn" onclick="calcCluster()">اكتشف الكلاستر ←</button></div>
-    </div>
-    <div id="clsResults"></div>
-  </div>
-</div>
+<div class="pg" id="pg-det"><div class="tp">
+<div class="th"><h1>🔍 كاشف الشكل الهندسي</h1><p>سعر البداية وسعر الارتداد</p></div>
+<div class="rc"><div class="ir">
+  <div class="ig"><label>سعر البداية</label><input type="text" id="dP" placeholder="90000"></div>
+  <div class="ig"><label>سعر الارتداد</label><input type="text" id="dB" placeholder="108000"></div>
+  <div class="ig"><label>الاتجاه</label><select id="dD"><option value="up">صعود ↑</option><option value="down">هبوط ↓</option></select></div>
+</div><div class="br"><button class="btn" onclick="detShape()">اكتشف ←</button></div></div>
+<div id="dR"></div>
+</div></div>
 
-<!-- LIVE PRICE -->
+<!-- CLUSTER -->
 
-<div class="page" id="page-live">
-  <div class="tool-page">
-    <div class="tool-header"><h1>⚡ السعر الحي — Binance</h1><p>اختر العملة لجلب السعر وتشغيل كل الحسابات تلقائياً</p></div>
-    <div class="result-card">
-      <div class="input-row">
-        <div class="input-group"><label>العملة</label><select id="liveSymbol">
-          <option value="BTCUSDT">BTC / USDT</option><option value="ETHUSDT">ETH / USDT</option>
-          <option value="BNBUSDT">BNB / USDT</option><option value="SOLUSDT">SOL / USDT</option>
-          <option value="XRPUSDT">XRP / USDT</option><option value="DOGEUSDT">DOGE / USDT</option>
-          <option value="ADAUSDT">ADA / USDT</option><option value="AVAXUSDT">AVAX / USDT</option>
-          <option value="DOTUSDT">DOT / USDT</option><option value="LINKUSDT">LINK / USDT</option>
-          <option value="MATICUSDT">MATIC / USDT</option><option value="SHIBUSDT">SHIB / USDT</option>
-          <option value="LTCUSDT">LTC / USDT</option><option value="ATOMUSDT">ATOM / USDT</option>
-          <option value="NEARUSDT">NEAR / USDT</option><option value="SUIUSDT">SUI / USDT</option>
-          <option value="PEPEUSDT">PEPE / USDT</option><option value="WIFUSDT">WIF / USDT</option>
-        </select></div>
-        <div class="input-group"><label>أو أدخل رمز يدوياً</label><input type="text" id="liveCustom" placeholder="مثال: TRUMPUSDT"></div>
-      </div>
-      <div class="btn-row">
-        <button class="btn" onclick="connectWS()" id="wsBtn">⚡ اتصال مباشر — WebSocket</button>
-        <button class="btn" style="background:var(--surface);color:var(--red);border:1.5px solid var(--border)" onclick="disconnectWS()" id="wsDcBtn" disabled>قطع الاتصال</button>
-      </div>
-      <div id="wsStatus" style="text-align:center;font-size:.75rem;color:var(--text3);margin-top:.5rem"></div>
-    </div>
-    <div id="livePrice" style="text-align:center;padding:1rem"></div>
-    <div id="liveResults"></div>
-  </div>
-</div>
+<div class="pg" id="pg-cls"><div class="tp">
+<div class="th"><h1>🎯 فيبوناتشي + زوايا — كلاستر</h1><p>اكتشف مناطق تطابق فيبوناتشي مع زوايا جان</p></div>
+<div class="rc"><div class="ir">
+  <div class="ig"><label>سعر البداية</label><input type="text" id="csS" placeholder="90000"></div>
+  <div class="ig"><label>سعر النهاية</label><input type="text" id="csE" placeholder="108000"></div>
+  <div class="ig"><label>الاتجاه</label><select id="csD"><option value="up">صعود ↑</option><option value="down">هبوط ↓</option></select></div>
+</div><div class="br"><button class="btn" onclick="calcCluster()">اكتشف الكلاستر ←</button></div></div>
+<div id="csR"></div>
+</div></div>
+
+<!-- CYCLES -->
+
+<div class="pg" id="pg-cyc"><div class="tp">
+<div class="th"><h1>🔄 حاسبة الدورات والأشكال</h1><p>دورات الأرقام + أشكال هندسية + مربع التسعة</p></div>
+<div class="rc"><div class="ir">
+  <div class="ig"><label>السعر</label><input type="text" id="yP" placeholder="104000"></div>
+  <div class="ig"><label>الاتجاه</label><select id="yD"><option value="up">صعود ↑</option><option value="down">هبوط ↓</option></select></div>
+</div><div class="br"><button class="btn" onclick="calcCyc()">احسب ←</button></div></div>
+<div id="yR"></div>
+</div></div>
+
+<!-- LIVE -->
+
+<div class="pg" id="pg-live"><div class="tp">
+<div class="th"><h1>⚡ السعر الحي — WebSocket</h1><p>اتصال مباشر بدون حدود — جان + فيبوناتشي + Murray + VWAP + RSI</p></div>
+<div class="rc"><div class="ir">
+  <div class="ig"><label>العملة</label><select id="lSym"><option value="BTC">BTC</option><option value="ETH">ETH</option><option value="SOL">SOL</option></select></div>
+  <div class="ig"><label>أو أدخل الرمز يدوياً (بدون USDT)</label><input type="text" id="lCust" placeholder="مثال: APT"></div>
+</div><div class="br">
+  <button class="btn" onclick="connectWS()" id="wsB">⚡ اتصال مباشر</button>
+  <button class="btn btn2" onclick="disconnectWS()" id="wsD" disabled>قطع</button>
+</div><div id="wsS" style="text-align:center;font-size:.7rem;color:var(--t3);margin-top:.4rem"></div></div>
+<div id="lP" style="text-align:center;padding:.8rem"></div>
+<div id="lR"></div>
+</div></div>
 
 <script>
 // NAV
-function navigate(p){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById('page-'+p).classList.add('active');document.querySelectorAll('[data-page]').forEach(a=>a.classList.toggle('active',a.dataset.page===p));window.scrollTo({top:0});history.replaceState(null,null,'#'+p);if(p==='sq9')setTimeout(calcSQ9,80)}
-function toggleMobile(){document.getElementById('mobileNav').classList.toggle('open')}
-function closeMobile(){document.getElementById('mobileNav').classList.remove('open')}
-window.addEventListener('DOMContentLoaded',()=>{const h=location.hash.replace('#','');if(h&&document.getElementById('page-'+h))navigate(h);else navigate('home')});
+function nav(p){document.querySelectorAll('.pg').forEach(x=>x.classList.remove('active'));document.getElementById('pg-'+p).classList.add('active');document.querySelectorAll('[data-p]').forEach(a=>a.classList.toggle('active',a.dataset.p===p));window.scrollTo({top:0});history.replaceState(null,null,'#'+p)}
+function toggleM(){document.getElementById('mn').classList.toggle('open')}
+function closeM(){document.getElementById('mn').classList.remove('open')}
+window.addEventListener('DOMContentLoaded',()=>{const h=location.hash.replace('#','');if(h&&document.getElementById('pg-'+h))nav(h);else nav('home');initHalving()});
 
-// SMART SCALING
-function getSF(p,dir){
-  if(p>=10000)return dir==='up'?0.0001:(p>=40000?0.0001:0.001);
-  if(p>=1000)return 0.01;if(p>=100)return 0.1;
-  if(p>=5)return dir==='down'?100:1;
-  if(p>=1)return dir==='down'?100:1;
-  return 100;
+// HALVING COUNTDOWN
+function initHalving(){
+  // Target: block 1,050,000. Last halving block 840,000 on April 20, 2024
+  // Estimated: April 14, 2028 (using ~9.9 min/block)
+  const target=new Date('2028-04-14T00:00:00Z').getTime();
+  const halvStart=new Date('2024-04-20T00:09:00Z').getTime();
+  const totalSpan=target-halvStart;
+  function tick(){
+    const now=Date.now(),left=target-now;
+    if(left<=0){document.getElementById('halvingNums').innerHTML='<div style="color:var(--o);font-size:1.2rem;font-weight:700">تم الهالفينج!</div>';return}
+    const d=Math.floor(left/86400000),h=Math.floor(left%86400000/3600000),m=Math.floor(left%3600000/60000),s=Math.floor(left%60000/1000);
+    document.getElementById('hDays').textContent=d;document.getElementById('hHours').textContent=h;
+    document.getElementById('hMins').textContent=m;document.getElementById('hSecs').textContent=s;
+    const pct=((now-halvStart)/totalSpan*100).toFixed(1);
+    document.getElementById('hBar').style.width=Math.min(pct,100)+'%';
+  }
+  tick();setInterval(tick,1000);
 }
-function smartCalc(price,deg,dir){
-  let m=getSF(price,dir),sp=price*m,root=Math.sqrt(sp),f=deg/180;
-  let nr=dir==='up'?root+f:root-f;
-  return nr<0?0:(nr*nr)/m;
-}
-function fmt(p){if(p<1&&p>0)return p.toFixed(4);if(p<10)return p.toFixed(4);if(p<1000)return p.toFixed(2);return p.toFixed(2)}
+
+// MATH
+function getSF(p,d){if(p>=10000)return d==='up'?0.0001:(p>=40000?0.0001:0.001);if(p>=1000)return 0.01;if(p>=100)return 0.1;if(p>=5)return d==='down'?100:1;if(p>=1)return d==='down'?100:1;return 100}
+function sc(p,deg,d){let m=getSF(p,d),r=Math.sqrt(p*m),f=deg/180,nr=d==='up'?r+f:r-f;return nr<0?0:(nr*nr)/m}
+function fm(p){if(p===0)return'0';if(p<1&&p>0)return p.toFixed(6);if(p<10)return p.toFixed(4);if(p<1000)return p.toFixed(2);return p.toFixed(2)}
 
 // CALCULATOR
-const ANGLES=[30,36,40,45,51.43,60,72,90,108,120,135,144,150,180,210,216,240,252,270,288,300,315,324,330,360];
+const ANG=[30,36,40,45,51.43,60,72,90,108,120,135,144,150,180,210,216,240,252,270,288,300,315,324,330,360];
 function autoCalc(){
-  const ps=document.getElementById('calcPrice').value.trim(),ty=document.getElementById('calcType').value,ct=document.getElementById('calcResults');
-  const price=parseFloat(ps);if(!ps||isNaN(price)||price<=0){ct.innerHTML='';return}
-  const dir=ty==='low'?'up':'down';let rows='';
-  ANGLES.forEach(a=>{
-    const r=smartCalc(price,a,dir),diff=Math.abs(r-price),pct=((diff/price)*100).toFixed(2);
-    const c=dir==='up'?'up':'dn',bg=[90,180,270,360].includes(a)?'background:var(--orange-dim)':'';
-    rows+=`<tr style="${bg}"><td>${a}°</td><td class="${c}" style="font-weight:700">${fmt(r)}</td><td>${fmt(diff)}</td><td>${pct}%</td></tr>`;
-  });
-  ct.innerHTML=`<div class="result-card"><h3>مستويات ${dir==='up'?'الصعود ↑':'الهبوط ↓'} من ${ps}</h3><p style="color:var(--text3);font-size:.75rem;margin-bottom:.8rem">الإزاحة: ${getSF(price,dir)}</p><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th><th>الفارق</th><th>%</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
-}
+  const p=parseFloat(document.getElementById('cP').value),d=document.getElementById('cT').value,ct=document.getElementById('cR');
+  if(isNaN(p)||p<=0){ct.innerHTML='';return}
+  let rows='';ANG.forEach(a=>{const r=sc(p,a,d),df=Math.abs(r-p),pc=((df/p)*100).toFixed(2),bg=[90,180,270,360].includes(a)?'background:var(--od)':'';
+    rows+=`<tr style="${bg}"><td>${a}°</td><td class="${d==='up'?'up':'dn'}" style="font-weight:700">${fm(r)}</td><td>${fm(df)}</td><td>${pc}%</td></tr>`});
+  ct.innerHTML=`<div class="rc"><h3>مستويات ${d==='up'?'الصعود ↑':'الهبوط ↓'}</h3><div style="overflow-x:auto"><table class="rt"><thead><tr><th>الزاوية</th><th>السعر</th><th>الفارق</th><th>%</th></tr></thead><tbody>${rows}</tbody></table></div></div>`}
 
-// SHAPE DETECTOR
-const SHAPES=[
-  {a:360,name:'الدائري',en:'Circle',css:'v-circle',ok:true,desc:'حركة قوية جداً — اتجاه طويل وسريع',aa:[360]},
-  {a:180,name:'المستقيم',en:'Straight Line',css:'v-line',ok:true,desc:'حركة قوية — نسبة نجاح كبيرة',aa:[180,360]},
-  {a:144,name:'الخماسي 144',en:'Pentagon',css:'v-pentagon',ok:true,desc:'تذبذب متوسط — صفقة 1:1',aa:[144,288,360]},
-  {a:120,name:'الثلاثي',en:'Triangle',css:'v-triangle',ok:true,desc:'من أهم الأشكال — سريع',aa:[120,240,360]},
-  {a:90,name:'الرباعي',en:'Square',css:'v-square',ok:true,desc:'الأكثر شيوعاً — متزن',aa:[90,180,270,360]},
-  {a:72,name:'الخماسي',en:'Pentagon',css:'v-pentagon',ok:true,desc:'تذبذب متوسط',aa:[72,144,216,288,360]},
-  {a:60,name:'السداسي',en:'Hexagon',css:'v-hexagon',ok:false,desc:'بطيء — نطاق ضيق',aa:[60,120,180,240,300,360]},
-  {a:45,name:'الثماني',en:'Octagon',css:'v-other',ok:false,desc:'تذبذب — شائع',aa:[45,90,135,180,225,270,315,360]},
-  {a:36,name:'العشاري',en:'Decagon',css:'v-other',ok:false,desc:'قد يسبق انفجار سعري',aa:[36,72,108,144,180,216,252,288,324,360]},
-  {a:30,name:'12 ضلع',en:'Dodecagon',css:'v-other',ok:false,desc:'نادر جداً',aa:[30,60,90,120,150,180,210,240,270,300,330,360]},
-];
-function detectShape(){
-  const ps=document.getElementById('detPrice').value.trim(),bs=document.getElementById('detBounce').value.trim(),dir=document.getElementById('detDir').value,ct=document.getElementById('detResults');
-  const price=parseFloat(ps),bounce=parseFloat(bs);
-  if(!ps||!bs||isNaN(price)||isNaN(bounce)){ct.innerHTML='<div class="result-card" style="text-align:center;color:var(--text2);padding:1.5rem">أدخل السعرين</div>';return}
-  let best=null,bestD=Infinity;
-  SHAPES.forEach(s=>{const r=smartCalc(price,s.a,dir);const df=Math.abs(r-bounce);if(df<bestD){bestD=df;best=s}});
-  if(!best)return;
-  let trows='';best.aa.forEach(a=>{const r=smartCalc(price,a,dir);trows+=`<tr><td>${a}°</td><td class="${dir==='up'?'up':'dn'}" style="font-weight:700">${fmt(r)}</td></tr>`});
-  ct.innerHTML=`<div class="result-card"><div class="shape-result"><div class="shape-visual ${best.css}">${best.css==='v-triangle'||best.css==='v-line'?'':best.a+'°'}</div><div class="shape-big">${best.name}</div><div class="shape-en">${best.en}</div><div class="sprops"><div class="sprop"><div class="sprop-l">الزاوية</div><div class="sprop-v">${best.a}°</div></div><div class="sprop"><div class="sprop-l">اكتمال</div><div class="sprop-v" style="color:${best.ok?'var(--green)':'var(--red)'}">${best.ok?'✓':'✗'}</div></div></div></div></div><div class="result-card"><h3>الأهداف</h3><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th></tr></thead><tbody>${trows}</tbody></table></div>`;
-}
+// DETECTOR
+const SHAPES=[{a:360,n:'الدائري',e:'Circle',c:'v-circle',ok:1,d:'قوي جداً',aa:[360]},{a:180,n:'المستقيم',e:'Line',c:'v-line',ok:1,d:'قوي وسريع',aa:[180,360]},{a:144,n:'خماسي 144',e:'Pentagon',c:'v-pentagon',ok:1,d:'متوسط',aa:[144,288,360]},{a:120,n:'الثلاثي',e:'Triangle',c:'v-triangle',ok:1,d:'سريع',aa:[120,240,360]},{a:90,n:'الرباعي',e:'Square',c:'v-square',ok:1,d:'متزن',aa:[90,180,270,360]},{a:72,n:'الخماسي',e:'Pentagon',c:'v-pentagon',ok:1,d:'متوسط',aa:[72,144,216,288,360]},{a:60,n:'السداسي',e:'Hexagon',c:'v-hexagon',ok:0,d:'بطيء',aa:[60,120,180,240,300,360]},{a:45,n:'الثماني',e:'Octagon',c:'v-other',ok:0,d:'تذبذب',aa:[45,90,135,180,225,270,315,360]},{a:36,n:'العشاري',e:'Decagon',c:'v-other',ok:0,d:'انفجار سعري',aa:[36,72,108,144,180,216,252,288,324,360]}];
+function detShape(){
+  const p=parseFloat(document.getElementById('dP').value),b=parseFloat(document.getElementById('dB').value),d=document.getElementById('dD').value,ct=document.getElementById('dR');
+  if(isNaN(p)||isNaN(b)){ct.innerHTML='<div class="rc" style="text-align:center;color:var(--t2)">أدخل السعرين</div>';return}
+  let best=null,bd=Infinity;SHAPES.forEach(s=>{const df=Math.abs(sc(p,s.a,d)-b);if(df<bd){bd=df;best=s}});
+  let tr='';best.aa.forEach(a=>{tr+=`<tr><td>${a}°</td><td class="${d==='up'?'up':'dn'}" style="font-weight:700">${fm(sc(p,a,d))}</td></tr>`});
+  ct.innerHTML=`<div class="rc"><div class="shape-result"><div class="shape-visual ${best.c}">${best.c==='v-triangle'||best.c==='v-line'?'':best.a+'°'}</div><div class="shape-big">${best.n}</div><div class="shape-en">${best.e}</div><div class="sprops"><div class="sp"><div class="sp-l">الزاوية</div><div class="sp-v">${best.a}°</div></div><div class="sp"><div class="sp-l">اكتمال</div><div class="sp-v" style="color:${best.ok?'var(--g)':'var(--r)'}">${best.ok?'✓':'✗'}</div></div></div></div></div><div class="rc"><h3>الأهداف</h3><table class="rt"><thead><tr><th>الزاوية</th><th>السعر</th></tr></thead><tbody>${tr}</tbody></table></div>`}
 
-// ===== SQ9: REAL INTERACTIVE GANN SQUARE OF 9 =====
-// Formula: Level = (√Price ± Angle/360)²
-// Grid: counterclockwise spiral from center
-
-function buildSpiralGrid(rings){
-  // Build counterclockwise spiral (Gann style)
-  const sz=rings*2+1;
-  const g=Array.from({length:sz},()=>Array(sz).fill(0));
-  const pos={}; // number -> {y,x}
-  let x=rings,y=rings,n=1;
-  g[y][x]=n;pos[n]={y,x};n++;
-  // Directions: right, up, left, down (counterclockwise after first move right)
-  for(let layer=1;layer<=rings;layer++){
-    // Move right 1
-    x++;g[y][x]=n;pos[n]={y,x};n++;
-    // Move up (layer*2-1)
-    for(let i=0;i<layer*2-1;i++){y--;g[y][x]=n;pos[n]={y,x};n++}
-    // Move left (layer*2)
-    for(let i=0;i<layer*2;i++){x--;g[y][x]=n;pos[n]={y,x};n++}
-    // Move down (layer*2)
-    for(let i=0;i<layer*2;i++){y++;g[y][x]=n;pos[n]={y,x};n++}
-    // Move right (layer*2)
-    for(let i=0;i<layer*2;i++){x++;g[y][x]=n;pos[n]={y,x};n++}
-  }
-  return{g,sz,pos,max:n-1};
-}
-
-function calcSQ9(){
-  const priceStr=document.getElementById('sq9Price').value.trim();
-  const rings=parseInt(document.getElementById('sq9Size').value)||5;
-  const price=parseFloat(priceStr);
-  if(!priceStr||isNaN(price)||price<=0)return;
-
-  // Build the visual grid (numbers 1..max)
-  const{g,sz,pos,max}=buildSpiralGrid(rings);
-
-  // Calculate Gann levels from price using formula: (√price ± n/360)²
-  // The center = price, surrounding = calculated levels
-  // We map grid position numbers to actual price levels
-  const centerNum=1;
-  const priceLevels={};
-  const sqrtP=Math.sqrt(price);
-  
-  for(let num=1;num<=max;num++){
-    if(num===centerNum){
-      priceLevels[num]=price;
-    } else {
-      // Each step in the spiral = increment of angle
-      // Full rotation (8 numbers around center) = 360°
-      // So each cell = (num-1) * (360/8) roughly, but better: use ring-based
-      // Simpler: each number offset from center represents fraction of rotation
-      // Standard approach: level = (√price + (num-1)/360 * k)² for up
-      // For SQ9, the step between adjacent cells on same cardinal = 2 added to sqrt
-      // We use: level_up = (√price + (num-1)*increment)²
-      // increment chosen so that a full rotation (8 steps) = meaningful price move
-    }
-  }
-  
-  // Better approach: Calculate actual S/R levels and show grid + table
-  // The REAL Gann SQ9 calculator: find levels at cardinal/ordinal angles
-  const angles=[45,90,135,180,225,270,315,360];
-  const levelsUp=[], levelsDown=[];
-  
-  angles.forEach(a=>{
-    // Gann formula: Level = (√Price + Angle/360)²
-    const up = Math.pow(sqrtP + a/360, 2);
-    const down = Math.pow(Math.max(0, sqrtP - a/360), 2);
-    levelsUp.push({angle:a, price:up});
-    levelsDown.push({angle:a, price:down});
-  });
-
-  // Also multi-rotation levels
-  for(let rot=2;rot<=3;rot++){
-    angles.forEach(a=>{
-      const totalA = 360*(rot-1)+a;
-      const up = Math.pow(sqrtP + totalA/360, 2);
-      const down = Math.pow(Math.max(0, sqrtP - totalA/360), 2);
-      levelsUp.push({angle:totalA, price:up});
-      levelsDown.push({angle:totalA, price:down});
-    });
-  }
-
-  // Now build visual spiral grid with PRICE values
-  // Map numbers to price levels where center=input price
-  // Each number N maps to: price_level = (√price + (N-1)/360)²
-  const cellPrices={};
-  for(let num=1;num<=max;num++){
-    const offset=(num-1);
-    cellPrices[num] = Math.pow(sqrtP + offset/360, 2);
-  }
-  // For numbers "below" center (downside), use negative offset
-  // But spiral only goes up. So let's use the grid purely visually
-  // and show the real calculator below
-
-  // Build grid HTML - show grid numbers mapped to prices
-  let gridHTML=`<div class="sq9-grid" style="grid-template-columns:repeat(${sz},1fr)">`;
-  
-  // Find which cells are on cardinal/ordinal crosses
-  const cardinalNums=new Set([1]);
-  for(let L=1;L<=rings;L++){
-    let start=(2*(L-1)+1)**2;
-    let sl=2*L;
-    cardinalNums.add(start+1);      // 0° (right)
-    cardinalNums.add(start+sl);     // 90° (top)  
-    cardinalNums.add(start+sl*2);   // 180° (left)
-    cardinalNums.add(start+sl*3);   // 270° (bottom)
-  }
-  // Ordinal crosses (45°, 135°, 225°, 315°) = odd perfect squares and midpoints
-  const ordinalNums=new Set();
-  for(let L=1;L<=rings;L++){
-    let start=(2*(L-1)+1)**2;
-    let sl=2*L;
-    let half=Math.floor(sl/2);
-    ordinalNums.add(start+half);           // ~45°
-    ordinalNums.add(start+sl+half);        // ~135°
-    ordinalNums.add(start+sl*2+half);      // ~225°
-    ordinalNums.add(start+sl*3+half);      // ~315°
-  }
-
-  for(let y2=0;y2<sz;y2++){
-    for(let x2=0;x2<sz;x2++){
-      const num=g[y2][x2];
-      let cls='sq9-cell';
-      if(num===1)cls+=' center';
-      else if(cardinalNums.has(num))cls+=' cardinal';
-      else if(ordinalNums.has(num))cls+=' same-angle';
-      
-      // Show actual price for this cell
-      const cellP = Math.pow(sqrtP + (num-1)/360, 2);
-      const display = num===1 ? fmt(price) : fmt(cellP);
-      gridHTML+=`<div class="${cls}" title="رقم ${num} | ${display}">${display}</div>`;
-    }
-  }
-  gridHTML+='</div>';
-  document.getElementById('sq9Wrap').innerHTML=gridHTML;
-
-  // Results table: Buy/Sell levels
-  let buyRows='',sellRows='';
-  const mainAngles=[45,90,135,180,225,270,315,360,405,450,540,630,720];
-  mainAngles.forEach(a=>{
-    const up=Math.pow(sqrtP+a/360,2);
-    const down=Math.pow(Math.max(0,sqrtP-a/360),2);
-    const upDiff=((up-price)/price*100).toFixed(2);
-    const downDiff=((price-down)/price*100).toFixed(2);
-    buyRows+=`<tr${a===360?' style="background:var(--orange-dim)"':''}><td>${a}°</td><td class="up" style="font-weight:700">${fmt(up)}</td><td>${upDiff}%</td></tr>`;
-    sellRows+=`<tr${a===360?' style="background:var(--orange-dim)"':''}><td>${a}°</td><td class="dn" style="font-weight:700">${fmt(down)}</td><td>${downDiff}%</td></tr>`;
-  });
-  
-  document.getElementById('sq9Results').innerHTML=`
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
-      <div class="result-card"><h3>مستويات الشراء (المقاومة) ↑</h3><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th><th>%</th></tr></thead><tbody>${buyRows}</tbody></table></div>
-      <div class="result-card"><h3>مستويات البيع (الدعم) ↓</h3><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th><th>%</th></tr></thead><tbody>${sellRows}</tbody></table></div>
-    </div>
-    <div class="result-card"><h3>طريقة الاستخدام</h3><ul style="color:var(--text2);padding-right:1rem;line-height:2.2;font-size:.85rem"><li><strong style="color:var(--green)">شراء:</strong> إذا السعر فوق مستوى زاوية معينة → الهدف الزاوية التالية</li><li><strong style="color:var(--red)">بيع:</strong> إذا السعر تحت مستوى زاوية → الهدف الزاوية التالية للأسفل</li><li><strong style="color:var(--orange)">360°</strong> = دورة كاملة — مستوى انعكاس رئيسي</li><li>الزوايا 90° و 180° و 270° هي أقوى مستويات الدعم والمقاومة</li></ul></div>`;
-}
+// CLUSTER
+function calcCluster(){
+  const s=parseFloat(document.getElementById('csS').value),e=parseFloat(document.getElementById('csE').value),d=document.getElementById('csD').value,ct=document.getElementById('csR');
+  if(isNaN(s)||isNaN(e)){ct.innerHTML='<div class="rc" style="text-align:center;color:var(--t2)">أدخل السعرين</div>';return}
+  const rng=Math.abs(e-s),thr=rng*0.015;
+  const fibs=[{n:'23.6%',r:.236},{n:'38.2%',r:.382},{n:'50%',r:.5},{n:'61.8%',r:.618},{n:'78.6%',r:.786},{n:'88.6%',r:.886}].map(f=>({...f,p:d==='up'?e-rng*f.r:e+rng*f.r}));
+  const ganns=[45,60,72,90,120,135,144,180,216,240,270,288,315,324,360].map(a=>({a,p:sc(s,a,d)}));
+  const cls=[];fibs.forEach(f=>{ganns.forEach(g=>{const df=Math.abs(f.p-g.p);if(df<=thr)cls.push({fn:f.n,fp:f.p,ga:g.a,gp:g.p,avg:(f.p+g.p)/2,str:df<thr*.5?'قوي جداً':'قوي',df})})});cls.sort((a,b)=>a.df-b.df);
+  let ch='';if(!cls.length)ch='<div style="text-align:center;color:var(--t3);padding:1.5rem">لا توجد مناطق كلاستر</div>';
+  else cls.forEach(c=>{ch+=`<div style="background:var(--s2);border-radius:9px;padding:.8rem;margin-bottom:.5rem;border-right:4px solid var(--o)"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.4rem"><span style="color:var(--o);font-weight:700;font-size:1rem">${fm(c.avg)}</span><span style="font-size:.75rem;color:var(--t2)">فيبو ${c.fn} ≈ ${c.ga}°</span></div><div style="font-size:.7rem;color:var(--t3)">${c.str} | فرق: ${fm(c.df)}</div></div>`});
+  let fr='',gr='';fibs.forEach(f=>{fr+=`<tr><td style="color:var(--o);font-weight:600">${f.n}</td><td style="font-weight:700">${fm(f.p)}</td></tr>`});
+  ganns.forEach(g=>{gr+=`<tr${[90,180,270,360].includes(g.a)?' style="background:var(--od)"':''}><td>${g.a}°</td><td style="font-weight:700">${fm(g.p)}</td></tr>`});
+  ct.innerHTML=`<div class="rc" style="border-color:var(--o)"><h3>كلاستر — ${cls.length} منطقة</h3>${ch}</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem"><div class="rc"><h3>فيبوناتشي</h3><table class="rt"><thead><tr><th>المستوى</th><th>السعر</th></tr></thead><tbody>${fr}</tbody></table></div><div class="rc"><h3>زوايا جان</h3><table class="rt"><thead><tr><th>الزاوية</th><th>السعر</th></tr></thead><tbody>${gr}</tbody></table></div></div>`}
 
 // CYCLES
-function dRoot(n){let s=String(Math.round(Math.abs(n))).split('').reduce((a,b)=>a+parseInt(b),0);while(s>=10){s=String(s).split('').reduce((a,b)=>a+parseInt(b),0)}return s}
+function dR(n){let s=String(Math.round(Math.abs(n))).split('').reduce((a,b)=>a+parseInt(b),0);while(s>=10)s=String(s).split('').reduce((a,b)=>a+parseInt(b),0);return s}
 const CM={1:'1',2:'2',3:'3',4:'4',5:'5',6:'3 أو 4',7:'5',8:'2 أو 4',9:'1 أو 5'};
-const CMN={1:[1],2:[2],3:[3],4:[4],5:[5],6:[3,4],7:[5],8:[2,4],9:[1,5]};
-
-function calcCycles(){
-  const ps=document.getElementById('cycPrice').value.trim(),dir=document.getElementById('cycType').value,ct=document.getElementById('cycResults');
-  const price=parseFloat(ps);if(!ps||isNaN(price)||price<=0){ct.innerHTML='';return}
-  const root=dRoot(price),cycs=CMN[root]||[1],mx=Math.max(...cycs);
-
-  let digs=String(Math.round(price)).split(''),dh='<div class="cyc-vis">';
-  digs.forEach(x=>{dh+=`<div class="cyc-d">${x}</div>`});dh+='<div class="cyc-arr">→</div>';
-  let tmp=digs.reduce((a,b)=>a+parseInt(b),0),steps=[tmp];
-  while(tmp>=10){let ns=String(tmp).split('').reduce((a,b)=>a+parseInt(b),0);tmp=ns;steps.push(tmp)}
+const CN={1:[1],2:[2],3:[3],4:[4],5:[5],6:[3,4],7:[5],8:[2,4],9:[1,5]};
+function calcCyc(){
+  const p=parseFloat(document.getElementById('yP').value),d=document.getElementById('yD').value,ct=document.getElementById('yR');
+  if(isNaN(p)||p<=0){ct.innerHTML='';return}
+  const root=dR(p),cycs=CN[root]||[1],mx=Math.max(...cycs);
+  let digs=String(Math.round(p)).split(''),dh='<div class="cyc-vis">';digs.forEach(x=>{dh+=`<div class="cyc-d">${x}</div>`});dh+='<div class="cyc-arr">→</div>';
+  let tmp=digs.reduce((a,b)=>a+parseInt(b),0),steps=[tmp];while(tmp>=10){tmp=String(tmp).split('').reduce((a,b)=>a+parseInt(b),0);steps.push(tmp)}
   steps.forEach((s,i)=>{dh+=`<div class="cyc-d ${i===steps.length-1?'active':''}">${s}</div>`;if(i<steps.length-1)dh+='<div class="cyc-arr">→</div>'});dh+='</div>';
+  let sr='';[90,180,270,360].forEach(a=>{const r=sc(p,a,d);sr+=`<tr${a===360?' style="background:var(--od)"':''}><td>${a}°</td><td class="${d==='up'?'up':'dn'}" style="font-weight:700">${fm(r)}</td><td>${((Math.abs(r-p)/p)*100).toFixed(2)}%</td></tr>`});
+  let shr='';const SA={'المربع':[90,180,270,360],'المثلث':[120,240,360],'الخماسي':[72,144,216,288,360]};
+  for(let[n,aa] of Object.entries(SA)){let c='';aa.forEach(a=>{c+=`<td class="${d==='up'?'up':'dn'}">${fm(sc(p,a,d))}</td>`});shr+=`<tr><td style="color:var(--o);font-weight:600">${n}</td>${c}</tr>`}
+  let cr='';for(let c=1;c<=mx;c++){const a=360*c,r=sc(p,a,d);cr+=`<tr${cycs.includes(c)?' style="background:var(--od)"':''}><td>D${c}</td><td>${a}°</td><td class="${d==='up'?'up':'dn'}" style="font-weight:700">${fm(r)}</td><td>${((Math.abs(r-p)/p)*100).toFixed(2)}%</td></tr>`}
+  ct.innerHTML=`<div class="rc"><h3>SQ9</h3><table class="rt"><thead><tr><th>الزاوية</th><th>السعر</th><th>%</th></tr></thead><tbody>${sr}</tbody></table></div><div class="rc"><h3>الأشكال</h3><div style="overflow-x:auto"><table class="rt"><thead><tr><th>الشكل</th><th colspan="5">المستويات</th></tr></thead><tbody>${shr}</tbody></table></div></div><div class="rc"><h3>دورات الأرقام</h3>${dh}<div style="text-align:center;margin:1rem 0"><div style="font-family:Cairo;font-weight:900;font-size:3rem;color:var(--o)">${root}</div><div style="font-size:.8rem;color:var(--t2)">الجذر الرقمي → الدورات: <strong style="color:var(--o)">${CM[root]}</strong></div></div></div><div class="rc"><h3>أهداف الدورات</h3><table class="rt"><thead><tr><th></th><th>الزاوية</th><th>السعر</th><th>%</th></tr></thead><tbody>${cr}</tbody></table></div>`}
 
-  let sq9rows='';[90,180,270,360].forEach(a=>{const r=smartCalc(price,a,dir),diff=Math.abs(r-price),pct=((diff/price)*100).toFixed(2);
-    sq9rows+=`<tr${a===360?' style="background:var(--orange-dim)"':''}><td>${a}°</td><td class="${dir==='up'?'up':'dn'}" style="font-weight:700">${fmt(r)}</td><td>${fmt(diff)}</td><td>${pct}%</td></tr>`});
-
-  let shapeRows='';
-  const SA={'المربع':[90,180,270,360],'المثلث':[120,240,360],'الخماسي':[72,144,216,288,360],'السداسي':[60,120,180,240,300,360]};
-  for(let[name,angs] of Object.entries(SA)){let cells='';angs.forEach(a=>{cells+=`<td class="${dir==='up'?'up':'dn'}" style="font-weight:600">${fmt(smartCalc(price,a,dir))}</td>`});
-    shapeRows+=`<tr><td style="color:var(--orange);font-weight:600">${name}</td>${cells}</tr>`}
-
-  let cycRows='';
-  for(let c=1;c<=mx;c++){const a=360*c,r=smartCalc(price,a,dir),pct=((Math.abs(r-price)/price)*100).toFixed(2);
-    cycRows+=`<tr${cycs.includes(c)?' style="background:var(--orange-dim)"':''}><td>الدورة ${c}</td><td>${a}°</td><td class="${dir==='up'?'up':'dn'}" style="font-weight:700">${fmt(r)}</td><td>${pct}%</td></tr>`}
-
-  ct.innerHTML=`
-    <div class="result-card"><h3>مربع التسعة SQ9</h3><p style="color:var(--text3);font-size:.75rem;margin-bottom:.6rem">الإزاحة: ${getSF(price,dir)}</p><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th><th>الفارق</th><th>%</th></tr></thead><tbody>${sq9rows}</tbody></table></div></div>
-    <div class="result-card"><h3>الأشكال الهندسية</h3><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الشكل</th>${Object.values(SA)[0].map((_,i)=>'<th>Z'+(i+1)+'</th>').join('')}<th>360°</th></tr></thead><tbody>${shapeRows}</tbody></table></div></div>
-    <div class="result-card"><h3>دورات الأرقام</h3>${dh}<div class="cyc-big"><div class="n">${root}</div><div class="l">الجذر الرقمي</div></div><div style="text-align:center;font-size:1rem">الدورات: <strong style="color:var(--orange);font-size:1.3rem">${CM[root]}</strong></div></div>
-    <div class="result-card"><h3>أهداف الدورات ${dir==='up'?'↑':'↓'}</h3><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الدورة</th><th>الزاوية</th><th>السعر</th><th>%</th></tr></thead><tbody>${cycRows}</tbody></table></div></div>`;
-}
-// ===== CLUSTER: Fibonacci + Gann Angles =====
-function calcCluster(){
-  const startStr=document.getElementById('clsStart').value.trim();
-  const endStr=document.getElementById('clsEnd').value.trim();
-  const dir=document.getElementById('clsDir').value;
-  const ct=document.getElementById('clsResults');
-  const startP=parseFloat(startStr),endP=parseFloat(endStr);
-  if(isNaN(startP)||isNaN(endP)||startP<=0||endP<=0){ct.innerHTML='<div class="result-card" style="text-align:center;color:var(--text2);padding:1.5rem">أدخل السعرين</div>';return}
-
-  const range=Math.abs(endP-startP);
-  const fibLevels=[
-    {name:'23.6%',ratio:0.236},{name:'38.2%',ratio:0.382},{name:'50.0%',ratio:0.5},
-    {name:'61.8%',ratio:0.618},{name:'78.6%',ratio:0.786},{name:'88.6%',ratio:0.886}
-  ];
-
-  // Fibonacci prices (retracement from end back toward start)
-  const fibs=fibLevels.map(f=>{
-    const price=dir==='up'?endP-range*f.ratio:endP+range*f.ratio;
-    return{name:f.name,ratio:f.ratio,price};
-  });
-
-  // Gann angle prices from start
-  const gannAngles=[45,60,72,90,120,135,144,180,216,240,270,288,315,324,360];
-  const ganns=gannAngles.map(a=>{
-    const price=smartCalc(startP,a,dir);
-    return{angle:a,price};
-  });
-
-  // Find clusters: where fib and gann levels are close (within 1.5% of price)
-  const threshold=range*0.015; // 1.5% of range
-  const clusters=[];
-  fibs.forEach(f=>{
-    ganns.forEach(g=>{
-      if(Math.abs(f.price-g.price)<=threshold){
-        clusters.push({
-          fibName:f.name,fibPrice:f.price,
-          gannAngle:g.angle,gannPrice:g.price,
-          avgPrice:(f.price+g.price)/2,
-          strength:Math.abs(f.price-g.price)<threshold*0.5?'قوي جداً':'قوي',
-          diff:Math.abs(f.price-g.price)
-        });
-      }
-    });
-  });
-  clusters.sort((a,b)=>a.diff-b.diff);
-
-  // Build results
-  let fibRows='';fibs.forEach(f=>{fibRows+=`<tr><td style="color:var(--orange);font-weight:600">${f.name}</td><td style="font-weight:700">${fmt(f.price)}</td></tr>`});
-  let gannRows='';ganns.forEach(g=>{const bg=[90,180,270,360].includes(g.angle)?'background:var(--orange-dim)':'';gannRows+=`<tr style="${bg}"><td>${g.angle}°</td><td style="font-weight:700">${fmt(g.price)}</td></tr>`});
-
-  let clusterHTML='';
-  if(clusters.length===0){
-    clusterHTML='<div style="text-align:center;color:var(--text3);padding:2rem">لا توجد مناطق كلاستر — جرب نطاق سعري مختلف</div>';
-  } else {
-    clusters.forEach(c=>{
-      const color=c.strength==='قوي جداً'?'var(--orange)':'var(--orange2)';
-      clusterHTML+=`<div style="background:var(--surface2);border-radius:10px;padding:1rem;margin-bottom:.6rem;border-right:4px solid ${color}">
-        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem">
-          <div><span style="color:${color};font-weight:700;font-size:1.1rem">${fmt(c.avgPrice)}</span><span style="color:var(--text3);font-size:.75rem;margin-right:.5rem">${c.strength}</span></div>
-          <div style="font-size:.8rem;color:var(--text2)">فيبو ${c.fibName} ≈ زاوية ${c.gannAngle}°</div>
-        </div>
-        <div style="font-size:.75rem;color:var(--text3);margin-top:.3rem">الفرق: ${fmt(c.diff)} (${((c.diff/startP)*100).toFixed(3)}%)</div>
-      </div>`;
-    });
-  }
-
-  ct.innerHTML=`
-    <div class="result-card" style="border-color:var(--orange)"><h3>مناطق الكلاستر — ${clusters.length} منطقة</h3><p style="color:var(--text2);font-size:.8rem;margin-bottom:1rem">المنطقة حيث يتطابق فيبوناتشي مع زاوية جان = أقوى دعم/مقاومة</p>${clusterHTML}</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
-      <div class="result-card"><h3>مستويات فيبوناتشي</h3><table class="rtable"><thead><tr><th>المستوى</th><th>السعر</th></tr></thead><tbody>${fibRows}</tbody></table></div>
-      <div class="result-card"><h3>زوايا جان من ${startStr}</h3><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th></tr></thead><tbody>${gannRows}</tbody></table></div>
-    </div>`;
-}
-
-// ===== LIVE PRICE via Binance WebSocket (no rate limits) =====
-let ws=null;
-let currentSymbol='';
-let liveHigh=0,liveLow=Infinity,liveOpen=0;
-
+// ===== LIVE WEBSOCKET =====
+let ws=null,lH=0,lL=Infinity,lO=0;
+function getSymbol(){return(document.getElementById('lCust').value.trim().toUpperCase()||document.getElementById('lSym').value)+'USDT'}
 function connectWS(){
-  const custom=document.getElementById('liveCustom').value.trim().toUpperCase();
-  const symbol=(custom||document.getElementById('liveSymbol').value).toLowerCase();
-  const statusEl=document.getElementById('wsStatus');
-  const priceDiv=document.getElementById('livePrice');
-  
-  // Disconnect existing
   if(ws){ws.close();ws=null}
-  
-  currentSymbol=symbol.toUpperCase();
-  liveHigh=0;liveLow=Infinity;liveOpen=0;
-  statusEl.innerHTML='<span style="color:var(--orange)">جاري الاتصال...</span>';
-  priceDiv.innerHTML='';
-  
-  // First fetch 24hr data via single REST call for high/low/open
-  fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${currentSymbol}`)
-    .then(r=>r.json()).then(d=>{
-      liveHigh=parseFloat(d.highPrice);
-      liveLow=parseFloat(d.lowPrice);
-      liveOpen=parseFloat(d.openPrice);
-    }).catch(()=>{});
+  const sym=getSymbol(),symL=sym.toLowerCase();
+  document.getElementById('wsS').innerHTML='<span style="color:var(--o)">جاري الاتصال...</span>';
+  // Fetch 24hr + klines for RSI/VWAP once
+  Promise.all([
+    fetch('https://api.binance.com/api/v3/ticker/24hr?symbol='+sym).then(r=>r.json()),
+    fetch('https://api.binance.com/api/v3/klines?symbol='+sym+'&interval=1d&limit=15').then(r=>r.json()),
+    fetch('https://api.alternative.me/fng/').then(r=>r.json()).catch(()=>({data:[{value:50,value_classification:'Neutral'}]}))
+  ]).then(([t,klines,fng])=>{
+    lH=parseFloat(t.highPrice);lL=parseFloat(t.lowPrice);lO=parseFloat(t.openPrice);
+    // RSI calc from 14 daily closes
+    const closes=klines.map(k=>parseFloat(k[4]));
+    window._rsi=calcRSI(closes);
+    // VWAP from today klines
+    window._vol24=parseFloat(t.volume);
+    window._volQ=parseFloat(t.quoteVolume);
+    window._vwap=window._volQ/window._vol24;
+    // Fear & Greed
+    window._fng=fng.data?fng.data[0]:{value:50,value_classification:'Neutral'};
+    startWS(sym,symL);
+  }).catch(()=>startWS(sym,symL));
+}
+function startWS(sym,symL){
+  ws=new WebSocket('wss://stream.binance.com:9443/ws/'+symL+'@miniTicker');
+  ws.onopen=()=>{document.getElementById('wsS').innerHTML='<span style="color:var(--g)">● متصل — '+sym+'</span>';document.getElementById('wsB').disabled=true;document.getElementById('wsB').style.opacity='.5';document.getElementById('wsD').disabled=false};
+  ws.onmessage=e=>{const d=JSON.parse(e.data);onTick(parseFloat(d.c),parseFloat(d.h)||lH,parseFloat(d.l)||lL,parseFloat(d.o)||lO,parseFloat(d.v)||0)};
+  ws.onerror=()=>{document.getElementById('wsS').innerHTML='<span style="color:var(--r)">خطأ — تأكد من الرمز</span>';rstWS()};
+  ws.onclose=()=>{document.getElementById('wsS').innerHTML='<span style="color:var(--t3)">● غير متصل</span>';rstWS()};
+}
+function disconnectWS(){if(ws)ws.close();ws=null;rstWS()}
+function rstWS(){document.getElementById('wsB').disabled=false;document.getElementById('wsB').style.opacity='1';document.getElementById('wsD').disabled=true}
 
-  // Connect WebSocket - miniTicker stream (lightweight, real-time)
-  ws=new WebSocket(`wss://stream.binance.com:9443/ws/${symbol}@miniTicker`);
-  
-  ws.onopen=()=>{
-    statusEl.innerHTML='<span style="color:var(--green)">● متصل — البيانات تتحدث لحظياً</span>';
-    document.getElementById('wsBtn').disabled=true;
-    document.getElementById('wsBtn').style.opacity='0.5';
-    document.getElementById('wsDcBtn').disabled=false;
-  };
-  
-  ws.onmessage=(event)=>{
-    const d=JSON.parse(event.data);
-    const price=parseFloat(d.c); // close/last price
-    const high=parseFloat(d.h);  // 24h high
-    const low=parseFloat(d.l);   // 24h low
-    const open=parseFloat(d.o);  // 24h open
-    
-    if(high>0)liveHigh=high;
-    if(low>0)liveLow=low;
-    if(open>0)liveOpen=open;
-    
-    const change=liveOpen>0?((price-liveOpen)/liveOpen*100):0;
-    const changeColor=change>=0?'var(--green)':'var(--red)';
-    const arrow=change>=0?'↑':'↓';
-    const now=new Date().toLocaleTimeString('ar-EG');
-    
-    priceDiv.innerHTML=`
-      <div style="font-family:'Cairo';font-weight:900;font-size:2.5rem;color:var(--orange)">${fmt(price)}</div>
-      <div style="font-size:1.1rem;color:${changeColor};font-weight:700">${arrow} ${change.toFixed(2)}%</div>
-      <div style="font-size:.8rem;color:var(--text3);margin-top:.3rem">${currentSymbol} | أعلى: ${fmt(liveHigh)} | أدنى: ${fmt(liveLow)} | ${now}</div>`;
-    
-    updateLiveAnalysis(price,liveHigh,liveLow);
-  };
-  
-  ws.onerror=()=>{
-    statusEl.innerHTML='<span style="color:var(--red)">● خطأ في الاتصال — تأكد من الرمز</span>';
-    resetWSButtons();
-  };
-  
-  ws.onclose=()=>{
-    statusEl.innerHTML='<span style="color:var(--text3)">● غير متصل</span>';
-    resetWSButtons();
-  };
+function calcRSI(closes){if(closes.length<2)return 50;let gains=0,losses=0;for(let i=1;i<closes.length;i++){const d=closes[i]-closes[i-1];if(d>0)gains+=d;else losses-=d}const ag=gains/(closes.length-1),al=losses/(closes.length-1);if(al===0)return 100;const rs=ag/al;return 100-(100/(1+rs))}
+
+// Murray Math Levels
+function murray(h,l){const rng=h-l,step=rng/8,levels=[];for(let i=-1;i<=9;i++){levels.push({n:i+'/8',p:l+step*i})}return levels}
+
+let lastTick=0;
+function onTick(price,high,low,open,vol){
+  if(high>lH)lH=high;if(low<lL)lL=low;if(open)lO=open;
+  const now=Date.now();if(now-lastTick<2000)return;lastTick=now; // throttle 2s
+  const chg=lO>0?((price-lO)/lO*100):0,cc=chg>=0?'var(--g)':'var(--r)',ar=chg>=0?'↑':'↓';
+  const tm=new Date().toLocaleTimeString('ar-EG');
+  document.getElementById('lP').innerHTML=`<div style="font-family:Cairo;font-weight:900;font-size:2.2rem;color:var(--o)">${fm(price)}</div><div style="font-size:1rem;color:${cc};font-weight:700">${ar} ${chg.toFixed(2)}%</div><div style="font-size:.75rem;color:var(--t3)">${getSymbol()} | H: ${fm(lH)} | L: ${fm(lL)} | ${tm}</div>`;
+  buildLiveAnalysis(price,lH,lL);
 }
 
-function disconnectWS(){
-  if(ws){ws.close();ws=null}
-  document.getElementById('wsStatus').innerHTML='<span style="color:var(--text3)">● تم قطع الاتصال</span>';
-  resetWSButtons();
-}
-
-function resetWSButtons(){
-  document.getElementById('wsBtn').disabled=false;
-  document.getElementById('wsBtn').style.opacity='1';
-  document.getElementById('wsDcBtn').disabled=true;
-}
-
-// Throttle analysis updates to avoid UI lag (update every 2 seconds max)
-let lastAnalysisUpdate=0;
-function updateLiveAnalysis(price,high,low){
-  const now=Date.now();
-  if(now-lastAnalysisUpdate<2000)return; // throttle
-  lastAnalysisUpdate=now;
-  
-  const ct=document.getElementById('liveResults');
-  const sf=getSF(price,'up');
-  
-  // SQ9 levels
-  let sq9rows='';
-  [45,90,135,180,225,270,315,360,450,540,720].forEach(a=>{
-    const up=smartCalc(price,a,'up'),dn=smartCalc(price,a,'down');
-    const bg=[90,180,270,360].includes(a)?'background:var(--orange-dim)':'';
-    sq9rows+=`<tr style="${bg}"><td>${a}°</td><td class="up">${fmt(up)}</td><td class="dn">${fmt(dn)}</td></tr>`;
-  });
-
-  // Shapes
-  let shapeRows='';
-  const SA={'المربع':{a:[90,180,270,360]},'المثلث':{a:[120,240,360]},'الخماسي':{a:[72,144,216,288,360]}};
-  for(let[name,obj] of Object.entries(SA)){
-    let upCells='',dnCells='';
-    obj.a.forEach(a=>{upCells+=`<td class="up">${fmt(smartCalc(price,a,'up'))}</td>`;dnCells+=`<td class="dn">${fmt(smartCalc(price,a,'down'))}</td>`});
-    shapeRows+=`<tr><td style="color:var(--orange);font-weight:600" rowspan="2">${name}</td>${upCells}</tr><tr>${dnCells}</tr>`;
-  }
-
-  // Fib from 24h low to high
-  const range24=high-low;
-  let fibRows='';
-  if(range24>0){
-    [{n:'23.6%',r:.236},{n:'38.2%',r:.382},{n:'50.0%',r:.5},{n:'61.8%',r:.618},{n:'78.6%',r:.786}].forEach(f=>{
-      const support=high-range24*f.r;
-      const resist=low+range24*f.r;
-      fibRows+=`<tr><td style="font-weight:600">${f.n}</td><td class="dn">${fmt(support)}</td><td class="up">${fmt(resist)}</td></tr>`;
-    });
-  }
-
-  const root=dRoot(price);
+function buildLiveAnalysis(p,h,l){
+  const ct=document.getElementById('lR');
+  // Gann SQ9
+  let g9='';[45,90,135,180,225,270,315,360,540,720].forEach(a=>{const u=sc(p,a,'up'),d=sc(p,a,'down'),bg=[90,180,270,360].includes(a)?'background:var(--od)':'';g9+=`<tr style="${bg}"><td>${a}°</td><td class="up">${fm(u)}</td><td class="dn">${fm(d)}</td></tr>`});
+  // Fib
+  const rng=h-l;let fb='';
+  if(rng>0)[{n:'23.6%',r:.236},{n:'38.2%',r:.382},{n:'50%',r:.5},{n:'61.8%',r:.618},{n:'78.6%',r:.786}].forEach(f=>{fb+=`<tr><td>${f.n}</td><td class="dn">${fm(h-rng*f.r)}</td><td class="up">${fm(l+rng*f.r)}</td></tr>`});
+  // Murray
+  const mLevels=murray(h,l);let mr='';
+  mLevels.forEach(m=>{const isKey=['0/8','4/8','8/8'].includes(m.n);mr+=`<tr${isKey?' style="background:var(--od)"':''}><td${isKey?' style="font-weight:700;color:var(--o)"':''}>${m.n}</td><td style="font-weight:${isKey?'700':'400'}">${fm(m.p)}</td></tr>`});
+  // VWAP
+  const vwap=window._vwap||0;
+  // RSI
+  const rsi=window._rsi||50;const rsiColor=rsi>70?'var(--r)':rsi<30?'var(--g)':'var(--o)';
+  // Fear & Greed gauge
+  const fng=window._fng||{value:50,value_classification:'Neutral'};
+  const fv=parseInt(fng.value);const needleDeg=-90+(fv/100*180);
+  const fColor=fv<=25?'var(--r)':fv<=45?'var(--o)':fv<=55?'var(--t)':fv<=75?'var(--o2)':'var(--g)';
 
   ct.innerHTML=`
-    <div class="result-card"><h3>زوايا جان — مقاومة ودعم</h3><p style="color:var(--text3);font-size:.75rem;margin-bottom:.6rem">إزاحة: ${sf} | تحديث لحظي</p><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الزاوية</th><th>مقاومة ↑</th><th>دعم ↓</th></tr></thead><tbody>${sq9rows}</tbody></table></div></div>
-    ${range24>0?`<div class="result-card"><h3>فيبوناتشي 24 ساعة</h3><p style="color:var(--text3);font-size:.75rem;margin-bottom:.6rem">من ${fmt(low)} إلى ${fmt(high)}</p><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>المستوى</th><th>دعم</th><th>مقاومة</th></tr></thead><tbody>${fibRows}</tbody></table></div></div>`:''}
-    <div class="result-card"><h3>الأشكال الهندسية</h3><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الشكل</th><th colspan="5">المستويات</th></tr></thead><tbody>${shapeRows}</tbody></table></div></div>
-    <div class="result-card" style="text-align:center"><h3>دورات الأرقام</h3><div style="font-size:.9rem;color:var(--text2)">الجذر الرقمي: <strong style="color:var(--orange);font-size:1.5rem">${root}</strong> → الدورات: <strong style="color:var(--orange)">${CM[root]}</strong></div></div>`;
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-bottom:.7rem">
+    <div class="rc" style="text-align:center"><div style="font-size:.7rem;color:var(--t3)">RSI (14)</div><div style="font-family:Cairo;font-weight:900;font-size:1.8rem;color:${rsiColor}">${rsi.toFixed(1)}</div><div style="font-size:.65rem;color:var(--t3)">${rsi>70?'تشبع شراء':rsi<30?'تشبع بيع':'محايد'}</div></div>
+    <div class="rc" style="text-align:center"><div style="font-size:.7rem;color:var(--t3)">VWAP</div><div style="font-family:Cairo;font-weight:700;font-size:1.3rem;color:var(--o)">${vwap>0?fm(vwap):'—'}</div><div style="font-size:.65rem;color:var(--t3)">السعر ${p>vwap?'فوق':'تحت'} VWAP</div></div>
+    <div class="rc" style="text-align:center"><div style="font-size:.7rem;color:var(--t3)">الحجم 24h</div><div style="font-family:Cairo;font-weight:700;font-size:1.1rem;color:var(--t)">${window._vol24?(window._vol24>1e6?(window._vol24/1e6).toFixed(1)+'M':window._vol24.toFixed(0)):'—'}</div></div>
+  </div>
+  <div class="rc" style="text-align:center">
+    <h3>مؤشر الخوف والطمع</h3>
+    <div class="gauge-wrap"><div class="gauge"><div class="gauge-bg"></div><div class="gauge-mask"></div><div class="gauge-needle" style="transform:rotate(${needleDeg}deg)"></div><div class="gauge-val" style="color:${fColor}">${fv}</div></div></div>
+    <div class="gauge-label" style="color:${fColor};font-weight:700">${fng.value_classification}</div>
+  </div>
+  <div class="rc"><h3>زوايا جان SQ9</h3><div style="overflow-x:auto"><table class="rt"><thead><tr><th>°</th><th>مقاومة ↑</th><th>دعم ↓</th></tr></thead><tbody>${g9}</tbody></table></div></div>
+  ${fb?`<div class="rc"><h3>فيبوناتشي 24h</h3><div style="overflow-x:auto"><table class="rt"><thead><tr><th>المستوى</th><th>دعم</th><th>مقاومة</th></tr></thead><tbody>${fb}</tbody></table></div></div>`:''}
+  <div class="rc"><h3>مستويات Murray Math</h3><p style="font-size:.7rem;color:var(--t3);margin-bottom:.5rem">من أدنى ${fm(l)} إلى أعلى ${fm(h)} — 24h</p><div style="overflow-x:auto"><table class="rt"><thead><tr><th>المستوى</th><th>السعر</th></tr></thead><tbody>${mr}</tbody></table></div></div>`;
 }
 
-// Cleanup WebSocket when leaving page
 window.addEventListener('beforeunload',()=>{if(ws)ws.close()});
 </script>
 
