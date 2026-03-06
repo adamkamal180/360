@@ -44,7 +44,7 @@ a{color:var(--orange);text-decoration:none}
 .hero-sub{color:var(–text2);font-size:.85rem;margin-top:.4rem;max-width:460px;margin-inline:auto}
 
 /* HORIZONTAL TOOL STRIP */
-.hero-strip{position:relative;z-index:2;width:100%;max-width:1100px;display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;padding:0 .5rem}
+.hero-strip{position:relative;z-index:2;width:100%;max-width:1100px;display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;padding:0 .5rem}
 .tool-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius);padding:1.3rem 1rem;cursor:pointer;transition:all .3s;text-align:center}
 .tool-card:hover{border-color:var(–orange);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.4)}
 .tool-icon{font-size:1.6rem;margin-bottom:.4rem}
@@ -130,6 +130,8 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
     <a onclick="navigate('detector')" data-page="detector">كاشف الشكل</a>
     <a onclick="navigate('sq9')" data-page="sq9">مربع التسعة</a>
     <a onclick="navigate('cycles')" data-page="cycles">الدورات</a>
+    <a onclick="navigate('cluster')" data-page="cluster">فيبو+زوايا</a>
+    <a onclick="navigate('live')" data-page="live">سعر حي</a>
   </nav>
   <a href="https://x.com/adams_k1?s=21&t=j0daPEI6JiicPs6LaMWXxQ" target="_blank" class="topbar-author"><img src="data:image/jpeg;base64,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" class="author-img" alt="AK">ADAM KAMAL</a>
   <button class="menu-btn" onclick="toggleMobile()">☰</button>
@@ -140,6 +142,8 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
   <a onclick="navigate('detector');closeMobile()" data-page="detector">كاشف الشكل</a>
   <a onclick="navigate('sq9');closeMobile()" data-page="sq9">مربع التسعة</a>
   <a onclick="navigate('cycles');closeMobile()" data-page="cycles">الدورات</a>
+  <a onclick="navigate('cluster');closeMobile()" data-page="cluster">فيبو+زوايا</a>
+  <a onclick="navigate('live');closeMobile()" data-page="live">سعر حي</a>
 </div>
 
 <div class="page active" id="page-home">
@@ -155,6 +159,8 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
       <div class="tool-card" onclick="navigate('detector')"><div class="tool-icon">🔍</div><div class="tool-name">كاشف الشكل</div><div class="tool-desc">تحديد الشكل الهندسي وأهدافه</div></div>
       <div class="tool-card" onclick="navigate('sq9')"><div class="tool-icon">🔢</div><div class="tool-name">مربع التسعة</div><div class="tool-desc">مربع جان التفاعلي مع السعر</div></div>
       <div class="tool-card" onclick="navigate('cycles')"><div class="tool-icon">🔄</div><div class="tool-name">الدورات</div><div class="tool-desc">حساب دورات الأرقام والأهداف</div></div>
+      <div class="tool-card" onclick="navigate('cluster')"><div class="tool-icon">🎯</div><div class="tool-name">فيبو + زوايا</div><div class="tool-desc">مناطق الكلاستر حيث يتطابق فيبوناتشي مع زاوية</div></div>
+      <div class="tool-card" onclick="navigate('live')"><div class="tool-icon">⚡</div><div class="tool-name">سعر حي</div><div class="tool-desc">جلب السعر من Binance وتشغيل كل الأدوات تلقائياً</div></div>
     </div>
   </section>
 </div>
@@ -217,6 +223,54 @@ select{cursor:pointer}select option{background:var(–surface);color:var(–text
       <div class="btn-row"><button class="btn" onclick="calcCycles()">احسب ←</button></div>
     </div>
     <div id="cycResults"></div>
+  </div>
+</div>
+
+<!-- CLUSTER: Fibonacci + Angles -->
+
+<div class="page" id="page-cluster">
+  <div class="tool-page">
+    <div class="tool-header"><h1>🎯 فيبوناتشي + الزوايا — مناطق الكلاستر</h1><p>اكتشف المناطق حيث يتطابق مستوى فيبوناتشي مع زاوية جان — أقوى مناطق الارتداد</p></div>
+    <div class="result-card">
+      <div class="input-row">
+        <div class="input-group"><label>سعر البداية (القاع أو القمة)</label><input type="text" id="clsStart" placeholder="مثال: 90000"></div>
+        <div class="input-group"><label>سعر النهاية (أول زاوية ردّت السعر)</label><input type="text" id="clsEnd" placeholder="مثال: 108000"></div>
+        <div class="input-group"><label>الاتجاه</label><select id="clsDir"><option value="up">صعود ↑ (بدأ من قاع)</option><option value="down">هبوط ↓ (بدأ من قمة)</option></select></div>
+      </div>
+      <div class="btn-row"><button class="btn" onclick="calcCluster()">اكتشف الكلاستر ←</button></div>
+    </div>
+    <div id="clsResults"></div>
+  </div>
+</div>
+
+<!-- LIVE PRICE -->
+
+<div class="page" id="page-live">
+  <div class="tool-page">
+    <div class="tool-header"><h1>⚡ السعر الحي — Binance</h1><p>اختر العملة لجلب السعر وتشغيل كل الحسابات تلقائياً</p></div>
+    <div class="result-card">
+      <div class="input-row">
+        <div class="input-group"><label>العملة</label><select id="liveSymbol">
+          <option value="BTCUSDT">BTC / USDT</option><option value="ETHUSDT">ETH / USDT</option>
+          <option value="BNBUSDT">BNB / USDT</option><option value="SOLUSDT">SOL / USDT</option>
+          <option value="XRPUSDT">XRP / USDT</option><option value="DOGEUSDT">DOGE / USDT</option>
+          <option value="ADAUSDT">ADA / USDT</option><option value="AVAXUSDT">AVAX / USDT</option>
+          <option value="DOTUSDT">DOT / USDT</option><option value="LINKUSDT">LINK / USDT</option>
+          <option value="MATICUSDT">MATIC / USDT</option><option value="SHIBUSDT">SHIB / USDT</option>
+          <option value="LTCUSDT">LTC / USDT</option><option value="ATOMUSDT">ATOM / USDT</option>
+          <option value="NEARUSDT">NEAR / USDT</option><option value="SUIUSDT">SUI / USDT</option>
+          <option value="PEPEUSDT">PEPE / USDT</option><option value="WIFUSDT">WIF / USDT</option>
+        </select></div>
+        <div class="input-group"><label>أو أدخل رمز يدوياً</label><input type="text" id="liveCustom" placeholder="مثال: TRUMPUSDT"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" onclick="connectWS()" id="wsBtn">⚡ اتصال مباشر — WebSocket</button>
+        <button class="btn" style="background:var(--surface);color:var(--red);border:1.5px solid var(--border)" onclick="disconnectWS()" id="wsDcBtn" disabled>قطع الاتصال</button>
+      </div>
+      <div id="wsStatus" style="text-align:center;font-size:.75rem;color:var(--text3);margin-top:.5rem"></div>
+    </div>
+    <div id="livePrice" style="text-align:center;padding:1rem"></div>
+    <div id="liveResults"></div>
   </div>
 </div>
 
@@ -470,6 +524,213 @@ function calcCycles(){
     <div class="result-card"><h3>دورات الأرقام</h3>${dh}<div class="cyc-big"><div class="n">${root}</div><div class="l">الجذر الرقمي</div></div><div style="text-align:center;font-size:1rem">الدورات: <strong style="color:var(--orange);font-size:1.3rem">${CM[root]}</strong></div></div>
     <div class="result-card"><h3>أهداف الدورات ${dir==='up'?'↑':'↓'}</h3><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الدورة</th><th>الزاوية</th><th>السعر</th><th>%</th></tr></thead><tbody>${cycRows}</tbody></table></div></div>`;
 }
+// ===== CLUSTER: Fibonacci + Gann Angles =====
+function calcCluster(){
+  const startStr=document.getElementById('clsStart').value.trim();
+  const endStr=document.getElementById('clsEnd').value.trim();
+  const dir=document.getElementById('clsDir').value;
+  const ct=document.getElementById('clsResults');
+  const startP=parseFloat(startStr),endP=parseFloat(endStr);
+  if(isNaN(startP)||isNaN(endP)||startP<=0||endP<=0){ct.innerHTML='<div class="result-card" style="text-align:center;color:var(--text2);padding:1.5rem">أدخل السعرين</div>';return}
+
+  const range=Math.abs(endP-startP);
+  const fibLevels=[
+    {name:'23.6%',ratio:0.236},{name:'38.2%',ratio:0.382},{name:'50.0%',ratio:0.5},
+    {name:'61.8%',ratio:0.618},{name:'78.6%',ratio:0.786},{name:'88.6%',ratio:0.886}
+  ];
+
+  // Fibonacci prices (retracement from end back toward start)
+  const fibs=fibLevels.map(f=>{
+    const price=dir==='up'?endP-range*f.ratio:endP+range*f.ratio;
+    return{name:f.name,ratio:f.ratio,price};
+  });
+
+  // Gann angle prices from start
+  const gannAngles=[45,60,72,90,120,135,144,180,216,240,270,288,315,324,360];
+  const ganns=gannAngles.map(a=>{
+    const price=smartCalc(startP,a,dir);
+    return{angle:a,price};
+  });
+
+  // Find clusters: where fib and gann levels are close (within 1.5% of price)
+  const threshold=range*0.015; // 1.5% of range
+  const clusters=[];
+  fibs.forEach(f=>{
+    ganns.forEach(g=>{
+      if(Math.abs(f.price-g.price)<=threshold){
+        clusters.push({
+          fibName:f.name,fibPrice:f.price,
+          gannAngle:g.angle,gannPrice:g.price,
+          avgPrice:(f.price+g.price)/2,
+          strength:Math.abs(f.price-g.price)<threshold*0.5?'قوي جداً':'قوي',
+          diff:Math.abs(f.price-g.price)
+        });
+      }
+    });
+  });
+  clusters.sort((a,b)=>a.diff-b.diff);
+
+  // Build results
+  let fibRows='';fibs.forEach(f=>{fibRows+=`<tr><td style="color:var(--orange);font-weight:600">${f.name}</td><td style="font-weight:700">${fmt(f.price)}</td></tr>`});
+  let gannRows='';ganns.forEach(g=>{const bg=[90,180,270,360].includes(g.angle)?'background:var(--orange-dim)':'';gannRows+=`<tr style="${bg}"><td>${g.angle}°</td><td style="font-weight:700">${fmt(g.price)}</td></tr>`});
+
+  let clusterHTML='';
+  if(clusters.length===0){
+    clusterHTML='<div style="text-align:center;color:var(--text3);padding:2rem">لا توجد مناطق كلاستر — جرب نطاق سعري مختلف</div>';
+  } else {
+    clusters.forEach(c=>{
+      const color=c.strength==='قوي جداً'?'var(--orange)':'var(--orange2)';
+      clusterHTML+=`<div style="background:var(--surface2);border-radius:10px;padding:1rem;margin-bottom:.6rem;border-right:4px solid ${color}">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem">
+          <div><span style="color:${color};font-weight:700;font-size:1.1rem">${fmt(c.avgPrice)}</span><span style="color:var(--text3);font-size:.75rem;margin-right:.5rem">${c.strength}</span></div>
+          <div style="font-size:.8rem;color:var(--text2)">فيبو ${c.fibName} ≈ زاوية ${c.gannAngle}°</div>
+        </div>
+        <div style="font-size:.75rem;color:var(--text3);margin-top:.3rem">الفرق: ${fmt(c.diff)} (${((c.diff/startP)*100).toFixed(3)}%)</div>
+      </div>`;
+    });
+  }
+
+  ct.innerHTML=`
+    <div class="result-card" style="border-color:var(--orange)"><h3>مناطق الكلاستر — ${clusters.length} منطقة</h3><p style="color:var(--text2);font-size:.8rem;margin-bottom:1rem">المنطقة حيث يتطابق فيبوناتشي مع زاوية جان = أقوى دعم/مقاومة</p>${clusterHTML}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+      <div class="result-card"><h3>مستويات فيبوناتشي</h3><table class="rtable"><thead><tr><th>المستوى</th><th>السعر</th></tr></thead><tbody>${fibRows}</tbody></table></div>
+      <div class="result-card"><h3>زوايا جان من ${startStr}</h3><table class="rtable"><thead><tr><th>الزاوية</th><th>السعر</th></tr></thead><tbody>${gannRows}</tbody></table></div>
+    </div>`;
+}
+
+// ===== LIVE PRICE via Binance WebSocket (no rate limits) =====
+let ws=null;
+let currentSymbol='';
+let liveHigh=0,liveLow=Infinity,liveOpen=0;
+
+function connectWS(){
+  const custom=document.getElementById('liveCustom').value.trim().toUpperCase();
+  const symbol=(custom||document.getElementById('liveSymbol').value).toLowerCase();
+  const statusEl=document.getElementById('wsStatus');
+  const priceDiv=document.getElementById('livePrice');
+  
+  // Disconnect existing
+  if(ws){ws.close();ws=null}
+  
+  currentSymbol=symbol.toUpperCase();
+  liveHigh=0;liveLow=Infinity;liveOpen=0;
+  statusEl.innerHTML='<span style="color:var(--orange)">جاري الاتصال...</span>';
+  priceDiv.innerHTML='';
+  
+  // First fetch 24hr data via single REST call for high/low/open
+  fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${currentSymbol}`)
+    .then(r=>r.json()).then(d=>{
+      liveHigh=parseFloat(d.highPrice);
+      liveLow=parseFloat(d.lowPrice);
+      liveOpen=parseFloat(d.openPrice);
+    }).catch(()=>{});
+
+  // Connect WebSocket - miniTicker stream (lightweight, real-time)
+  ws=new WebSocket(`wss://stream.binance.com:9443/ws/${symbol}@miniTicker`);
+  
+  ws.onopen=()=>{
+    statusEl.innerHTML='<span style="color:var(--green)">● متصل — البيانات تتحدث لحظياً</span>';
+    document.getElementById('wsBtn').disabled=true;
+    document.getElementById('wsBtn').style.opacity='0.5';
+    document.getElementById('wsDcBtn').disabled=false;
+  };
+  
+  ws.onmessage=(event)=>{
+    const d=JSON.parse(event.data);
+    const price=parseFloat(d.c); // close/last price
+    const high=parseFloat(d.h);  // 24h high
+    const low=parseFloat(d.l);   // 24h low
+    const open=parseFloat(d.o);  // 24h open
+    
+    if(high>0)liveHigh=high;
+    if(low>0)liveLow=low;
+    if(open>0)liveOpen=open;
+    
+    const change=liveOpen>0?((price-liveOpen)/liveOpen*100):0;
+    const changeColor=change>=0?'var(--green)':'var(--red)';
+    const arrow=change>=0?'↑':'↓';
+    const now=new Date().toLocaleTimeString('ar-EG');
+    
+    priceDiv.innerHTML=`
+      <div style="font-family:'Cairo';font-weight:900;font-size:2.5rem;color:var(--orange)">${fmt(price)}</div>
+      <div style="font-size:1.1rem;color:${changeColor};font-weight:700">${arrow} ${change.toFixed(2)}%</div>
+      <div style="font-size:.8rem;color:var(--text3);margin-top:.3rem">${currentSymbol} | أعلى: ${fmt(liveHigh)} | أدنى: ${fmt(liveLow)} | ${now}</div>`;
+    
+    updateLiveAnalysis(price,liveHigh,liveLow);
+  };
+  
+  ws.onerror=()=>{
+    statusEl.innerHTML='<span style="color:var(--red)">● خطأ في الاتصال — تأكد من الرمز</span>';
+    resetWSButtons();
+  };
+  
+  ws.onclose=()=>{
+    statusEl.innerHTML='<span style="color:var(--text3)">● غير متصل</span>';
+    resetWSButtons();
+  };
+}
+
+function disconnectWS(){
+  if(ws){ws.close();ws=null}
+  document.getElementById('wsStatus').innerHTML='<span style="color:var(--text3)">● تم قطع الاتصال</span>';
+  resetWSButtons();
+}
+
+function resetWSButtons(){
+  document.getElementById('wsBtn').disabled=false;
+  document.getElementById('wsBtn').style.opacity='1';
+  document.getElementById('wsDcBtn').disabled=true;
+}
+
+// Throttle analysis updates to avoid UI lag (update every 2 seconds max)
+let lastAnalysisUpdate=0;
+function updateLiveAnalysis(price,high,low){
+  const now=Date.now();
+  if(now-lastAnalysisUpdate<2000)return; // throttle
+  lastAnalysisUpdate=now;
+  
+  const ct=document.getElementById('liveResults');
+  const sf=getSF(price,'up');
+  
+  // SQ9 levels
+  let sq9rows='';
+  [45,90,135,180,225,270,315,360,450,540,720].forEach(a=>{
+    const up=smartCalc(price,a,'up'),dn=smartCalc(price,a,'down');
+    const bg=[90,180,270,360].includes(a)?'background:var(--orange-dim)':'';
+    sq9rows+=`<tr style="${bg}"><td>${a}°</td><td class="up">${fmt(up)}</td><td class="dn">${fmt(dn)}</td></tr>`;
+  });
+
+  // Shapes
+  let shapeRows='';
+  const SA={'المربع':{a:[90,180,270,360]},'المثلث':{a:[120,240,360]},'الخماسي':{a:[72,144,216,288,360]}};
+  for(let[name,obj] of Object.entries(SA)){
+    let upCells='',dnCells='';
+    obj.a.forEach(a=>{upCells+=`<td class="up">${fmt(smartCalc(price,a,'up'))}</td>`;dnCells+=`<td class="dn">${fmt(smartCalc(price,a,'down'))}</td>`});
+    shapeRows+=`<tr><td style="color:var(--orange);font-weight:600" rowspan="2">${name}</td>${upCells}</tr><tr>${dnCells}</tr>`;
+  }
+
+  // Fib from 24h low to high
+  const range24=high-low;
+  let fibRows='';
+  if(range24>0){
+    [{n:'23.6%',r:.236},{n:'38.2%',r:.382},{n:'50.0%',r:.5},{n:'61.8%',r:.618},{n:'78.6%',r:.786}].forEach(f=>{
+      const support=high-range24*f.r;
+      const resist=low+range24*f.r;
+      fibRows+=`<tr><td style="font-weight:600">${f.n}</td><td class="dn">${fmt(support)}</td><td class="up">${fmt(resist)}</td></tr>`;
+    });
+  }
+
+  const root=dRoot(price);
+
+  ct.innerHTML=`
+    <div class="result-card"><h3>زوايا جان — مقاومة ودعم</h3><p style="color:var(--text3);font-size:.75rem;margin-bottom:.6rem">إزاحة: ${sf} | تحديث لحظي</p><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الزاوية</th><th>مقاومة ↑</th><th>دعم ↓</th></tr></thead><tbody>${sq9rows}</tbody></table></div></div>
+    ${range24>0?`<div class="result-card"><h3>فيبوناتشي 24 ساعة</h3><p style="color:var(--text3);font-size:.75rem;margin-bottom:.6rem">من ${fmt(low)} إلى ${fmt(high)}</p><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>المستوى</th><th>دعم</th><th>مقاومة</th></tr></thead><tbody>${fibRows}</tbody></table></div></div>`:''}
+    <div class="result-card"><h3>الأشكال الهندسية</h3><div style="overflow-x:auto"><table class="rtable"><thead><tr><th>الشكل</th><th colspan="5">المستويات</th></tr></thead><tbody>${shapeRows}</tbody></table></div></div>
+    <div class="result-card" style="text-align:center"><h3>دورات الأرقام</h3><div style="font-size:.9rem;color:var(--text2)">الجذر الرقمي: <strong style="color:var(--orange);font-size:1.5rem">${root}</strong> → الدورات: <strong style="color:var(--orange)">${CM[root]}</strong></div></div>`;
+}
+
+// Cleanup WebSocket when leaving page
+window.addEventListener('beforeunload',()=>{if(ws)ws.close()});
 </script>
 
 </body>
