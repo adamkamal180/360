@@ -8,7 +8,7 @@
 
 ### 🌐 رابط الموقع
 
-[https://adamkamal180.github.io/360-trading-angles](https://adamkamal180.github.io/360-trading-angles)
+https://adamkamal180.github.io/360/
 
 ### 👤 المالك
 
