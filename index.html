@@ -88,7 +88,7 @@ a { color: var(--o); text-decoration: none; }
 .gauge-label { text-align: center; font-size: 0.75rem; color: var(--t); margin-top: 0.2rem; font-weight: 700; }
 
 /* Tool strip */
-.hstrip { position: relative; z-index: 2; width: 100%; max-width: 900px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.6rem; }
+.hstrip { position: relative; z-index: 2; width: 100%; max-width: 900px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.6rem; }
 .tc { background: var(--s); border: 1px solid var(--b); border-radius: var(--rd); padding: 1rem 0.8rem; cursor: pointer; transition: all 0.3s; text-align: center; }
 .tc:hover { border-color: var(--o); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.6); }
 .tc-i { font-size: 1.4rem; margin-bottom: 0.3rem; }
@@ -156,6 +156,7 @@ select option { background: var(--s); color: var(--t); }
     <a onclick="nav('cls')" data-p="cls">فيبو+زوايا</a>
     <a onclick="nav('cyc')" data-p="cyc">الدورات</a>
     <a onclick="nav('live')" data-p="live">سعر حي</a>
+    <a onclick="nav('reg')" data-p="reg">قناة الانحدار</a>
   </nav>
   
   <div class="top-user" onclick="toggleUserMenu()" id="uDropdown">
@@ -178,6 +179,7 @@ select option { background: var(--s); color: var(--t); }
   <a onclick="nav('cls');closeM()" data-p="cls">فيبو+زوايا</a>
   <a onclick="nav('cyc');closeM()" data-p="cyc">الدورات</a>
   <a onclick="nav('live');closeM()" data-p="live">سعر حي</a>
+  <a onclick="nav('reg');closeM()" data-p="reg">قناة الانحدار</a>
 </div>
 
 <div class="pg active" id="pg-home">
@@ -220,6 +222,7 @@ select option { background: var(--s); color: var(--t); }
   <div class="tc" onclick="nav('cls')"><div class="tc-i">🎯</div><div class="tc-n">فيبو + زوايا</div><div class="tc-d">مناطق الكلاستر</div></div>
   <div class="tc" onclick="nav('cyc')"><div class="tc-i">🔄</div><div class="tc-n">الدورات</div><div class="tc-d">دورات الأرقام</div></div>
   <div class="tc" onclick="nav('live')"><div class="tc-i">⚡</div><div class="tc-n">سعر حي</div><div class="tc-d">توصيل WebSocket مباشر</div></div>
+  <div class="tc" onclick="nav('reg')"><div class="tc-i">📊</div><div class="tc-n">قناة الانحدار</div><div class="tc-d">القيمة العادلة الإحصائية (100 يوم)</div></div>
 </div>
 </section>
 </div>
@@ -273,6 +276,22 @@ select option { background: var(--s); color: var(--t); }
 </div><div id="wsS" style="text-align:center;font-size:0.75rem;color:var(--t3);margin-top:0.6rem;font-weight:600"></div></div>
 <div id="lP" style="text-align:center;padding:1rem"></div>
 <div id="lR"></div>
+</div></div>
+
+<div class="pg" id="pg-reg"><div class="tp">
+<div class="th"><h1>📊 قناة الانحدار الخطي</h1><p>القيمة العادلة الإحصائية لآخر 100 شمعة يومية مع قنوات الانحراف المعياري (±1σ و ±2σ)</p></div>
+<div class="rc"><div class="ir">
+  <div class="ig"><label>العملة المدرجة</label><select id="regSym"><option value="BTC">BTC</option><option value="ETH">ETH</option><option value="SOL">SOL</option></select></div>
+  <div class="ig"><label>أو إدخال رمز مخصص (يُلحق بـ USDT تلقائياً)</label><input type="text" id="regCust" placeholder="مثال: APT"></div>
+</div><div class="br">
+  <button class="btn" onclick="loadRegressionChannel()">تحليل قناة الانحدار الخطي ←</button>
+</div>
+<div id="regStatus" style="text-align:center;font-size:0.75rem;color:var(--t3);margin-top:0.6rem;font-weight:600"></div>
+</div>
+<div style="margin-bottom:0.7rem;border-radius:var(--rd);overflow:hidden;border:1px solid var(--b);background:var(--s);display:none" id="regCanvasWrap">
+  <canvas id="regCanvas" style="width:100%;display:block" height="420"></canvas>
+</div>
+<div id="regR"></div>
 </div></div>
 
 <script>
@@ -536,7 +555,404 @@ function buildLiveAnalysis(p,h,l){
 }
 
 window.addEventListener('beforeunload',()=>{if(ws)ws.close()});
-</script>
+
+// ===== LINEAR REGRESSION CHANNEL — القيمة العادلة الإحصائية (100 يوم) =====
+async function loadRegressionChannel() {
+  const custVal = document.getElementById('regCust').value.trim().toUpperCase();
+  const symBase = custVal || document.getElementById('regSym').value;
+  const sym = symBase + 'USDT';
+  const statusEl = document.getElementById('regStatus');
+  const ct = document.getElementById('regR');
+  const canvasWrap = document.getElementById('regCanvasWrap');
+
+  statusEl.innerHTML = '<span style="color:var(--o)">جاري جلب بيانات آخر 100 شمعة يومية لزوج ' + sym + '...</span>';
+  ct.innerHTML = '';
+  canvasWrap.style.display = 'none';
+
+  try {
+    const url = 'https://api.binance.com/api/v3/klines?symbol=' + sym + '&interval=1d&limit=100';
+    const resp = await fetch(url);
+    const klines = await resp.json();
+
+    if (!Array.isArray(klines) || klines.length < 10) {
+      statusEl.innerHTML = '<span style="color:var(--t2)">فشل جلب البيانات — يُرجى التحقق من صحة الرمز المدخل</span>';
+      return;
+    }
+
+    // استخراج بيانات OHLC من استجابة Binance
+    // klines: [openTime, open, high, low, close, volume, closeTime, ...]
+    const closes = klines.map(function(k) { return parseFloat(k[4]); });
+    const highs  = klines.map(function(k) { return parseFloat(k[2]); });
+    const lows   = klines.map(function(k) { return parseFloat(k[3]); });
+    const opens  = klines.map(function(k) { return parseFloat(k[1]); });
+    const times  = klines.map(function(k) { return k[0]; });
+    const n = closes.length;
+
+    // حساب الانحدار الخطي بطريقة المربعات الصغرى (Ordinary Least Squares)
+    var xs = [];
+    for (var i = 0; i < n; i++) { xs.push(i); }
+
+    var sumX = 0, sumY = 0, sumXY = 0, sumX2 = 0;
+    for (var i = 0; i < n; i++) {
+      sumX  += xs[i];
+      sumY  += closes[i];
+      sumXY += xs[i] * closes[i];
+      sumX2 += xs[i] * xs[i];
+    }
+
+    var slope     = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    var intercept = (sumY - slope * sumX) / n;
+
+    // القيم المتوقعة على خط الانحدار
+    var predicted = xs.map(function(x) { return slope * x + intercept; });
+
+    // الانحراف المعياري للبواقي (residuals) — يمثل عرض القناة
+    var residuals = closes.map(function(c, i) { return c - predicted[i]; });
+    var meanRes   = residuals.reduce(function(a, b) { return a + b; }, 0) / n;
+    var variance  = residuals.reduce(function(acc, r) { return acc + (r - meanRes) * (r - meanRes); }, 0) / n;
+    var stdDev    = Math.sqrt(variance);
+
+    // حساب حدود القناة العلوية والسفلية (±1σ و ±2σ)
+    var upperChannel2 = predicted.map(function(p) { return p + 2 * stdDev; });
+    var lowerChannel2 = predicted.map(function(p) { return p - 2 * stdDev; });
+    var upperChannel1 = predicted.map(function(p) { return p + stdDev; });
+    var lowerChannel1 = predicted.map(function(p) { return p - stdDev; });
+
+    // القيم الحالية (آخر شمعة)
+    var lastIdx          = n - 1;
+    var currentFairValue = predicted[lastIdx];
+    var currentUpper2    = upperChannel2[lastIdx];
+    var currentLower2    = lowerChannel2[lastIdx];
+    var currentUpper1    = upperChannel1[lastIdx];
+    var currentLower1    = lowerChannel1[lastIdx];
+    var currentPrice     = closes[lastIdx];
+
+    // موضع السعر داخل القناة (نسبة مئوية)
+    var channelRange = currentUpper2 - currentLower2;
+    var position     = channelRange > 0 ? ((currentPrice - currentLower2) / channelRange * 100).toFixed(1) : '50.0';
+
+    // اتجاه الميل
+    var trendDir = slope > 0 ? 'صاعد ↑' : 'هابط ↓';
+
+    statusEl.innerHTML = '<span style="color:#ffffff">تم تحليل ' + n + ' شمعة يومية بنجاح — زوج ' + sym + '</span>';
+
+    // رسم المخطط البياني
+    canvasWrap.style.display = 'block';
+    drawRegressionChart(
+      { closes: closes, highs: highs, lows: lows, opens: opens, times: times,
+        predicted: predicted,
+        upperChannel2: upperChannel2, lowerChannel2: lowerChannel2,
+        upperChannel1: upperChannel1, lowerChannel1: lowerChannel1 },
+      sym
+    );
+
+    // بناء جدول النتائج
+    buildRegressionResults({
+      sym: sym, n: n,
+      currentPrice: currentPrice, currentFairValue: currentFairValue,
+      currentUpper2: currentUpper2, currentLower2: currentLower2,
+      currentUpper1: currentUpper1, currentLower1: currentLower1,
+      position: position, slope: slope, stdDev: stdDev, trendDir: trendDir,
+      predicted: predicted
+    });
+
+  } catch(err) {
+    statusEl.innerHTML = '<span style="color:var(--t2)">خطأ في الاتصال — يُرجى المحاولة مجدداً</span>';
+    console.error(err);
+  }
+}
+
+function drawRegressionChart(data, sym) {
+  var canvas = document.getElementById('regCanvas');
+  if (!canvas) return;
+
+  // مزامنة عرض canvas مع عرض الحاوية الفعلي
+  canvas.width  = canvas.parentElement.offsetWidth || 800;
+  var ctx = canvas.getContext('2d');
+  var W   = canvas.width;
+  var H   = canvas.height;
+
+  var closes        = data.closes;
+  var highs         = data.highs;
+  var lows          = data.lows;
+  var opens         = data.opens;
+  var predicted     = data.predicted;
+  var upperChannel2 = data.upperChannel2;
+  var lowerChannel2 = data.lowerChannel2;
+  var upperChannel1 = data.upperChannel1;
+  var lowerChannel1 = data.lowerChannel1;
+  var n = closes.length;
+
+  // حساب نطاق الأسعار لمعايرة المحاور
+  var allVals = [];
+  for (var i = 0; i < n; i++) {
+    allVals.push(highs[i]);
+    allVals.push(lows[i]);
+    allVals.push(upperChannel2[i]);
+    allVals.push(lowerChannel2[i]);
+  }
+  var minP  = Math.min.apply(null, allVals) * 0.999;
+  var maxP  = Math.max.apply(null, allVals) * 1.001;
+  var range = maxP - minP;
+
+  var padL = 75, padR = 80, padT = 30, padB = 35;
+  var chartW = W - padL - padR;
+  var chartH = H - padT - padB;
+
+  function xScale(i) { return padL + (i / (n - 1)) * chartW; }
+  function yScale(p) { return padT + chartH - ((p - minP) / range) * chartH; }
+
+  // مسح الرسمة السابقة وتعبئة الخلفية
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = '#0d0d0d';
+  ctx.fillRect(0, 0, W, H);
+
+  // رسم خطوط الشبكة الأفقية
+  ctx.lineWidth = 1;
+  var gridCount = 7;
+  for (var g = 0; g <= gridCount; g++) {
+    var gy = padT + (g / gridCount) * chartH;
+    ctx.strokeStyle = '#2a2a2a';
+    ctx.beginPath();
+    ctx.moveTo(padL, gy);
+    ctx.lineTo(W - padR, gy);
+    ctx.stroke();
+    // تسمية السعر على المحور الأيسر
+    var gPrice = maxP - (g / gridCount) * range;
+    ctx.fillStyle = '#888888';
+    ctx.font = '10px monospace';
+    ctx.textAlign = 'right';
+    ctx.fillText(fm(gPrice), padL - 4, gy + 4);
+  }
+
+  // رسم خطوط الشبكة العمودية
+  var vCount = 10;
+  for (var v = 0; v <= vCount; v++) {
+    var vx = padL + (v / vCount) * chartW;
+    ctx.strokeStyle = '#1c1c1c';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(vx, padT);
+    ctx.lineTo(vx, padT + chartH);
+    ctx.stroke();
+  }
+
+  // تعبئة منطقة القناة الخارجية (±2σ) بلون برتقالي شفاف جداً
+  ctx.beginPath();
+  ctx.moveTo(xScale(0), yScale(upperChannel2[0]));
+  for (var i = 1; i < n; i++) { ctx.lineTo(xScale(i), yScale(upperChannel2[i])); }
+  for (var i = n - 1; i >= 0; i--) { ctx.lineTo(xScale(i), yScale(lowerChannel2[i])); }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(255, 106, 0, 0.06)';
+  ctx.fill();
+
+  // تعبئة منطقة القناة الداخلية (±1σ) بلون برتقالي شفاف أكثر
+  ctx.beginPath();
+  ctx.moveTo(xScale(0), yScale(upperChannel1[0]));
+  for (var i = 1; i < n; i++) { ctx.lineTo(xScale(i), yScale(upperChannel1[i])); }
+  for (var i = n - 1; i >= 0; i--) { ctx.lineTo(xScale(i), yScale(lowerChannel1[i])); }
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(255, 106, 0, 0.10)';
+  ctx.fill();
+
+  // رسم حد القناة العلوية الخارجية (+2σ) — خط متقطع برتقالي
+  ctx.beginPath();
+  ctx.strokeStyle = '#ff6a00';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([7, 4]);
+  for (var i = 0; i < n; i++) {
+    if (i === 0) { ctx.moveTo(xScale(i), yScale(upperChannel2[i])); }
+    else         { ctx.lineTo(xScale(i), yScale(upperChannel2[i])); }
+  }
+  ctx.stroke();
+
+  // رسم حد القناة السفلية الخارجية (-2σ) — خط متقطع برتقالي
+  ctx.beginPath();
+  ctx.strokeStyle = '#ff6a00';
+  ctx.lineWidth = 1.5;
+  for (var i = 0; i < n; i++) {
+    if (i === 0) { ctx.moveTo(xScale(i), yScale(lowerChannel2[i])); }
+    else         { ctx.lineTo(xScale(i), yScale(lowerChannel2[i])); }
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // رسم حد القناة العلوية الداخلية (+1σ) — خط منقط برتقالي شفاف
+  ctx.beginPath();
+  ctx.strokeStyle = 'rgba(255, 106, 0, 0.45)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 6]);
+  for (var i = 0; i < n; i++) {
+    if (i === 0) { ctx.moveTo(xScale(i), yScale(upperChannel1[i])); }
+    else         { ctx.lineTo(xScale(i), yScale(upperChannel1[i])); }
+  }
+  ctx.stroke();
+
+  // رسم حد القناة السفلية الداخلية (-1σ)
+  ctx.beginPath();
+  ctx.strokeStyle = 'rgba(255, 106, 0, 0.45)';
+  ctx.lineWidth = 1;
+  for (var i = 0; i < n; i++) {
+    if (i === 0) { ctx.moveTo(xScale(i), yScale(lowerChannel1[i])); }
+    else         { ctx.lineTo(xScale(i), yScale(lowerChannel1[i])); }
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // رسم الشموع اليابانية (Candlesticks)
+  var candleW = Math.max(1.5, (chartW / n) * 0.55);
+  for (var i = 0; i < n; i++) {
+    var co = opens[i];
+    var cc = closes[i];
+    var ch = highs[i];
+    var cl = lows[i];
+    var isUp  = cc >= co;
+    var cx    = xScale(i);
+    var wickColor = isUp ? 'rgba(255,255,255,0.7)' : 'rgba(180,180,180,0.6)';
+    var bodyColor = isUp ? 'rgba(255,255,255,0.85)' : 'rgba(130,130,130,0.55)';
+
+    // رسم الفتيل (Wick)
+    ctx.beginPath();
+    ctx.strokeStyle = wickColor;
+    ctx.lineWidth   = 1;
+    ctx.moveTo(cx, yScale(ch));
+    ctx.lineTo(cx, yScale(cl));
+    ctx.stroke();
+
+    // رسم جسم الشمعة (Body)
+    var bodyTop = yScale(Math.max(co, cc));
+    var bodyBot = yScale(Math.min(co, cc));
+    var bodyH   = Math.max(1, bodyBot - bodyTop);
+    ctx.fillStyle = bodyColor;
+    ctx.fillRect(cx - candleW / 2, bodyTop, candleW, bodyH);
+  }
+
+  // رسم خط الانحدار الخطي (القيمة العادلة) — الخط الرئيسي البرتقالي الصلب
+  ctx.beginPath();
+  ctx.strokeStyle = '#ff6a00';
+  ctx.lineWidth   = 2.5;
+  ctx.setLineDash([]);
+  for (var i = 0; i < n; i++) {
+    if (i === 0) { ctx.moveTo(xScale(i), yScale(predicted[i])); }
+    else         { ctx.lineTo(xScale(i), yScale(predicted[i])); }
+  }
+  ctx.stroke();
+
+  // تسميات المستويات على الحافة اليمنى
+  var lastN = n - 1;
+  ctx.font      = 'bold 9.5px monospace';
+  ctx.textAlign = 'left';
+
+  ctx.fillStyle = '#ff6a00';
+  ctx.fillText('+2\u03c3 ' + fm(upperChannel2[lastN]), W - padR + 4, yScale(upperChannel2[lastN]) + 4);
+
+  ctx.fillStyle = 'rgba(255,106,0,0.7)';
+  ctx.fillText('+1\u03c3 ' + fm(upperChannel1[lastN]), W - padR + 4, yScale(upperChannel1[lastN]) + 4);
+
+  ctx.fillStyle = '#ff6a00';
+  ctx.fillText('FV ' + fm(predicted[lastN]), W - padR + 4, yScale(predicted[lastN]) - 5);
+
+  ctx.fillStyle = 'rgba(255,106,0,0.7)';
+  ctx.fillText('-1\u03c3 ' + fm(lowerChannel1[lastN]), W - padR + 4, yScale(lowerChannel1[lastN]) + 4);
+
+  ctx.fillStyle = '#ff6a00';
+  ctx.fillText('-2\u03c3 ' + fm(lowerChannel2[lastN]), W - padR + 4, yScale(lowerChannel2[lastN]) + 12);
+
+  // عنوان الرسم البياني في الأعلى
+  ctx.fillStyle   = '#ffffff';
+  ctx.font        = 'bold 12px Cairo, sans-serif';
+  ctx.textAlign   = 'center';
+  ctx.fillText('\u0642\u0646\u0627\u0629 \u0627\u0644\u0627\u0646\u062d\u062f\u0627\u0631 \u0627\u0644\u062e\u0637\u064a (\u200e' + n + ' \u064a\u0648\u0645) \u2014 ' + sym, W / 2, 18);
+}
+
+function buildRegressionResults(d) {
+  var ct = document.getElementById('regR');
+  var sym            = d.sym;
+  var n              = d.n;
+  var currentPrice   = d.currentPrice;
+  var fairValue      = d.currentFairValue;
+  var upper2         = d.currentUpper2;
+  var lower2         = d.currentLower2;
+  var upper1         = d.currentUpper1;
+  var lower1         = d.currentLower1;
+  var position       = d.position;
+  var slope          = d.slope;
+  var stdDev         = d.stdDev;
+  var trendDir       = d.trendDir;
+  var predicted      = d.predicted;
+
+  var deviation       = currentPrice - fairValue;
+  var deviationPct    = fairValue > 0 ? ((deviation / fairValue) * 100).toFixed(2) : '0.00';
+  var distToUpper2    = currentPrice > 0 ? ((upper2 - currentPrice) / currentPrice * 100).toFixed(2) : '0.00';
+  var distToLower2    = currentPrice > 0 ? ((currentPrice - lower2) / currentPrice * 100).toFixed(2) : '0.00';
+  var distToUpper1    = currentPrice > 0 ? ((upper1 - currentPrice) / currentPrice * 100).toFixed(2) : '0.00';
+  var distToLower1    = currentPrice > 0 ? ((currentPrice - lower1) / currentPrice * 100).toFixed(2) : '0.00';
+  var zScore          = stdDev > 0 ? (deviation / stdDev).toFixed(2) : '0.00';
+  var zScoreAbs       = Math.abs(parseFloat(zScore));
+
+  var posColor  = deviation > 0 ? '#ffffff' : '#cccccc';
+  var posLabel  = deviation > 0 ? '\u0641\u0648\u0642 \u0627\u0644\u0642\u064a\u0645\u0629 \u0627\u0644\u0639\u0627\u062f\u0644\u0629 (\u0645\u0628\u0627\u0644\u063a \u0641\u064a\u0647)' :
+                  deviation < 0 ? '\u062f\u0648\u0646 \u0627\u0644\u0642\u064a\u0645\u0629 \u0627\u0644\u0639\u0627\u062f\u0644\u0629 (\u0645\u062e\u0641\u0636)' :
+                                  '\u0639\u0646\u062f \u0627\u0644\u0642\u064a\u0645\u0629 \u0627\u0644\u0639\u0627\u062f\u0644\u0629';
+  var trendColor = slope > 0 ? '#ffffff' : '#cccccc';
+  var zColor     = zScoreAbs > 2 ? 'var(--o)' : zScoreAbs > 1 ? '#ffffff' : '#cccccc';
+
+  ct.innerHTML =
+    '<div class="rc" style="border-color:var(--o)">' +
+      '<h3>\u0645\u0644\u062e\u0635 \u0642\u0646\u0627\u0629 \u0627\u0644\u0627\u0646\u062d\u062f\u0627\u0631 \u0627\u0644\u062e\u0637\u064a \u2014 ' + sym + '</h3>' +
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:0.6rem;margin-bottom:0.8rem">' +
+        '<div class="sp"><div class="sp-l">\u0627\u0644\u0633\u0639\u0631 \u0627\u0644\u062d\u0627\u0644\u064a</div><div class="sp-v">' + fm(currentPrice) + '</div></div>' +
+        '<div class="sp"><div class="sp-l">\u0627\u0644\u0642\u064a\u0645\u0629 \u0627\u0644\u0639\u0627\u062f\u0644\u0629 (FV)</div><div class="sp-v" style="color:var(--o)">' + fm(fairValue) + '</div></div>' +
+        '<div class="sp"><div class="sp-l">\u0627\u0644\u0642\u0646\u0627\u0629 \u0627\u0644\u0639\u0644\u064a\u0627 +2\u03c3</div><div class="sp-v" style="color:#ffffff">' + fm(upper2) + '</div></div>' +
+        '<div class="sp"><div class="sp-l">\u0627\u0644\u0642\u0646\u0627\u0629 \u0627\u0644\u0633\u0641\u0644\u0649 -2\u03c3</div><div class="sp-v" style="color:#cccccc">' + fm(lower2) + '</div></div>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:0.6rem">' +
+        '<div class="sp"><div class="sp-l">\u0627\u0644\u0627\u062a\u062c\u0627\u0647 \u0627\u0644\u0639\u0627\u0645</div><div class="sp-v" style="color:' + trendColor + '">' + trendDir + '</div></div>' +
+        '<div class="sp"><div class="sp-l">\u0645\u0648\u0636\u0639 \u0627\u0644\u0633\u0639\u0631 \u0645\u0646 \u0627\u0644\u0642\u0646\u0627\u0629</div><div class="sp-v" style="color:' + posColor + '">' + position + '%</div></div>' +
+        '<div class="sp"><div class="sp-l">\u0627\u0644\u0627\u0646\u062d\u0631\u0627\u0641 \u0639\u0646 FV</div><div class="sp-v" style="color:' + posColor + '">' + (deviation >= 0 ? '+' : '') + deviationPct + '%</div></div>' +
+        '<div class="sp"><div class="sp-l">Z-Score (\u0645\u0639\u064a\u0627\u0631\u064a)</div><div class="sp-v" style="color:' + zColor + '">' + zScore + '</div></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="rc">' +
+      '<h3>\u062a\u062d\u0644\u064a\u0644 \u0627\u0644\u0645\u0633\u0627\u0641\u0627\u062a \u0648\u0627\u0644\u0645\u0633\u062a\u0648\u064a\u0627\u062a \u0627\u0644\u0645\u0633\u062a\u0647\u062f\u0641\u0629</h3>' +
+      '<div style="overflow-x:auto"><table class="rt">' +
+        '<thead><tr><th>\u0627\u0644\u0645\u0633\u062a\u0648\u0649</th><th>\u0627\u0644\u0633\u0639\u0631</th><th>\u0627\u0644\u0641\u0627\u0631\u0642 \u0639\u0646 \u0627\u0644\u0633\u0639\u0631 \u0627\u0644\u062d\u0627\u0644\u064a</th><th>% \u0627\u0644\u062a\u063a\u064a\u0631</th></tr></thead>' +
+        '<tbody>' +
+          '<tr><td style="color:var(--t2)">\u0627\u0644\u0642\u0646\u0627\u0629 \u0627\u0644\u0639\u0644\u064a\u0627 +2\u03c3</td>' +
+              '<td style="font-weight:700;color:#ffffff">' + fm(upper2) + '</td>' +
+              '<td style="color:#ffffff">' + fm(upper2 - currentPrice) + '</td>' +
+              '<td style="color:#ffffff">+' + distToUpper2 + '%</td></tr>' +
+          '<tr><td style="color:var(--t2)">\u0627\u0644\u0642\u0646\u0627\u0629 \u0627\u0644\u0639\u0644\u064a\u0627 +1\u03c3</td>' +
+              '<td style="color:#ffffff">' + fm(upper1) + '</td>' +
+              '<td style="color:#ffffff">' + fm(upper1 - currentPrice) + '</td>' +
+              '<td style="color:#ffffff">+' + distToUpper1 + '%</td></tr>' +
+          '<tr style="background:var(--od)"><td style="color:var(--o);font-weight:700">\u0627\u0644\u0642\u064a\u0645\u0629 \u0627\u0644\u0639\u0627\u062f\u0644\u0629 (FV)</td>' +
+              '<td style="font-weight:700;color:var(--o)">' + fm(fairValue) + '</td>' +
+              '<td style="color:var(--o)">' + (deviation >= 0 ? '+' : '') + fm(deviation) + '</td>' +
+              '<td style="color:var(--o)">' + (deviation >= 0 ? '+' : '') + deviationPct + '%</td></tr>' +
+          '<tr><td style="color:var(--t2)">\u0627\u0644\u0642\u0646\u0627\u0629 \u0627\u0644\u0633\u0641\u0644\u0649 -1\u03c3</td>' +
+              '<td style="color:#cccccc">' + fm(lower1) + '</td>' +
+              '<td style="color:#cccccc">' + fm(lower1 - currentPrice) + '</td>' +
+              '<td style="color:#cccccc">' + distToLower1 + '%</td></tr>' +
+          '<tr><td style="color:var(--t2)">\u0627\u0644\u0642\u0646\u0627\u0629 \u0627\u0644\u0633\u0641\u0644\u0649 -2\u03c3</td>' +
+              '<td style="font-weight:700;color:#cccccc">' + fm(lower2) + '</td>' +
+              '<td style="color:#cccccc">' + fm(lower2 - currentPrice) + '</td>' +
+              '<td style="color:#cccccc">-' + distToLower2 + '%</td></tr>' +
+        '</tbody>' +
+      '</table></div>' +
+    '</div>' +
+    '<div class="rc">' +
+      '<h3>\u0627\u0644\u0645\u0639\u0627\u062f\u0644\u0629 \u0627\u0644\u0625\u062d\u0635\u0627\u0626\u064a\u0629 \u0644\u0644\u0627\u0646\u062d\u062f\u0627\u0631 \u0627\u0644\u062e\u0637\u064a</h3>' +
+      '<div style="background:var(--s2);border-radius:9px;padding:0.9rem;border:1px solid var(--b)">' +
+        '<div style="margin-bottom:0.45rem;font-size:0.83rem;color:var(--t)"><span style="color:var(--o);font-weight:700">\u0627\u0644\u0645\u064a\u0644 (Slope):</span> ' + slope.toFixed(6) + ' \u0644\u0643\u0644 \u064a\u0648\u0645</div>' +
+        '<div style="margin-bottom:0.45rem;font-size:0.83rem;color:var(--t)"><span style="color:var(--o);font-weight:700">\u0627\u0644\u0627\u0646\u062d\u0631\u0627\u0641 \u0627\u0644\u0645\u0639\u064a\u0627\u0631\u064a (\u03c3):</span> ' + fm(stdDev) + '</div>' +
+        '<div style="margin-bottom:0.45rem;font-size:0.83rem;color:var(--t)"><span style="color:var(--o);font-weight:700">\u0645\u0639\u0627\u062f\u0644\u0629 \u0627\u0644\u062e\u0637:</span> y = ' + slope.toFixed(4) + 'x + ' + fm(predicted[0]) + '</div>' +
+        '<div style="margin-bottom:0.45rem;font-size:0.83rem;color:var(--t)"><span style="color:var(--o);font-weight:700">\u0639\u062f\u062f \u0627\u0644\u0634\u0645\u0639\u0627\u062a \u0627\u0644\u0645\u062d\u0644\u0644\u0629:</span> ' + n + ' \u0634\u0645\u0639\u0629 \u064a\u0648\u0645\u064a\u0629</div>' +
+        '<div style="font-size:0.83rem;color:var(--t)"><span style="color:var(--o);font-weight:700">\u062d\u0627\u0644\u0629 \u0627\u0644\u0633\u0639\u0631:</span> <span style="color:' + posColor + '">' + posLabel + '</span></div>' +
+      '</div>' +
+    '</div>';
+}
+
 <script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("sw.js")
